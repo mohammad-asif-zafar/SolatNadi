@@ -1,0 +1,90 @@
+CREATE TABLE LocationEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    country TEXT NOT NULL,
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL,
+    timezone TEXT NOT NULL,
+    isSelected INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE PrayerTimeEntity (
+    locationId TEXT NOT NULL,
+    date TEXT NOT NULL,
+    fajr TEXT NOT NULL,
+    dhuhr TEXT NOT NULL,
+    asr TEXT NOT NULL,
+    maghrib TEXT NOT NULL,
+    isha TEXT NOT NULL,
+    source TEXT NOT NULL,
+    updatedAt INTEGER NOT NULL,
+    PRIMARY KEY (locationId, date),
+    FOREIGN KEY (locationId) REFERENCES LocationEntity(id) ON DELETE CASCADE
+);
+
+CREATE TABLE NotificationPreferenceEntity (
+    prayerName TEXT NOT NULL PRIMARY KEY,
+    enabled INTEGER NOT NULL DEFAULT 1,
+    soundPreference TEXT NOT NULL DEFAULT 'DEFAULT'
+);
+
+CREATE TABLE AppPreferenceEntity (
+    key TEXT NOT NULL PRIMARY KEY,
+    value TEXT NOT NULL
+);
+
+-- Queries for Location
+selectSelectedLocation:
+SELECT * FROM LocationEntity WHERE isSelected = 1 LIMIT 1;
+
+selectAllLocations:
+SELECT * FROM LocationEntity;
+
+selectLocationById:
+SELECT * FROM LocationEntity WHERE id = :id;
+
+insertLocation:
+INSERT OR REPLACE INTO LocationEntity (id, name, country, latitude, longitude, timezone, isSelected)
+VALUES (:id, :name, :country, :latitude, :longitude, :timezone, :isSelected);
+
+clearSelectedLocation:
+UPDATE LocationEntity SET isSelected = 0;
+
+setSelectedLocation:
+UPDATE LocationEntity SET isSelected = 1 WHERE id = :id;
+
+-- Queries for Prayer Times
+getPrayerTimeForDate:
+SELECT * FROM PrayerTimeEntity
+WHERE locationId = :locationId AND date = :date;
+
+observePrayerTimesForLocation:
+SELECT * FROM PrayerTimeEntity
+WHERE locationId = :locationId
+ORDER BY date ASC;
+
+insertPrayerTime:
+INSERT OR REPLACE INTO PrayerTimeEntity (locationId, date, fajr, dhuhr, asr, maghrib, isha, source, updatedAt)
+VALUES (:locationId, :date, :fajr, :dhuhr, :asr, :maghrib, :isha, :source, :updatedAt);
+
+deletePrayerTimesForLocation:
+DELETE FROM PrayerTimeEntity WHERE locationId = :locationId;
+
+-- Queries for Notification Preferences
+getNotificationPreferences:
+SELECT * FROM NotificationPreferenceEntity;
+
+getNotificationPreferenceForPrayer:
+SELECT * FROM NotificationPreferenceEntity WHERE prayerName = :prayerName;
+
+insertOrUpdateNotificationPreference:
+INSERT OR REPLACE INTO NotificationPreferenceEntity (prayerName, enabled, soundPreference)
+VALUES (:prayerName, :enabled, :soundPreference);
+
+-- Queries for App Preferences
+getAppPreference:
+SELECT value FROM AppPreferenceEntity WHERE key = :key;
+
+insertOrUpdateAppPreference:
+INSERT OR REPLACE INTO AppPreferenceEntity (key, value)
+VALUES (:key, :value);
