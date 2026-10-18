@@ -19,6 +19,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
@@ -59,7 +61,7 @@ fun LocationSelectionScreen(
     )
 }
 
-@Composable
+/*@Composable
 fun LocationSelectionScreenContent(
     uiState: SettingsUiState,
     onLocationSelected: (PrayerLocation) -> Unit,
@@ -287,7 +289,255 @@ fun LocationSelectionScreenContent(
             Spacer(modifier = Modifier.height(24.dp))
         }
     }
+}*/
+
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalStdlibApi::class)
+@Composable
+fun LocationSelectionScreenContent(
+    uiState: SettingsUiState,
+    onLocationSelected: (PrayerLocation) -> Unit,
+    onNavigateBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var searchQuery by remember { mutableStateOf("") }
+
+    val filteredLocations = remember(searchQuery, uiState.availableLocations) {
+        if (searchQuery.isBlank()) {
+            uiState.availableLocations
+        } else {
+            uiState.availableLocations.filter {
+                it.name.contains(searchQuery, ignoreCase = true) ||
+                        it.country.contains(searchQuery, ignoreCase = true)
+            }
+        }
+    }
+
+    // Pull design tokens from your Design System
+    val spacing = SolatNadiTheme.spacing
+    val dimens = SolatNadiTheme.dimens
+    val shapes = SolatNadiTheme.shapes
+
+    val colorScheme = MaterialTheme.colorScheme
+    val typography = MaterialTheme.typography
+
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+            .background(colorScheme.background)
+            .statusBarsPadding()
+            .padding(horizontal = dimens.ScreenHorizontalPadding)
+    ) {
+        item {
+            Spacer(modifier = Modifier.height(spacing.Large))
+
+            // Back Button Row
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Surface(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .clickable { onNavigateBack() }
+                        .padding(spacing.Small),
+                    color = Color.Transparent
+                ) {
+                    Text(
+                        text = " ← ",
+                        style = typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = colorScheme.primary
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(spacing.Medium))
+
+            Text(
+                text = "Select Your City",
+                style = typography.headlineLarge,
+                fontWeight = FontWeight.ExtraBold,
+                color = colorScheme.onSurface
+            )
+
+            Spacer(modifier = Modifier.height(spacing.XSmall))
+
+            Text(
+                text = "Search for your city to get accurate prayer times",
+                style = typography.bodyMedium,
+                color = colorScheme.onSurfaceVariant
+            )
+
+            Spacer(modifier = Modifier.height(spacing.Large))
+
+            // Search Bar Input Field
+            OutlinedTextField(
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                placeholder = {
+                    Text(
+                        text = "Search city or country...",
+                        style = typography.bodyLarge,
+                        color = colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                    )
+                },
+                leadingIcon = {
+                    // Cleaner layout alternative to text emojis
+                    Text("🔍", style = typography.bodyLarge)
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = shapes.Medium,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = colorScheme.surfaceVariant,
+                    unfocusedContainerColor = colorScheme.surfaceVariant,
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    focusedTextColor = colorScheme.onSurface,
+                    unfocusedTextColor = colorScheme.onSurface
+                ),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.height(spacing.XXLarge))
+
+            Text(
+                text = "Current Location",
+                style = typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = colorScheme.onSurface
+            )
+
+            Spacer(modifier = Modifier.height(spacing.Small))
+
+            // Active / Selected Location Card
+            val current = uiState.selectedLocation
+            if (current != null) {
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .shadow(elevation = dimens.CardElevation, shape = shapes.Medium),
+                    shape = shapes.Medium,
+                    color = colorScheme.primaryContainer
+                ) {
+                    Row(
+                        modifier = Modifier.padding(spacing.Large),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Surface(
+                            modifier = Modifier.size(44.dp),
+                            shape = shapes.Small,
+                            color = colorScheme.primary.copy(alpha = 0.15f)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Text("📍", style = typography.titleLarge)
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.width(spacing.Medium))
+
+                        Column {
+                            Text(
+                                text = "${current.name}, ${current.country}",
+                                style = typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = colorScheme.onPrimaryContainer
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = "${current.latitude}, ${current.longitude}",
+                                style = typography.bodySmall,
+                                color = colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                            )
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(spacing.XXLarge))
+
+            Text(
+                text = "Available Locations",
+                style = typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = colorScheme.onSurface
+            )
+
+            Spacer(modifier = Modifier.height(spacing.Small))
+        }
+
+        // Search Grid List Elements
+        items(
+            items = filteredLocations,
+            key = { it.id }
+        ) { loc ->
+            val isSelected = loc.id == uiState.selectedLocation?.id
+
+            val itemBackground = if (isSelected) colorScheme.primaryContainer else colorScheme.surface
+            val rowTextColor = if (isSelected) colorScheme.onPrimaryContainer else colorScheme.onSurface
+
+            val borderModifier = if (isSelected) {
+                Modifier.border(dimens.BorderWidth * 1.5f, colorScheme.primary, shapes.Medium)
+            } else Modifier
+
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = spacing.XSmall)
+                    .then(borderModifier)
+                    .shadow(
+                        elevation = if (isSelected) 1.dp else dimens.CardElevation,
+                        shape = shapes.Medium
+                    )
+                    .clickable { onLocationSelected(loc) },
+                shape = shapes.Medium,
+                color = itemBackground
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = spacing.Large, vertical = spacing.Medium),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Surface(
+                            modifier = Modifier.size(46.dp),
+                            shape = shapes.Small,
+                            // FIXED: Using colorScheme directly or falling back cleanly to an explicit alpha layer calculation
+                            color = if (isSelected) { colorScheme.primary.copy(alpha = 0.2f) } else { colorScheme.surfaceVariant }
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Text("M", style = typography.titleMedium, fontWeight = FontWeight.Bold, color = colorScheme.primary)
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.width(spacing.Medium))
+
+                        Column {
+                            Text(
+                                text = loc.name,
+                                style = typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = rowTextColor
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = loc.country,
+                                style = typography.bodySmall,
+                                color = if (isSelected) colorScheme.onPrimaryContainer.copy(alpha = 0.7f) else colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                    Text(
+                        text = "›",
+                        style = typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = colorScheme.primary
+                    )
+                }
+            }
+        }
+    }
 }
+
 
 @Preview(name = "City Selection Light Mode", showBackground = true)
 @Composable

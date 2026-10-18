@@ -39,7 +39,7 @@ val useCaseModule = module {
     factory { ObservePrayerTimesUseCase(get()) }
     factory { RefreshPrayerTimesUseCase(get()) }
     factory { GetNextPrayerUseCase() }
-    factory { ToggleNotificationUseCase(get()) }
+    factory { ToggleNotificationUseCase(get(), get()) }
     factory { GetAppPreferencesUseCase(get()) }
     factory { UpdateAppPreferencesUseCase(get()) }
 }
@@ -50,7 +50,7 @@ val viewModelModule = module {
 }
 
 val appModule = module {
-    includes(networkModule, databaseModule, repositoryModule, useCaseModule, viewModelModule)
+    includes(networkModule, databaseModule, repositoryModule, useCaseModule, viewModelModule, platformNotificationModule)
 }
 
 fun initKoin(appDeclaration: KoinAppDeclaration = {}) {

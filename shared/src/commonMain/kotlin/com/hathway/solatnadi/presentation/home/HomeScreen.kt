@@ -19,6 +19,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -63,6 +64,202 @@ fun HomeScreen(
     )
 }
 
+@OptIn(ExperimentalStdlibApi::class)
+@Composable
+fun HomeScreenContent(
+    uiState: HomeUiState,
+    onIntent: (HomeIntent) -> Unit,
+    onNavigateToSettings: () -> Unit,
+    onNavigateToLocationSelection: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    // Pull central layout parameters from your Design System
+    val spacing = SolatNadiTheme.spacing
+    val dimens = SolatNadiTheme.dimens
+    val shapes = SolatNadiTheme.shapes
+    val customColors = SolatNadiTheme.customColors
+
+    val colorScheme = MaterialTheme.colorScheme
+    val typography = MaterialTheme.typography
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(colorScheme.background)
+    ) {
+        // Banner Image Header Section
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(340.dp)
+        ) {
+            Image(
+                painter = painterResource(Res.drawable.misty_kuala_lumpur_sunrise_skyline_bg),
+                contentDescription = "Skyline Background",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+
+            // Dynamic background gradient that correctly respects theme mutations
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                colorScheme.background.copy(alpha = 0.4f),
+                                colorScheme.background
+                            )
+                        )
+                    )
+            )
+        }
+
+        // Main Scrolling Feed Layout Container
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .verticalScroll(rememberScrollState())
+                .padding(
+                    horizontal = dimens.ScreenHorizontalPadding,
+                    vertical = dimens.ScreenVerticalPadding
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Header Action Navigation Bar Row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Location Selector Dropdown Clickable Block
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clip(shapes.Small)
+                        .clickable { onNavigateToLocationSelection() }
+                        .padding(horizontal = spacing.XSmall, vertical = spacing.XSmall)
+                ) {
+                    Surface(
+                        modifier = Modifier.size(36.dp),
+                        shape = CircleShape,
+                        color = colorScheme.primary
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Text(text = "📍", style = typography.titleMedium)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.width(spacing.Small))
+
+                    Column {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "${uiState.location?.name ?: "Kuala Lumpur"}, ${uiState.location?.country ?: "Malaysia"}",
+                                style = typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = colorScheme.onSurface
+                            )
+                            Spacer(modifier = Modifier.width(spacing.XSmall))
+                            Text(
+                                text = "▾",
+                                style = typography.titleSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = colorScheme.onSurface
+                            )
+                        }
+
+                        Text(
+                            text = "${uiState.gregorianDateFormatted}  •  ${uiState.hijriDateFormatted}",
+                            style = typography.bodySmall,
+                            fontWeight = FontWeight.Medium,
+                            color = colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                // Header Secondary Option Buttons
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Surface(
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(CircleShape)
+                            .clickable { },
+                        shape = CircleShape,
+                        color = colorScheme.onSurface.copy(alpha = 0.1f) // Translucent theme-neutral touch target
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Text("ℹ", style = typography.titleMedium, fontWeight = FontWeight.Bold, color = colorScheme.onSurface)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.width(spacing.Small))
+
+                    Surface(
+                        modifier = Modifier
+                            .size(38.dp)
+                            .clip(CircleShape)
+                            .clickable { onNavigateToSettings() },
+                        shape = CircleShape,
+                        color = colorScheme.onSurface.copy(alpha = 0.1f)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Text("⚙", style = typography.titleMedium, fontWeight = FontWeight.Bold, color = colorScheme.onSurface)
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(spacing.XXLarge))
+
+            // Dynamic Unified Countdown Arc Composable Widget
+            CircularCountdownRing(
+                countdownText = uiState.countdownFormatted,
+                nextPrayerName = uiState.nextPrayer?.prayerName?.displayName ?: "Asr",
+                progress = uiState.countdownProgress
+            )
+
+            Spacer(modifier = Modifier.height(spacing.XXLarge))
+
+            // Adaptive Connection Network / Database Warning Status Banner
+            if (uiState.isOffline) {
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = spacing.Medium),
+                    shape = shapes.Small,
+                    color = customColors.warning.copy(alpha = 0.15f) // Flips container to dark amber nicely
+                ) {
+                    Text(
+                        text = "⚡ Working Offline — Displaying cached prayer schedule",
+                        style = typography.bodySmall,
+                        color = customColors.warning,
+                        modifier = Modifier.padding(spacing.Medium),
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
+
+            // Scrollable Prayer Card Iterative Layout Blocks
+            uiState.prayerTimes.forEach { prayerTime ->
+                key(prayerTime.prayerName) {
+                    PrayerCard(
+                        prayerTime = prayerTime,
+                        onToggleNotification = { enabled ->
+                            onIntent(HomeIntent.ToggleNotification(prayerTime.prayerName, enabled))
+                        }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(spacing.Huge))
+        }
+    }
+}
+
+/*
 @Composable
 fun HomeScreenContent(
     uiState: HomeUiState,
@@ -236,6 +433,7 @@ fun HomeScreenContent(
         }
     }
 }
+*/
 
 @Preview(name = "Light Mode", showBackground = true)
 @Composable

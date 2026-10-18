@@ -6,6 +6,8 @@ import kotlinx.datetime.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class GetNextPrayerUseCaseTest {
 
@@ -28,6 +30,7 @@ class GetNextPrayerUseCaseTest {
         assertNotNull(nextInfo)
         assertEquals(PrayerName.ASR, nextInfo.prayer.prayerName)
         assertEquals("01:24:36", nextInfo.formattedCountdown)
+        assertTrue(nextInfo.progress > 0.5f && nextInfo.progress < 0.7f)
     }
 
     @Test
@@ -39,5 +42,24 @@ class GetNextPrayerUseCaseTest {
         assertNotNull(nextInfo)
         assertEquals(PrayerName.FAJR, nextInfo.prayer.prayerName)
         assertEquals("08:24:00", nextInfo.formattedCountdown)
+        assertTrue(nextInfo.progress >= 0f)
+    }
+
+    @Test
+    fun testNextPrayerCalculatesFajrEarlyMorningBeforeFajr() {
+        val now = LocalDateTime(2026, 10, 18, 4, 0, 0)
+
+        val nextInfo = useCase.execute(prayerTimes, now)
+
+        assertNotNull(nextInfo)
+        assertEquals(PrayerName.FAJR, nextInfo.prayer.prayerName)
+        assertEquals("01:54:00", nextInfo.formattedCountdown)
+    }
+
+    @Test
+    fun testEmptyListReturnsNull() {
+        val now = LocalDateTime(2026, 10, 18, 12, 0, 0)
+        val nextInfo = useCase.execute(emptyList(), now)
+        assertNull(nextInfo)
     }
 }
