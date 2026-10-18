@@ -17,7 +17,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 import kotlinx.datetime.LocalDate
 
 class PrayerTimesRepositoryImpl(
@@ -105,6 +106,7 @@ class PrayerTimesRepositoryImpl(
             }
 
             val dateString = formatDateKey(date)
+            @OptIn(ExperimentalTime::class)
             val currentTimeMillis = Clock.System.now().toEpochMilliseconds()
 
             database.solatNadiDatabaseQueries.transaction {
