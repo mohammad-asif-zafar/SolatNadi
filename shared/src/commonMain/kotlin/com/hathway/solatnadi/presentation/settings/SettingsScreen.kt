@@ -25,10 +25,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hathway.solatnadi.domain.model.AppPreferences
+import com.hathway.solatnadi.domain.model.PrayerLocation
 import com.hathway.solatnadi.domain.model.TimeFormat
 import com.hathway.solatnadi.presentation.theme.SolatNadiPalette
+import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
+import com.hathway.solatnadi.presentation.theme.SolatNadiThemeMode
 
 @Composable
 fun SettingsScreen(
@@ -37,7 +42,21 @@ fun SettingsScreen(
     onNavigateToLocationSelection: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    SettingsScreenContent(
+        uiState = uiState,
+        onUpdatePreferences = viewModel::updatePreferences,
+        onNavigateBack = onNavigateBack,
+        onNavigateToLocationSelection = onNavigateToLocationSelection
+    )
+}
 
+@Composable
+fun SettingsScreenContent(
+    uiState: SettingsUiState,
+    onUpdatePreferences: (AppPreferences) -> Unit,
+    onNavigateBack: () -> Unit,
+    onNavigateToLocationSelection: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -148,7 +167,7 @@ fun SettingsScreen(
                     Switch(
                         checked = uiState.preferences.timeFormat == TimeFormat.FORMAT_12H,
                         onCheckedChange = { is12h ->
-                            viewModel.updatePreferences(
+                            onUpdatePreferences(
                                 uiState.preferences.copy(
                                     timeFormat = if (is12h) TimeFormat.FORMAT_12H else TimeFormat.FORMAT_24H
                                 )
@@ -181,7 +200,7 @@ fun SettingsScreen(
                     Switch(
                         checked = uiState.preferences.isAutoLocationEnabled,
                         onCheckedChange = { enabled ->
-                            viewModel.updatePreferences(
+                            onUpdatePreferences(
                                 uiState.preferences.copy(isAutoLocationEnabled = enabled)
                             )
                         }
@@ -233,4 +252,34 @@ fun SettingsSectionHeader(title: String) {
         color = Color(0xFF788590),
         modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
     )
+}
+
+@Preview(name = "Settings Light Mode", showBackground = true)
+@Composable
+fun SettingsScreenLightPreview() {
+    SolatNadiTheme(themeMode = SolatNadiThemeMode.LIGHT) {
+        SettingsScreenContent(
+            uiState = SettingsUiState(
+                selectedLocation = PrayerLocation("kl_my", "Kuala Lumpur", "Malaysia", 3.1390, 101.6869, "Asia/Kuala_Lumpur")
+            ),
+            onUpdatePreferences = {},
+            onNavigateBack = {},
+            onNavigateToLocationSelection = {}
+        )
+    }
+}
+
+@Preview(name = "Settings Dark Mode", showBackground = true)
+@Composable
+fun SettingsScreenDarkPreview() {
+    SolatNadiTheme(themeMode = SolatNadiThemeMode.DARK) {
+        SettingsScreenContent(
+            uiState = SettingsUiState(
+                selectedLocation = PrayerLocation("kl_my", "Kuala Lumpur", "Malaysia", 3.1390, 101.6869, "Asia/Kuala_Lumpur")
+            ),
+            onUpdatePreferences = {},
+            onNavigateBack = {},
+            onNavigateToLocationSelection = {}
+        )
+    }
 }

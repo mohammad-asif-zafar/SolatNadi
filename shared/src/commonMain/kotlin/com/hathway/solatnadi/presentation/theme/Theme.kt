@@ -5,8 +5,60 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import com.hathway.solatnadi.presentation.theme.SolatNadiPalette
+
+/**
+ * Data container for non-Material semantic brand tokens.
+ */
+@Immutable
+data class SolatNadiCustomColors(
+    val sunriseGold: Color,
+    val sunsetOrange: Color,
+    val nightBlue: Color,
+    val success: Color,
+    val warning: Color,
+    val error: Color,
+    val info: Color,
+    val ringTrack: Color
+)
+
+/**
+ * Specialized text configurations that fall outside standard Material 3 specs.
+ */
+@Immutable
+data class SolatNadiCustomTypography(
+    val countdown: androidx.compose.ui.text.TextStyle
+)
+
+private val LightCustomColors = SolatNadiCustomColors(
+    sunriseGold = SolatNadiPalette.SunriseGold,
+    sunsetOrange = SolatNadiPalette.SunsetOrange,
+    nightBlue = SolatNadiPalette.NightBlue,
+    success = SolatNadiPalette.Success,
+    warning = SolatNadiPalette.Warning,
+    error = SolatNadiPalette.Error,
+    info = SolatNadiPalette.Info,
+    ringTrack = SolatNadiPalette.RingTrack
+)
+
+private val DarkCustomColors = SolatNadiCustomColors(
+    sunriseGold = Color(0xFFFFD078),
+    sunsetOrange = Color(0xFFFFB39A),
+    nightBlue = Color(0xFF8BB2DC),
+    success = Color(0xFF76D7A8),
+    warning = Color(0xFFFFD9A3),
+    error = Color(0xFFFFB4AB),
+    info = Color(0xFF96C9F4),
+    ringTrack = Color(0xFF1B3D32) // Dark-optimized subtle track
+)
+
+private val LocalCustomColors = staticCompositionLocalOf { LightCustomColors }
+private val LocalCustomTypography = staticCompositionLocalOf { SolatNadiCustomTypography(countdown = CountdownTextStyle) }
 
 private val SolatNadiLightColorScheme = lightColorScheme(
     primary = SolatNadiPalette.ForestGreen,
@@ -72,6 +124,27 @@ enum class SolatNadiThemeMode {
     DARK
 }
 
+/**
+ * Universal access token registry for the entire application layout system.
+ * Fixed to correctly reference structural design tokens in Compose Multiplatform.
+ */
+object SolatNadiTheme {
+    val customColors: SolatNadiCustomColors
+        @Composable @ReadOnlyComposable get() = LocalCustomColors.current
+
+    val customTypography: SolatNadiCustomTypography
+        @Composable @ReadOnlyComposable get() = LocalCustomTypography.current
+
+    val spacing: SolatNadiSpacing
+        get() = SolatNadiSpacing
+
+    val dimens: SolatNadiDimens
+        get() = SolatNadiDimens
+
+    val shapes: SolatNadiShapes
+        get() = SolatNadiShapes
+}
+
 @Composable
 fun SolatNadiTheme(
     themeMode: SolatNadiThemeMode = SolatNadiThemeMode.SYSTEM,
@@ -83,14 +156,22 @@ fun SolatNadiTheme(
         SolatNadiThemeMode.DARK -> true
     }
 
-    MaterialTheme(
-        colorScheme = if (useDarkTheme) {
-            SolatNadiDarkColorScheme
-        } else {
-            SolatNadiLightColorScheme
-        },
-        typography = SolatNadiTypography,
-        shapes = SolatNadiMaterialShapes,
-        content = content
-    )
+    val selectedCustomColors = if (useDarkTheme) DarkCustomColors else LightCustomColors
+    val customTypographyInstance = SolatNadiCustomTypography(countdown = CountdownTextStyle)
+
+    CompositionLocalProvider(
+        LocalCustomColors provides selectedCustomColors,
+        LocalCustomTypography provides customTypographyInstance
+    ) {
+        MaterialTheme(
+            colorScheme = if (useDarkTheme) {
+                SolatNadiDarkColorScheme
+            } else {
+                SolatNadiLightColorScheme
+            },
+            typography = SolatNadiTypography,
+            shapes = SolatNadiMaterialShapes,
+            content = content
+        )
+    }
 }

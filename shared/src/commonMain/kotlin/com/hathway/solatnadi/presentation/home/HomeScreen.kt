@@ -32,11 +32,18 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hathway.solatnadi.domain.model.PrayerLocation
+import com.hathway.solatnadi.domain.model.PrayerName
+import com.hathway.solatnadi.domain.model.PrayerTime
 import com.hathway.solatnadi.presentation.components.CircularCountdownRing
 import com.hathway.solatnadi.presentation.components.PrayerCard
 import com.hathway.solatnadi.presentation.theme.SolatNadiPalette
+import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
+import com.hathway.solatnadi.presentation.theme.SolatNadiThemeMode
+import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.painterResource
 import solatnadi.shared.generated.resources.Res
 import solatnadi.shared.generated.resources.misty_kuala_lumpur_sunrise_skyline_bg
@@ -191,7 +198,9 @@ fun HomeScreenContent(
 
             CircularCountdownRing(
                 countdownText = uiState.countdownFormatted,
-                nextPrayerName = uiState.nextPrayer?.prayerName?.displayName ?: "Asr"
+                nextPrayerName = uiState.nextPrayer?.prayerName?.displayName ?: "Asr",
+                progress = uiState.countdownProgress,
+                prayerName = uiState.nextPrayer?.prayerName
             )
 
             Spacer(modifier = Modifier.height(28.dp))
@@ -225,5 +234,59 @@ fun HomeScreenContent(
 
             Spacer(modifier = Modifier.height(30.dp))
         }
+    }
+}
+
+@Preview(name = "Light Mode", showBackground = true)
+@Composable
+fun HomeScreenLightPreview() {
+    SolatNadiTheme(themeMode = SolatNadiThemeMode.LIGHT) {
+        HomeScreenContent(
+            uiState = HomeUiState(
+                location = PrayerLocation("kl_my", "Kuala Lumpur", "Malaysia", 3.1390, 101.6869, "Asia/Kuala_Lumpur"),
+                gregorianDateFormatted = "Sat, 18 Oct 2026",
+                hijriDateFormatted = "7 Rabiulakhir 1448 AH",
+                countdownFormatted = "01:24:36",
+                countdownProgress = 0.58f,
+                nextPrayer = PrayerTime(PrayerName.ASR, "04:46 PM", LocalDateTime(2026, 10, 18, 16, 46, 0), isNext = true),
+                prayerTimes = listOf(
+                    PrayerTime(PrayerName.FAJR, "05:54 AM", LocalDateTime(2026, 10, 18, 5, 54, 0)),
+                    PrayerTime(PrayerName.DHUHR, "01:22 PM", LocalDateTime(2026, 10, 18, 13, 22, 0)),
+                    PrayerTime(PrayerName.ASR, "04:46 PM", LocalDateTime(2026, 10, 18, 16, 46, 0), isNext = true),
+                    PrayerTime(PrayerName.MAGHRIB, "07:21 PM", LocalDateTime(2026, 10, 18, 19, 21, 0)),
+                    PrayerTime(PrayerName.ISHA, "08:32 PM", LocalDateTime(2026, 10, 18, 20, 32, 0))
+                )
+            ),
+            onIntent = {},
+            onNavigateToSettings = {},
+            onNavigateToLocationSelection = {}
+        )
+    }
+}
+
+@Preview(name = "Dark Mode", showBackground = true)
+@Composable
+fun HomeScreenDarkPreview() {
+    SolatNadiTheme(themeMode = SolatNadiThemeMode.DARK) {
+        HomeScreenContent(
+            uiState = HomeUiState(
+                location = PrayerLocation("kl_my", "Kuala Lumpur", "Malaysia", 3.1390, 101.6869, "Asia/Kuala_Lumpur"),
+                gregorianDateFormatted = "Sat, 18 Oct 2026",
+                hijriDateFormatted = "7 Rabiulakhir 1448 AH",
+                countdownFormatted = "01:24:36",
+                countdownProgress = 0.58f,
+                nextPrayer = PrayerTime(PrayerName.ASR, "04:46 PM", LocalDateTime(2026, 10, 18, 16, 46, 0), isNext = true),
+                prayerTimes = listOf(
+                    PrayerTime(PrayerName.FAJR, "05:54 AM", LocalDateTime(2026, 10, 18, 5, 54, 0)),
+                    PrayerTime(PrayerName.DHUHR, "01:22 PM", LocalDateTime(2026, 10, 18, 13, 22, 0)),
+                    PrayerTime(PrayerName.ASR, "04:46 PM", LocalDateTime(2026, 10, 18, 16, 46, 0), isNext = true),
+                    PrayerTime(PrayerName.MAGHRIB, "07:21 PM", LocalDateTime(2026, 10, 18, 19, 21, 0)),
+                    PrayerTime(PrayerName.ISHA, "08:32 PM", LocalDateTime(2026, 10, 18, 20, 32, 0))
+                )
+            ),
+            onIntent = {},
+            onNavigateToSettings = {},
+            onNavigateToLocationSelection = {}
+        )
     }
 }

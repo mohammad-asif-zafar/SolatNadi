@@ -1,6 +1,9 @@
 package com.hathway.solatnadi.presentation.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -10,10 +13,13 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathOperation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hathway.solatnadi.domain.model.PrayerName
 import com.hathway.solatnadi.presentation.theme.SolatNadiPalette
+import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
+import com.hathway.solatnadi.presentation.theme.SolatNadiThemeMode
 
 @Composable
 fun PrayerIcon(
@@ -175,5 +181,35 @@ fun IshaIcon(modifier: Modifier = Modifier) {
             radius = w * 0.025f,
             center = Offset(w * 0.65f, h * 0.25f)
         )
+    }
+}
+
+@Preview(name = "Prayer Icons Light Mode", showBackground = true)
+@Composable
+fun PrayerIconsLightPreview() {
+    SolatNadiTheme(themeMode = SolatNadiThemeMode.LIGHT) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            PrayerName.entries.forEach { prayer ->
+                PrayerIcon(prayerName = prayer, size = 36.dp)
+            }
+        }
+    }
+}
+
+@Preview(name = "Prayer Icons Dark Mode", showBackground = true)
+@Composable
+fun PrayerIconsDarkPreview() {
+    SolatNadiTheme(themeMode = SolatNadiThemeMode.DARK) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            PrayerName.entries.forEach { prayer ->
+                PrayerIcon(prayerName = prayer, size = 36.dp)
+            }
+        }
     }
 }

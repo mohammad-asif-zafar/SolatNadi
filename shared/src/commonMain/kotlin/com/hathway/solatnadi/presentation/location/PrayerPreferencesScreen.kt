@@ -37,13 +37,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hathway.solatnadi.domain.model.AppPreferences
 import com.hathway.solatnadi.domain.model.CalculationMethod
 import com.hathway.solatnadi.domain.model.Madhab
 import com.hathway.solatnadi.domain.model.PrayerLocation
 import com.hathway.solatnadi.presentation.settings.SettingsViewModel
 import com.hathway.solatnadi.presentation.theme.SolatNadiPalette
+import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
+import com.hathway.solatnadi.presentation.theme.SolatNadiThemeMode
 
 @Composable
 fun PrayerPreferencesScreen(
@@ -54,11 +58,30 @@ fun PrayerPreferencesScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    var selectedMethodId by remember(uiState.preferences) {
-        mutableStateOf(uiState.preferences.calculationMethod)
+    PrayerPreferencesScreenContent(
+        targetLocation = targetLocation,
+        initialPreferences = uiState.preferences,
+        onSaveAndContinue = { newLocation, newPrefs ->
+            viewModel.selectLocation(newLocation)
+            viewModel.updatePreferences(newPrefs)
+            onComplete()
+        },
+        onNavigateBack = onNavigateBack
+    )
+}
+
+@Composable
+fun PrayerPreferencesScreenContent(
+    targetLocation: PrayerLocation,
+    initialPreferences: AppPreferences,
+    onSaveAndContinue: (PrayerLocation, AppPreferences) -> Unit,
+    onNavigateBack: () -> Unit
+) {
+    var selectedMethodId by remember(initialPreferences) {
+        mutableStateOf(initialPreferences.calculationMethod)
     }
-    var selectedMadhab by remember(uiState.preferences) {
-        mutableStateOf(uiState.preferences.madhab)
+    var selectedMadhab by remember(initialPreferences) {
+        mutableStateOf(initialPreferences.madhab)
     }
     var showMethodDropdown by remember { mutableStateOf(false) }
 
@@ -108,7 +131,6 @@ fun PrayerPreferencesScreen(
 
         Spacer(modifier = Modifier.height(28.dp))
 
-        // Calculation Method Box
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -195,7 +217,6 @@ fun PrayerPreferencesScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Madhab (Asr method) Section
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -291,17 +312,15 @@ fun PrayerPreferencesScreen(
         Spacer(modifier = Modifier.weight(1f))
         Spacer(modifier = Modifier.height(30.dp))
 
-        // Continue Button
         Button(
             onClick = {
-                viewModel.selectLocation(targetLocation)
-                viewModel.updatePreferences(
-                    uiState.preferences.copy(
+                onSaveAndContinue(
+                    targetLocation,
+                    initialPreferences.copy(
                         calculationMethod = selectedMethodId,
                         madhab = selectedMadhab
                     )
                 )
-                onComplete()
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -318,5 +337,31 @@ fun PrayerPreferencesScreen(
                 fontWeight = FontWeight.Bold
             )
         }
+    }
+}
+
+@Preview(name = "Prayer Preferences Light Mode", showBackground = true)
+@Composable
+fun PrayerPreferencesLightPreview() {
+    SolatNadiTheme(themeMode = SolatNadiThemeMode.LIGHT) {
+        PrayerPreferencesScreenContent(
+            targetLocation = PrayerLocation("kl_my", "Kuala Lumpur", "Malaysia", 3.1390, 101.6869, "Asia/Kuala_Lumpur"),
+            initialPreferences = AppPreferences(),
+            onSaveAndContinue = { _, _ -> },
+            onNavigateBack = {}
+        )
+    }
+}
+
+@Preview(name = "Prayer Preferences Dark Mode", showBackground = true)
+@Composable
+fun PrayerPreferencesDarkPreview() {
+    SolatNadiTheme(themeMode = SolatNadiThemeMode.DARK) {
+        PrayerPreferencesScreenContent(
+            targetLocation = PrayerLocation("kl_my", "Kuala Lumpur", "Malaysia", 3.1390, 101.6869, "Asia/Kuala_Lumpur"),
+            initialPreferences = AppPreferences(),
+            onSaveAndContinue = { _, _ -> },
+            onNavigateBack = {}
+        )
     }
 }

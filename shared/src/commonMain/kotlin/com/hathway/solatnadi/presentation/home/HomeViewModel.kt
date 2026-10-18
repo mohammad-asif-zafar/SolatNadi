@@ -52,11 +52,12 @@ class HomeViewModel(
         viewModelScope.launch {
             combine(
                 preferencesRepository.observeSelectedLocation(),
-                preferencesRepository.observeAvailableLocations()
-            ) { selectedLoc, locations ->
-                selectedLoc to locations
+                preferencesRepository.observeAvailableLocations(),
+                preferencesRepository.observeAppPreferences()
+            ) { selectedLoc, locations, appPrefs ->
+                Triple(selectedLoc, locations, appPrefs)
             }.distinctUntilChanged()
-                .flatMapLatest { (location, locations) ->
+                .flatMapLatest { (location, locations, _) ->
                     val locationTz = try {
                         TimeZone.of(location.timezone)
                     } catch (e: Exception) {
@@ -160,11 +161,12 @@ class HomeViewModel(
                         }
 
                         _uiState.update { current ->
-                            if (current.countdownFormatted != nextInfo.formattedCountdown || hasChangedNext) {
+                            if (current.countdownFormatted != nextInfo.formattedCountdown || current.countdownProgress != nextInfo.progress || hasChangedNext) {
                                 current.copy(
                                     prayerTimes = updatedTimes,
                                     nextPrayer = nextInfo.prayer,
-                                    countdownFormatted = nextInfo.formattedCountdown
+                                    countdownFormatted = nextInfo.formattedCountdown,
+                                    countdownProgress = nextInfo.progress
                                 )
                             } else {
                                 current

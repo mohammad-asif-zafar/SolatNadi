@@ -9,10 +9,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -28,9 +29,8 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.hathway.solatnadi.domain.model.PrayerTime
-import com.hathway.solatnadi.presentation.theme.SolatNadiPalette
+import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
 
 @Composable
 fun PrayerCard(
@@ -39,51 +39,64 @@ fun PrayerCard(
     modifier: Modifier = Modifier
 ) {
     val isNext = prayerTime.isNext
-    val cardBackground = if (isNext) Color(0xFFEAF8EE) else Color.White
-    val cardShadowElevation = if (isNext) 2.dp else 4.dp
+
+    val spacing = SolatNadiTheme.spacing
+    val dimens = SolatNadiTheme.dimens
+    val shapes = SolatNadiTheme.shapes
+    val customColors = SolatNadiTheme.customColors
+    val colorScheme = MaterialTheme.colorScheme
+    val typography = MaterialTheme.typography
+
+    val cardBackground = if (isNext) colorScheme.primaryContainer else colorScheme.surface
+    val cardShadowElevation = if (isNext) dimens.CardElevation else dimens.CardElevation * 2
+    val primaryTextColor = if (isNext) colorScheme.onPrimaryContainer else colorScheme.onSurface
+    val textSecondaryColor = colorScheme.onSurfaceVariant
 
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 5.dp)
+            .heightIn(min = dimens.PrayerCardMinHeight)
+            .padding(vertical = spacing.XSmall)
             .shadow(
                 elevation = cardShadowElevation,
-                shape = RoundedCornerShape(20.dp),
-                spotColor = Color(0x1A000000)
+                shape = shapes.Medium,
+                spotColor = colorScheme.onBackground.copy(alpha = 0.1f)
             ),
-        shape = RoundedCornerShape(20.dp),
+        shape = shapes.Medium,
         color = cardBackground
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 18.dp, vertical = 14.dp),
+                .padding(
+                    horizontal = dimens.PrayerCardHorizontalPadding,
+                    vertical = dimens.PrayerCardVerticalPadding
+                ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 PrayerIcon(
                     prayerName = prayerTime.prayerName,
-                    size = 36.dp
+                    size = dimens.IconLarge + 8.dp
                 )
 
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(spacing.Large))
 
                 Column {
                     Text(
                         text = prayerTime.prayerName.displayName,
-                        fontSize = 18.sp,
+                        style = typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = SolatNadiPalette.TextPrimary
+                        color = primaryTextColor
                     )
 
                     Spacer(modifier = Modifier.height(2.dp))
 
                     Text(
                         text = prayerTime.timeString,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color(0xFF788590)
+                        style = typography.bodyMedium,
+                        color = textSecondaryColor
                     )
                 }
             }
@@ -92,37 +105,43 @@ fun PrayerCard(
                 if (isNext) {
                     Box(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(Color(0xFFD3EEDC))
-                            .padding(horizontal = 10.dp, vertical = 5.dp)
+                            .clip(shapes.Small)
+                            .background(customColors.success.copy(alpha = 0.15f))
+                            .padding(
+                                horizontal = dimens.BadgeHorizontalPadding,
+                                vertical = dimens.BadgeVerticalPadding
+                            )
                     ) {
                         Text(
                             text = "Next Prayer",
-                            fontSize = 11.sp,
+                            style = typography.labelSmall,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF1B6338)
+                            color = customColors.success
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(10.dp))
+                    Spacer(modifier = Modifier.width(spacing.Small))
                 }
 
                 Switch(
                     checked = prayerTime.isNotificationEnabled,
                     onCheckedChange = onToggleNotification,
                     colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color.White,
-                        checkedTrackColor = Color(0xFF1BB762),
-                        uncheckedThumbColor = Color.White,
-                        uncheckedTrackColor = Color(0xFFD8DCE0),
+                        checkedThumbColor = colorScheme.surface,
+                        checkedTrackColor = customColors.success,
+                        uncheckedThumbColor = colorScheme.surfaceVariant,
+                        uncheckedTrackColor = colorScheme.outline.copy(alpha = 0.4f),
                         uncheckedBorderColor = Color.Transparent,
                         checkedBorderColor = Color.Transparent
                     )
                 )
 
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(spacing.Small))
 
-                BellIcon(isActive = prayerTime.isNotificationEnabled)
+                BellIcon(
+                    isActive = prayerTime.isNotificationEnabled,
+                    modifier = Modifier.size(dimens.IconMedium)
+                )
             }
         }
     }
@@ -133,10 +152,13 @@ fun BellIcon(
     isActive: Boolean,
     modifier: Modifier = Modifier
 ) {
+    val customColors = SolatNadiTheme.customColors
+    val colorScheme = MaterialTheme.colorScheme
+
     Canvas(modifier = modifier.size(22.dp)) {
         val w = size.width
         val h = size.height
-        val color = if (isActive) Color(0xFF1BB762) else Color(0xFF9EA7B0)
+        val color = if (isActive) customColors.success else colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
 
         val bellPath = Path().apply {
             moveTo(w * 0.5f, h * 0.15f)

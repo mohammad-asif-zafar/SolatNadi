@@ -35,11 +35,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hathway.solatnadi.domain.model.PrayerLocation
+import com.hathway.solatnadi.presentation.settings.SettingsUiState
 import com.hathway.solatnadi.presentation.settings.SettingsViewModel
 import com.hathway.solatnadi.presentation.theme.SolatNadiPalette
+import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
+import com.hathway.solatnadi.presentation.theme.SolatNadiThemeMode
 
 @Composable
 fun LocationSelectionScreen(
@@ -48,6 +52,19 @@ fun LocationSelectionScreen(
     onNavigateBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    LocationSelectionScreenContent(
+        uiState = uiState,
+        onLocationSelected = onLocationSelected,
+        onNavigateBack = onNavigateBack
+    )
+}
+
+@Composable
+fun LocationSelectionScreenContent(
+    uiState: SettingsUiState,
+    onLocationSelected: (PrayerLocation) -> Unit,
+    onNavigateBack: () -> Unit
+) {
     var searchQuery by remember { mutableStateOf("") }
 
     val filteredLocations = remember(searchQuery, uiState.availableLocations) {
@@ -269,5 +286,43 @@ fun LocationSelectionScreen(
         item {
             Spacer(modifier = Modifier.height(24.dp))
         }
+    }
+}
+
+@Preview(name = "City Selection Light Mode", showBackground = true)
+@Composable
+fun LocationSelectionLightPreview() {
+    SolatNadiTheme(themeMode = SolatNadiThemeMode.LIGHT) {
+        LocationSelectionScreenContent(
+            uiState = SettingsUiState(
+                selectedLocation = PrayerLocation("kl_my", "Kuala Lumpur", "Malaysia", 3.1390, 101.6869, "Asia/Kuala_Lumpur"),
+                availableLocations = listOf(
+                    PrayerLocation("kl_my", "Kuala Lumpur", "Malaysia", 3.1390, 101.6869, "Asia/Kuala_Lumpur"),
+                    PrayerLocation("sg", "Singapore", "Singapore", 1.3521, 103.8198, "Asia/Singapore"),
+                    PrayerLocation("jakarta", "Jakarta", "Indonesia", -6.2088, 106.8456, "Asia/Jakarta")
+                )
+            ),
+            onLocationSelected = {},
+            onNavigateBack = {}
+        )
+    }
+}
+
+@Preview(name = "City Selection Dark Mode", showBackground = true)
+@Composable
+fun LocationSelectionDarkPreview() {
+    SolatNadiTheme(themeMode = SolatNadiThemeMode.DARK) {
+        LocationSelectionScreenContent(
+            uiState = SettingsUiState(
+                selectedLocation = PrayerLocation("kl_my", "Kuala Lumpur", "Malaysia", 3.1390, 101.6869, "Asia/Kuala_Lumpur"),
+                availableLocations = listOf(
+                    PrayerLocation("kl_my", "Kuala Lumpur", "Malaysia", 3.1390, 101.6869, "Asia/Kuala_Lumpur"),
+                    PrayerLocation("sg", "Singapore", "Singapore", 1.3521, 103.8198, "Asia/Singapore"),
+                    PrayerLocation("jakarta", "Jakarta", "Indonesia", -6.2088, 106.8456, "Asia/Jakarta")
+                )
+            ),
+            onLocationSelected = {},
+            onNavigateBack = {}
+        )
     }
 }

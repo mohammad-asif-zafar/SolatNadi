@@ -13,6 +13,7 @@ data class HomeUiState(
     val prayerTimes: List<PrayerTime> = emptyList(),
     val nextPrayer: PrayerTime? = null,
     val countdownFormatted: String = "00:00:00",
+    val countdownProgress: Float = 0f,
     val isOffline: Boolean = false,
     val errorMessage: String? = null
 )
