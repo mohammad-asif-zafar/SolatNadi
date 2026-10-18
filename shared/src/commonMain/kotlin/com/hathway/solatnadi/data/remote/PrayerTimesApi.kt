@@ -17,13 +17,15 @@ class PrayerTimesApi(
         latitude: Double,
         longitude: Double,
         date: LocalDate,
-        method: Int = 3
+        method: Int = 3,
+        school: Int = 0
     ): AladhanResponse {
         val dateString = "${date.dayOfMonth.toString().padStart(2, '0')}-${date.monthNumber.toString().padStart(2, '0')}-${date.year}"
         return httpClient.get("https://api.aladhan.com/v1/timings/$dateString") {
             parameter("latitude", latitude)
             parameter("longitude", longitude)
             parameter("method", method)
+            parameter("school", school)
         }.body()
     }
 
@@ -31,13 +33,15 @@ class PrayerTimesApi(
         city: String,
         country: String,
         date: LocalDate,
-        method: Int = 3
+        method: Int = 3,
+        school: Int = 0
     ): AladhanResponse {
         val dateString = "${date.dayOfMonth.toString().padStart(2, '0')}-${date.monthNumber.toString().padStart(2, '0')}-${date.year}"
         return httpClient.get("https://api.aladhan.com/v1/timingsByCity/$dateString") {
             parameter("city", city)
             parameter("country", country)
             parameter("method", method)
+            parameter("school", school)
         }.body()
     }
 }

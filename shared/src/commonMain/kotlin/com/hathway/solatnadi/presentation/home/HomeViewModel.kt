@@ -2,7 +2,6 @@ package com.hathway.solatnadi.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hathway.solatnadi.domain.model.PrayerLocation
 import com.hathway.solatnadi.domain.repository.PreferencesRepository
 import com.hathway.solatnadi.domain.usecase.GetNextPrayerUseCase
 import com.hathway.solatnadi.domain.usecase.ObservePrayerTimesUseCase
@@ -24,7 +23,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -44,14 +42,13 @@ class HomeViewModel(
     val effects: SharedFlow<HomeEffect> = _effects.asSharedFlow()
 
     private var countdownJob: Job? = null
+    private var refreshJob: Job? = null
 
     init {
         observeData()
     }
 
     private fun observeData() {
-        val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
-
         viewModelScope.launch {
             combine(
                 preferencesRepository.observeSelectedLocation(),
@@ -60,8 +57,32 @@ class HomeViewModel(
                 selectedLoc to locations
             }.distinctUntilChanged()
                 .flatMapLatest { (location, locations) ->
-                    _uiState.update { it.copy(location = location, availableLocations = locations) }
-                    refreshPrayerTimes(location, today)
+                    val locationTz = try {
+                        TimeZone.of(location.timezone)
+                    } catch (e: Exception) {
+                        TimeZone.currentSystemDefault()
+                    }
+                    val today = Clock.System.now().toLocalDateTime(locationTz).date
+
+                    _uiState.update {
+                        it.copy(
+                            location = location,
+                            availableLocations = locations,
+                            isRefreshing = true
+                        )
+                    }
+
+                    refreshJob?.cancel()
+                    refreshJob = viewModelScope.launch {
+                        val result = refreshPrayerTimesUseCase(location, today)
+                        _uiState.update { current ->
+                            current.copy(
+                                isRefreshing = false,
+                                isOffline = result.isFailure
+                            )
+                        }
+                    }
+
                     observePrayerTimesUseCase(location.id, today)
                 }.collect { schedule ->
                     if (schedule != null) {
@@ -82,11 +103,17 @@ class HomeViewModel(
         when (intent) {
             is HomeIntent.Refresh -> {
                 val loc = _uiState.value.location ?: return
-                val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+                val locationTz = try {
+                    TimeZone.of(loc.timezone)
+                } catch (e: Exception) {
+                    TimeZone.currentSystemDefault()
+                }
+                val today = Clock.System.now().toLocalDateTime(locationTz).date
+
                 viewModelScope.launch {
                     _uiState.update { it.copy(isRefreshing = true) }
-                    refreshPrayerTimes(loc, today)
-                    _uiState.update { it.copy(isRefreshing = false) }
+                    val result = refreshPrayerTimesUseCase(loc, today)
+                    _uiState.update { it.copy(isRefreshing = false, isOffline = result.isFailure) }
                 }
             }
             is HomeIntent.Retry -> {
@@ -105,34 +132,43 @@ class HomeViewModel(
         }
     }
 
-    private suspend fun refreshPrayerTimes(location: PrayerLocation, date: LocalDate) {
-        val result = refreshPrayerTimesUseCase(location, date)
-        if (result.isFailure) {
-            _uiState.update { it.copy(isOffline = true) }
-        } else {
-            _uiState.update { it.copy(isOffline = false, errorMessage = null) }
-        }
-    }
-
     private fun startCountdownTicker() {
         countdownJob?.cancel()
         countdownJob = viewModelScope.launch {
             while (isActive) {
                 val currentTimes = _uiState.value.prayerTimes
-                if (currentTimes.isNotEmpty()) {
-                    val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                val currentLocation = _uiState.value.location
+                if (currentTimes.isNotEmpty() && currentLocation != null) {
+                    val locationTz = try {
+                        TimeZone.of(currentLocation.timezone)
+                    } catch (e: Exception) {
+                        TimeZone.currentSystemDefault()
+                    }
+                    val now = Clock.System.now().toLocalDateTime(locationTz)
                     val nextInfo = getNextPrayerUseCase.execute(currentTimes, now)
 
                     if (nextInfo != null) {
-                        val updatedTimes = currentTimes.map { prayer ->
-                            prayer.copy(isNext = prayer.prayerName == nextInfo.prayer.prayerName)
+                        val activeNextName = nextInfo.prayer.prayerName
+                        val hasChangedNext = currentTimes.any { it.isNext != (it.prayerName == activeNextName) }
+
+                        val updatedTimes = if (hasChangedNext) {
+                            currentTimes.map { prayer ->
+                                prayer.copy(isNext = prayer.prayerName == activeNextName)
+                            }
+                        } else {
+                            currentTimes
                         }
-                        _uiState.update {
-                            it.copy(
-                                prayerTimes = updatedTimes,
-                                nextPrayer = nextInfo.prayer,
-                                countdownFormatted = nextInfo.formattedCountdown
-                            )
+
+                        _uiState.update { current ->
+                            if (current.countdownFormatted != nextInfo.formattedCountdown || hasChangedNext) {
+                                current.copy(
+                                    prayerTimes = updatedTimes,
+                                    nextPrayer = nextInfo.prayer,
+                                    countdownFormatted = nextInfo.formattedCountdown
+                                )
+                            } else {
+                                current
+                            }
                         }
                     }
                 }

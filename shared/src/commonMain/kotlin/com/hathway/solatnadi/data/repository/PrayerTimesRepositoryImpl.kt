@@ -2,11 +2,12 @@ package com.hathway.solatnadi.data.repository
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOneOrNull
+import com.hathway.solatnadi.data.mapper.estimateHijriDate
+import com.hathway.solatnadi.data.mapper.formatGregorianDate
 import com.hathway.solatnadi.data.mapper.toDomainList
 import com.hathway.solatnadi.data.remote.PrayerTimesApi
 import com.hathway.solatnadi.database.SolatNadiDatabase
 import com.hathway.solatnadi.domain.model.PrayerLocation
-import com.hathway.solatnadi.domain.model.PrayerName
 import com.hathway.solatnadi.domain.model.PrayerSchedule
 import com.hathway.solatnadi.domain.repository.PreferencesRepository
 import com.hathway.solatnadi.domain.repository.PrayerTimesRepository
@@ -14,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
@@ -36,12 +38,14 @@ class PrayerTimesRepositoryImpl(
 
         val notificationPreferencesFlow = preferencesRepository.observeNotificationPreferences()
         val locationsFlow = preferencesRepository.observeAvailableLocations()
+        val appPreferencesFlow = preferencesRepository.observeAppPreferences()
 
         return combine(
             prayerTimeFlow,
             notificationPreferencesFlow,
-            locationsFlow
-        ) { entity, notifMap, locations ->
+            locationsFlow,
+            appPreferencesFlow
+        ) { entity, notifMap, locations, appPrefs ->
             val location = locations.find { it.id == locationId } ?: PrayerLocation(
                 id = locationId,
                 name = "Kuala Lumpur",
@@ -51,11 +55,11 @@ class PrayerTimesRepositoryImpl(
                 timezone = "Asia/Kuala_Lumpur"
             )
 
-            if (entity != null) {
-                entity.toDomainList(location = location, notificationPreferences = notifMap)
-            } else {
-                createDefaultSchedule(location, date, notifMap)
-            }
+            entity?.toDomainList(
+                location = location,
+                notificationPreferences = notifMap,
+                timeFormat = appPrefs.timeFormat
+            )
         }
     }
 
@@ -64,15 +68,41 @@ class PrayerTimesRepositoryImpl(
         date: LocalDate
     ): Result<Unit> = withContext(Dispatchers.IO) {
         try {
+            val appPrefs = preferencesRepository.observeAppPreferences().first()
             val response = api.getPrayerTimes(
                 latitude = location.latitude,
                 longitude = location.longitude,
-                date = date
+                date = date,
+                method = appPrefs.calculationMethod,
+                school = appPrefs.madhab.schoolCode
             )
 
             val timings = response.data?.timings ?: return@withContext Result.failure(
                 IllegalStateException("Invalid API response")
             )
+
+            val greg = response.data.date.gregorian
+            val hijri = response.data.date.hijri
+
+            val gregorianDateStr = if (greg != null) {
+                val weekday = greg.weekday?.en?.take(3) ?: ""
+                val day = greg.date.split("-").firstOrNull() ?: date.dayOfMonth.toString()
+                val month = greg.month?.en?.take(3) ?: ""
+                val year = greg.year
+                "$weekday, $day $month $year"
+            } else {
+                formatGregorianDate(date)
+            }
+
+            val hijriDateStr = if (hijri != null) {
+                val day = hijri.day
+                val month = hijri.month?.en ?: "Rabiulakhir"
+                val year = hijri.year
+                val desig = hijri.designation?.abbreviated ?: "AH"
+                "$day $month $year $desig"
+            } else {
+                estimateHijriDate(date)
+            }
 
             val dateString = formatDateKey(date)
             val currentTimeMillis = Clock.System.now().toEpochMilliseconds()
@@ -87,6 +117,8 @@ class PrayerTimesRepositoryImpl(
                     maghrib = timings.maghrib,
                     isha = timings.isha,
                     source = "Aladhan API",
+                    gregorianDate = gregorianDateStr,
+                    hijriDate = hijriDateStr,
                     updatedAt = currentTimeMillis
                 )
             }
@@ -99,29 +131,5 @@ class PrayerTimesRepositoryImpl(
 
     private fun formatDateKey(date: LocalDate): String {
         return "${date.year}-${date.monthNumber.toString().padStart(2, '0')}-${date.dayOfMonth.toString().padStart(2, '0')}"
-    }
-
-    private fun createDefaultSchedule(
-        location: PrayerLocation,
-        date: LocalDate,
-        notifMap: Map<PrayerName, Boolean>
-    ): PrayerSchedule {
-        val dateString = formatDateKey(date)
-        val currentTimeMillis = Clock.System.now().toEpochMilliseconds()
-        
-        database.solatNadiDatabaseQueries.insertPrayerTime(
-            locationId = location.id,
-            date = dateString,
-            fajr = "05:54",
-            dhuhr = "13:22",
-            asr = "16:46",
-            maghrib = "19:21",
-            isha = "20:32",
-            source = "Aladhan API (Cached)",
-            updatedAt = currentTimeMillis
-        )
-
-        val entity = database.solatNadiDatabaseQueries.getPrayerTimeForDate(location.id, dateString).executeAsOne()
-        return entity.toDomainList(location, notifMap)
     }
 }

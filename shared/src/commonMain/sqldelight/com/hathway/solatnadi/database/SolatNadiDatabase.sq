@@ -17,6 +17,8 @@ CREATE TABLE PrayerTimeEntity (
     maghrib TEXT NOT NULL,
     isha TEXT NOT NULL,
     source TEXT NOT NULL,
+    gregorianDate TEXT NOT NULL DEFAULT '',
+    hijriDate TEXT NOT NULL DEFAULT '',
     updatedAt INTEGER NOT NULL,
     PRIMARY KEY (locationId, date),
     FOREIGN KEY (locationId) REFERENCES LocationEntity(id) ON DELETE CASCADE
@@ -64,8 +66,8 @@ WHERE locationId = :locationId
 ORDER BY date ASC;
 
 insertPrayerTime:
-INSERT OR REPLACE INTO PrayerTimeEntity (locationId, date, fajr, dhuhr, asr, maghrib, isha, source, updatedAt)
-VALUES (:locationId, :date, :fajr, :dhuhr, :asr, :maghrib, :isha, :source, :updatedAt);
+INSERT OR REPLACE INTO PrayerTimeEntity (locationId, date, fajr, dhuhr, asr, maghrib, isha, source, gregorianDate, hijriDate, updatedAt)
+VALUES (:locationId, :date, :fajr, :dhuhr, :asr, :maghrib, :isha, :source, :gregorianDate, :hijriDate, :updatedAt);
 
 deletePrayerTimesForLocation:
 DELETE FROM PrayerTimeEntity WHERE locationId = :locationId;

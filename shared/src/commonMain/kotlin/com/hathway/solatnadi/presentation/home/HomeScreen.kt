@@ -19,16 +19,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,13 +44,15 @@ import solatnadi.shared.generated.resources.misty_kuala_lumpur_sunrise_skyline_b
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
-    onNavigateToSettings: () -> Unit
+    onNavigateToSettings: () -> Unit,
+    onNavigateToLocationSelection: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     HomeScreenContent(
         uiState = uiState,
         onIntent = viewModel::processIntent,
-        onNavigateToSettings = onNavigateToSettings
+        onNavigateToSettings = onNavigateToSettings,
+        onNavigateToLocationSelection = onNavigateToLocationSelection
     )
 }
 
@@ -62,10 +60,9 @@ fun HomeScreen(
 fun HomeScreenContent(
     uiState: HomeUiState,
     onIntent: (HomeIntent) -> Unit,
-    onNavigateToSettings: () -> Unit
+    onNavigateToSettings: () -> Unit,
+    onNavigateToLocationSelection: () -> Unit
 ) {
-    var showLocationMenu by remember { mutableStateOf(false) }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -111,68 +108,51 @@ fun HomeScreenContent(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(12.dp))
-                            .clickable { showLocationMenu = true }
-                            .padding(horizontal = 6.dp, vertical = 4.dp)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable { onNavigateToLocationSelection() }
+                        .padding(horizontal = 6.dp, vertical = 4.dp)
+                ) {
+                    Surface(
+                        modifier = Modifier.size(36.dp),
+                        shape = CircleShape,
+                        color = SolatNadiPalette.ForestGreen
                     ) {
-                        Surface(
-                            modifier = Modifier.size(36.dp),
-                            shape = CircleShape,
-                            color = SolatNadiPalette.ForestGreen
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Text(
-                                    text = "📍",
-                                    fontSize = 18.sp
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.width(10.dp))
-
-                        Column {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(
-                                    text = "${uiState.location?.name ?: "Kuala Lumpur"}, ${uiState.location?.country ?: "Malaysia"}",
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = SolatNadiPalette.TextPrimary
-                                )
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text(
-                                    text = "∨",
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = SolatNadiPalette.TextPrimary
-                                )
-                            }
-
+                        Box(contentAlignment = Alignment.Center) {
                             Text(
-                                text = "${uiState.gregorianDateFormatted}  •  ${uiState.hijriDateFormatted}",
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = Color(0xFF6B7A85)
+                                text = "📍",
+                                fontSize = 18.sp
                             )
                         }
                     }
 
-                    DropdownMenu(
-                        expanded = showLocationMenu,
-                        onDismissRequest = { showLocationMenu = false }
-                    ) {
-                        uiState.availableLocations.forEach { loc ->
-                            DropdownMenuItem(
-                                text = { Text("${loc.name}, ${loc.country}") },
-                                onClick = {
-                                    showLocationMenu = false
-                                    onIntent(HomeIntent.SelectLocation(loc))
-                                }
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    Column {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "${uiState.location?.name ?: "Kuala Lumpur"}, ${uiState.location?.country ?: "Malaysia"}",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = SolatNadiPalette.TextPrimary
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = "∨",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = SolatNadiPalette.TextPrimary
                             )
                         }
+
+                        Text(
+                            text = "${uiState.gregorianDateFormatted}  •  ${uiState.hijriDateFormatted}",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color(0xFF6B7A85)
+                        )
                     }
                 }
 
@@ -233,12 +213,14 @@ fun HomeScreenContent(
             }
 
             uiState.prayerTimes.forEach { prayerTime ->
-                PrayerCard(
-                    prayerTime = prayerTime,
-                    onToggleNotification = { enabled ->
-                        onIntent(HomeIntent.ToggleNotification(prayerTime.prayerName, enabled))
-                    }
-                )
+                key(prayerTime.prayerName) {
+                    PrayerCard(
+                        prayerTime = prayerTime,
+                        onToggleNotification = { enabled ->
+                            onIntent(HomeIntent.ToggleNotification(prayerTime.prayerName, enabled))
+                        }
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(30.dp))

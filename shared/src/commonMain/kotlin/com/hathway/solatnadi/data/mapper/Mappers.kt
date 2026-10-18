@@ -6,6 +6,7 @@ import com.hathway.solatnadi.domain.model.PrayerLocation
 import com.hathway.solatnadi.domain.model.PrayerName
 import com.hathway.solatnadi.domain.model.PrayerSchedule
 import com.hathway.solatnadi.domain.model.PrayerTime
+import com.hathway.solatnadi.domain.model.TimeFormat
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 
@@ -36,7 +37,8 @@ fun PrayerLocation.toEntity(): LocationEntity {
 fun PrayerTimeEntity.toDomainList(
     location: PrayerLocation,
     notificationPreferences: Map<PrayerName, Boolean> = emptyMap(),
-    nextPrayerName: PrayerName? = null
+    nextPrayerName: PrayerName? = null,
+    timeFormat: TimeFormat = TimeFormat.FORMAT_12H
 ): PrayerSchedule {
     val dateParts = date.split("-")
     val localDate = if (dateParts.size == 3) {
@@ -46,17 +48,17 @@ fun PrayerTimeEntity.toDomainList(
     }
 
     val times = listOf(
-        createPrayerTime(PrayerName.FAJR, fajr, localDate, notificationPreferences[PrayerName.FAJR] ?: true, nextPrayerName),
-        createPrayerTime(PrayerName.DHUHR, dhuhr, localDate, notificationPreferences[PrayerName.DHUHR] ?: true, nextPrayerName),
-        createPrayerTime(PrayerName.ASR, asr, localDate, notificationPreferences[PrayerName.ASR] ?: true, nextPrayerName),
-        createPrayerTime(PrayerName.MAGHRIB, maghrib, localDate, notificationPreferences[PrayerName.MAGHRIB] ?: true, nextPrayerName),
-        createPrayerTime(PrayerName.ISHA, isha, localDate, notificationPreferences[PrayerName.ISHA] ?: true, nextPrayerName)
+        createPrayerTime(PrayerName.FAJR, fajr, localDate, notificationPreferences[PrayerName.FAJR] ?: true, nextPrayerName, timeFormat),
+        createPrayerTime(PrayerName.DHUHR, dhuhr, localDate, notificationPreferences[PrayerName.DHUHR] ?: true, nextPrayerName, timeFormat),
+        createPrayerTime(PrayerName.ASR, asr, localDate, notificationPreferences[PrayerName.ASR] ?: true, nextPrayerName, timeFormat),
+        createPrayerTime(PrayerName.MAGHRIB, maghrib, localDate, notificationPreferences[PrayerName.MAGHRIB] ?: true, nextPrayerName, timeFormat),
+        createPrayerTime(PrayerName.ISHA, isha, localDate, notificationPreferences[PrayerName.ISHA] ?: true, nextPrayerName, timeFormat)
     )
 
     val nextPrayer = times.find { it.isNext } ?: times.find { it.prayerName == nextPrayerName }
 
-    val gregorianFormatted = formatGregorianDate(localDate)
-    val hijriFormatted = estimateHijriDate(localDate)
+    val gregorianFormatted = if (gregorianDate.isNotBlank()) gregorianDate else formatGregorianDate(localDate)
+    val hijriFormatted = if (hijriDate.isNotBlank()) hijriDate else estimateHijriDate(localDate)
 
     return PrayerSchedule(
         location = location,
@@ -74,7 +76,8 @@ private fun createPrayerTime(
     timeRaw: String,
     date: LocalDate,
     isNotificationEnabled: Boolean,
-    nextPrayerName: PrayerName?
+    nextPrayerName: PrayerName?,
+    timeFormat: TimeFormat
 ): PrayerTime {
     val cleanTime = timeRaw.split(" ").firstOrNull() ?: timeRaw
     val timeParts = cleanTime.split(":")
@@ -83,7 +86,11 @@ private fun createPrayerTime(
 
     @Suppress("DEPRECATION")
     val dateTime = LocalDateTime(date.year, date.monthNumber, date.dayOfMonth, hour, minute, 0)
-    val formattedTimeString = formatTo12Hour(hour, minute)
+    val formattedTimeString = if (timeFormat == TimeFormat.FORMAT_24H) {
+        "${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}"
+    } else {
+        formatTo12Hour(hour, minute)
+    }
 
     return PrayerTime(
         prayerName = prayerName,

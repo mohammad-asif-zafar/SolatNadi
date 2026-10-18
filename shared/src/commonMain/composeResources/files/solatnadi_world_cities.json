@@ -1,0 +1,1820 @@
+{
+  "schemaVersion": "1.0.0",
+  "dataset": {
+    "name": "SolatNadi Worldwide Major Cities Starter Dataset",
+    "description": "Curated starter set of major cities for local city search and coordinate-based prayer-time API requests. Not an exhaustive global gazetteer.",
+    "generatedDate": "2026-10-18",
+    "recordCount": 127,
+    "coordinateOrder": "latitude, longitude",
+    "coordinateUnits": "decimal degrees",
+    "timezoneStandard": "IANA Time Zone Database identifiers",
+    "prayerZonePolicy": "No city is marked as having a verified official prayer zone. prayerZone.status=not_verified means coordinates may be used for coordinate-based calculations, but official local schedules/zone mappings have not been validated.",
+    "sources": [
+      {
+        "name": "GeoNames",
+        "url": "https://www.geonames.org/",
+        "use": "Recommended authoritative source for building/refreshing a broader city gazetteer and timezone mapping.",
+        "attribution": "GeoNames geographical database; consult GeoNames terms and attribution requirements before redistributing derived bulk data.",
+        "license": "Creative Commons Attribution 4.0 (CC BY 4.0)"
+      },
+      {
+        "name": "World Cities geolocation data by joelacus",
+        "url": "https://github.com/joelacus/world-cities",
+        "use": "Reference for a downloadable world city dataset with coordinates and optional timezone metadata.",
+        "attribution": "World Cities geolocation data; source states data is from GeoNames except separately identified enrichment fields.",
+        "license": "Creative Commons Attribution 4.0 (CC BY 4.0)"
+      },
+      {
+        "name": "IANA Time Zone Database",
+        "url": "https://www.iana.org/time-zones",
+        "use": "Standard timezone identifier system; timezone values in this starter file should be validated against the timezone database bundled with your platform/runtime."
+      }
+    ],
+    "limitations": [
+      "This is a curated starter dataset, not every city worldwide.",
+      "Coordinates are representative city-center points and may not match the user's exact locality.",
+      "City coordinates alone do not establish an official prayer timetable or Malaysian JAKIM prayer-zone membership.",
+      "Before production release, validate the full dataset and consider generating a larger source-derived file with stable GeoNames IDs."
+    ]
+  },
+  "cities": [
+    {
+      "id": "abu-dhabi",
+      "name": "Abu Dhabi",
+      "countryCode": "AE",
+      "latitude": 24.4539,
+      "longitude": 54.3773,
+      "timezone": "Asia/Dubai",
+      "population": 1500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "dubai",
+      "name": "Dubai",
+      "countryCode": "AE",
+      "latitude": 25.2048,
+      "longitude": 55.2708,
+      "timezone": "Asia/Dubai",
+      "population": 3500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "kabul",
+      "name": "Kabul",
+      "countryCode": "AF",
+      "latitude": 34.5553,
+      "longitude": 69.2075,
+      "timezone": "Asia/Kabul",
+      "population": 4600000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "luanda",
+      "name": "Luanda",
+      "countryCode": "AO",
+      "latitude": -8.839,
+      "longitude": 13.2894,
+      "timezone": "Africa/Luanda",
+      "population": 9000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "buenos-aires",
+      "name": "Buenos Aires",
+      "countryCode": "AR",
+      "latitude": -34.6037,
+      "longitude": -58.3816,
+      "timezone": "America/Argentina/Buenos_Aires",
+      "population": 15200000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "vienna",
+      "name": "Vienna",
+      "countryCode": "AT",
+      "latitude": 48.2082,
+      "longitude": 16.3738,
+      "timezone": "Europe/Vienna",
+      "population": 2000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "melbourne",
+      "name": "Melbourne",
+      "countryCode": "AU",
+      "latitude": -37.8136,
+      "longitude": 144.9631,
+      "timezone": "Australia/Melbourne",
+      "population": 5100000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "perth",
+      "name": "Perth",
+      "countryCode": "AU",
+      "latitude": -31.9505,
+      "longitude": 115.8605,
+      "timezone": "Australia/Perth",
+      "population": 2200000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "sydney",
+      "name": "Sydney",
+      "countryCode": "AU",
+      "latitude": -33.8688,
+      "longitude": 151.2093,
+      "timezone": "Australia/Sydney",
+      "population": 5300000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "dhaka",
+      "name": "Dhaka",
+      "countryCode": "BD",
+      "latitude": 23.8103,
+      "longitude": 90.4125,
+      "timezone": "Asia/Dhaka",
+      "population": 22400000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "bandar-seri-begawan",
+      "name": "Bandar Seri Begawan",
+      "countryCode": "BN",
+      "latitude": 4.9031,
+      "longitude": 114.9398,
+      "timezone": "Asia/Brunei",
+      "population": 100000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "rio-de-janeiro",
+      "name": "Rio de Janeiro",
+      "countryCode": "BR",
+      "latitude": -22.9068,
+      "longitude": -43.1729,
+      "timezone": "America/Sao_Paulo",
+      "population": 13700000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "sao-paulo",
+      "name": "São Paulo",
+      "countryCode": "BR",
+      "latitude": -23.5505,
+      "longitude": -46.6333,
+      "timezone": "America/Sao_Paulo",
+      "population": 22400000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "montreal",
+      "name": "Montreal",
+      "countryCode": "CA",
+      "latitude": 45.5019,
+      "longitude": -73.5674,
+      "timezone": "America/Toronto",
+      "population": 4300000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "toronto",
+      "name": "Toronto",
+      "countryCode": "CA",
+      "latitude": 43.6532,
+      "longitude": -79.3832,
+      "timezone": "America/Toronto",
+      "population": 6500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "vancouver",
+      "name": "Vancouver",
+      "countryCode": "CA",
+      "latitude": 49.2827,
+      "longitude": -123.1207,
+      "timezone": "America/Vancouver",
+      "population": 2600000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "kinshasa",
+      "name": "Kinshasa",
+      "countryCode": "CD",
+      "latitude": -4.4419,
+      "longitude": 15.2663,
+      "timezone": "Africa/Kinshasa",
+      "population": 15600000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "zurich",
+      "name": "Zurich",
+      "countryCode": "CH",
+      "latitude": 47.3769,
+      "longitude": 8.5417,
+      "timezone": "Europe/Zurich",
+      "population": 1400000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "santiago",
+      "name": "Santiago",
+      "countryCode": "CL",
+      "latitude": -33.4489,
+      "longitude": -70.6693,
+      "timezone": "America/Santiago",
+      "population": 6700000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "beijing",
+      "name": "Beijing",
+      "countryCode": "CN",
+      "latitude": 39.9042,
+      "longitude": 116.4074,
+      "timezone": "Asia/Shanghai",
+      "population": 21200000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "chengdu",
+      "name": "Chengdu",
+      "countryCode": "CN",
+      "latitude": 30.5728,
+      "longitude": 104.0668,
+      "timezone": "Asia/Shanghai",
+      "population": 9000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "chongqing",
+      "name": "Chongqing",
+      "countryCode": "CN",
+      "latitude": 29.4316,
+      "longitude": 106.9123,
+      "timezone": "Asia/Shanghai",
+      "population": 16300000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "dongguan",
+      "name": "Dongguan",
+      "countryCode": "CN",
+      "latitude": 23.0207,
+      "longitude": 113.7518,
+      "timezone": "Asia/Shanghai",
+      "population": 7500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "guangzhou",
+      "name": "Guangzhou",
+      "countryCode": "CN",
+      "latitude": 23.1291,
+      "longitude": 113.2644,
+      "timezone": "Asia/Shanghai",
+      "population": 14500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "hangzhou",
+      "name": "Hangzhou",
+      "countryCode": "CN",
+      "latitude": 30.2741,
+      "longitude": 120.1551,
+      "timezone": "Asia/Shanghai",
+      "population": 7500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "nanjing",
+      "name": "Nanjing",
+      "countryCode": "CN",
+      "latitude": 32.0603,
+      "longitude": 118.7969,
+      "timezone": "Asia/Shanghai",
+      "population": 9000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "shanghai",
+      "name": "Shanghai",
+      "countryCode": "CN",
+      "latitude": 31.2304,
+      "longitude": 121.4737,
+      "timezone": "Asia/Shanghai",
+      "population": 29200000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "shenzhen",
+      "name": "Shenzhen",
+      "countryCode": "CN",
+      "latitude": 22.5431,
+      "longitude": 114.0579,
+      "timezone": "Asia/Shanghai",
+      "population": 12000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "suzhou",
+      "name": "Suzhou",
+      "countryCode": "CN",
+      "latitude": 31.2989,
+      "longitude": 120.5853,
+      "timezone": "Asia/Shanghai",
+      "population": 7000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "tianjin",
+      "name": "Tianjin",
+      "countryCode": "CN",
+      "latitude": 39.3434,
+      "longitude": 117.3616,
+      "timezone": "Asia/Shanghai",
+      "population": 11600000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "wuhan",
+      "name": "Wuhan",
+      "countryCode": "CN",
+      "latitude": 30.5928,
+      "longitude": 114.3055,
+      "timezone": "Asia/Shanghai",
+      "population": 9000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "xi-an",
+      "name": "Xi'an",
+      "countryCode": "CN",
+      "latitude": 34.3416,
+      "longitude": 108.9398,
+      "timezone": "Asia/Shanghai",
+      "population": 8500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "bogota",
+      "name": "Bogotá",
+      "countryCode": "CO",
+      "latitude": 4.711,
+      "longitude": -74.0721,
+      "timezone": "America/Bogota",
+      "population": 11300000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "berlin",
+      "name": "Berlin",
+      "countryCode": "DE",
+      "latitude": 52.52,
+      "longitude": 13.405,
+      "timezone": "Europe/Berlin",
+      "population": 3700000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "algiers",
+      "name": "Algiers",
+      "countryCode": "DZ",
+      "latitude": 36.7538,
+      "longitude": 3.0588,
+      "timezone": "Africa/Algiers",
+      "population": 3900000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "alexandria",
+      "name": "Alexandria",
+      "countryCode": "EG",
+      "latitude": 31.2001,
+      "longitude": 29.9187,
+      "timezone": "Africa/Cairo",
+      "population": 5500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "cairo",
+      "name": "Cairo",
+      "countryCode": "EG",
+      "latitude": 30.0444,
+      "longitude": 31.2357,
+      "timezone": "Africa/Cairo",
+      "population": 22100000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "barcelona",
+      "name": "Barcelona",
+      "countryCode": "ES",
+      "latitude": 41.3874,
+      "longitude": 2.1686,
+      "timezone": "Europe/Madrid",
+      "population": 5600000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "madrid",
+      "name": "Madrid",
+      "countryCode": "ES",
+      "latitude": 40.4168,
+      "longitude": -3.7038,
+      "timezone": "Europe/Madrid",
+      "population": 6700000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "addis-ababa",
+      "name": "Addis Ababa",
+      "countryCode": "ET",
+      "latitude": 8.9806,
+      "longitude": 38.7578,
+      "timezone": "Africa/Addis_Ababa",
+      "population": 5200000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "suva",
+      "name": "Suva",
+      "countryCode": "FJ",
+      "latitude": -18.1248,
+      "longitude": 178.4501,
+      "timezone": "Pacific/Fiji",
+      "population": 180000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "paris",
+      "name": "Paris",
+      "countryCode": "FR",
+      "latitude": 48.8566,
+      "longitude": 2.3522,
+      "timezone": "Europe/Paris",
+      "population": 11000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "london",
+      "name": "London",
+      "countryCode": "GB",
+      "latitude": 51.5072,
+      "longitude": -0.1276,
+      "timezone": "Europe/London",
+      "population": 9500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "accra",
+      "name": "Accra",
+      "countryCode": "GH",
+      "latitude": 5.6037,
+      "longitude": -0.187,
+      "timezone": "Africa/Accra",
+      "population": 2500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "athens",
+      "name": "Athens",
+      "countryCode": "GR",
+      "latitude": 37.9838,
+      "longitude": 23.7275,
+      "timezone": "Europe/Athens",
+      "population": 3100000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "hong-kong",
+      "name": "Hong Kong",
+      "countryCode": "HK",
+      "latitude": 22.3193,
+      "longitude": 114.1694,
+      "timezone": "Asia/Hong_Kong",
+      "population": 7500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "bandung",
+      "name": "Bandung",
+      "countryCode": "ID",
+      "latitude": -6.9175,
+      "longitude": 107.6191,
+      "timezone": "Asia/Jakarta",
+      "population": 2500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "denpasar",
+      "name": "Denpasar",
+      "countryCode": "ID",
+      "latitude": -8.6705,
+      "longitude": 115.2126,
+      "timezone": "Asia/Makassar",
+      "population": 900000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "jakarta",
+      "name": "Jakarta",
+      "countryCode": "ID",
+      "latitude": -6.2088,
+      "longitude": 106.8456,
+      "timezone": "Asia/Jakarta",
+      "population": 11200000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "makassar",
+      "name": "Makassar",
+      "countryCode": "ID",
+      "latitude": -5.1477,
+      "longitude": 119.4327,
+      "timezone": "Asia/Makassar",
+      "population": 1500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "medan",
+      "name": "Medan",
+      "countryCode": "ID",
+      "latitude": 3.5952,
+      "longitude": 98.6722,
+      "timezone": "Asia/Jakarta",
+      "population": 2500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "surabaya",
+      "name": "Surabaya",
+      "countryCode": "ID",
+      "latitude": -7.2575,
+      "longitude": 112.7521,
+      "timezone": "Asia/Jakarta",
+      "population": 2900000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "yogyakarta",
+      "name": "Yogyakarta",
+      "countryCode": "ID",
+      "latitude": -7.7956,
+      "longitude": 110.3695,
+      "timezone": "Asia/Jakarta",
+      "population": 400000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "ahmedabad",
+      "name": "Ahmedabad",
+      "countryCode": "IN",
+      "latitude": 23.0225,
+      "longitude": 72.5714,
+      "timezone": "Asia/Kolkata",
+      "population": 8500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "bangalore",
+      "name": "Bengaluru",
+      "countryCode": "IN",
+      "latitude": 12.9716,
+      "longitude": 77.5946,
+      "timezone": "Asia/Kolkata",
+      "population": 12300000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "chennai",
+      "name": "Chennai",
+      "countryCode": "IN",
+      "latitude": 13.0827,
+      "longitude": 80.2707,
+      "timezone": "Asia/Kolkata",
+      "population": 11000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "delhi",
+      "name": "Delhi",
+      "countryCode": "IN",
+      "latitude": 28.6139,
+      "longitude": 77.209,
+      "timezone": "Asia/Kolkata",
+      "population": 32900000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "hyderabad",
+      "name": "Hyderabad",
+      "countryCode": "IN",
+      "latitude": 17.385,
+      "longitude": 78.4867,
+      "timezone": "Asia/Kolkata",
+      "population": 10500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "kolkata",
+      "name": "Kolkata",
+      "countryCode": "IN",
+      "latitude": 22.5726,
+      "longitude": 88.3639,
+      "timezone": "Asia/Kolkata",
+      "population": 15100000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "mumbai",
+      "name": "Mumbai",
+      "countryCode": "IN",
+      "latitude": 19.076,
+      "longitude": 72.8777,
+      "timezone": "Asia/Kolkata",
+      "population": 20700000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "surat",
+      "name": "Surat",
+      "countryCode": "IN",
+      "latitude": 21.1702,
+      "longitude": 72.8311,
+      "timezone": "Asia/Kolkata",
+      "population": 7500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "baghdad",
+      "name": "Baghdad",
+      "countryCode": "IQ",
+      "latitude": 33.3152,
+      "longitude": 44.3661,
+      "timezone": "Asia/Baghdad",
+      "population": 7000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "tehran",
+      "name": "Tehran",
+      "countryCode": "IR",
+      "latitude": 35.6892,
+      "longitude": 51.389,
+      "timezone": "Asia/Tehran",
+      "population": 9500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "reykjavik",
+      "name": "Reykjavik",
+      "countryCode": "IS",
+      "latitude": 64.1466,
+      "longitude": -21.9426,
+      "timezone": "Atlantic/Reykjavik",
+      "population": 250000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "rome",
+      "name": "Rome",
+      "countryCode": "IT",
+      "latitude": 41.9028,
+      "longitude": 12.4964,
+      "timezone": "Europe/Rome",
+      "population": 4300000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "amman",
+      "name": "Amman",
+      "countryCode": "JO",
+      "latitude": 31.9539,
+      "longitude": 35.9106,
+      "timezone": "Asia/Amman",
+      "population": 4200000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "nagoya",
+      "name": "Nagoya",
+      "countryCode": "JP",
+      "latitude": 35.1815,
+      "longitude": 136.9066,
+      "timezone": "Asia/Tokyo",
+      "population": 9500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "osaka",
+      "name": "Osaka",
+      "countryCode": "JP",
+      "latitude": 34.6937,
+      "longitude": 135.5023,
+      "timezone": "Asia/Tokyo",
+      "population": 19000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "tokyo",
+      "name": "Tokyo",
+      "countryCode": "JP",
+      "latitude": 35.6762,
+      "longitude": 139.6503,
+      "timezone": "Asia/Tokyo",
+      "population": 37400000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "nairobi",
+      "name": "Nairobi",
+      "countryCode": "KE",
+      "latitude": -1.2921,
+      "longitude": 36.8219,
+      "timezone": "Africa/Nairobi",
+      "population": 5000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "phnom-penh",
+      "name": "Phnom Penh",
+      "countryCode": "KH",
+      "latitude": 11.5564,
+      "longitude": 104.9282,
+      "timezone": "Asia/Phnom_Penh",
+      "population": 2300000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "seoul",
+      "name": "Seoul",
+      "countryCode": "KR",
+      "latitude": 37.5665,
+      "longitude": 126.978,
+      "timezone": "Asia/Seoul",
+      "population": 9900000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "colombo",
+      "name": "Colombo",
+      "countryCode": "LK",
+      "latitude": 6.9271,
+      "longitude": 79.8612,
+      "timezone": "Asia/Colombo",
+      "population": 750000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "casablanca",
+      "name": "Casablanca",
+      "countryCode": "MA",
+      "latitude": 33.5731,
+      "longitude": -7.5898,
+      "timezone": "Africa/Casablanca",
+      "population": 4400000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "rabat",
+      "name": "Rabat",
+      "countryCode": "MA",
+      "latitude": 34.0209,
+      "longitude": -6.8416,
+      "timezone": "Africa/Casablanca",
+      "population": 1900000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "yangon",
+      "name": "Yangon",
+      "countryCode": "MM",
+      "latitude": 16.8409,
+      "longitude": 96.1735,
+      "timezone": "Asia/Yangon",
+      "population": 5200000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "mexico-city",
+      "name": "Mexico City",
+      "countryCode": "MX",
+      "latitude": 19.4326,
+      "longitude": -99.1332,
+      "timezone": "America/Mexico_City",
+      "population": 21900000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "george-town",
+      "name": "George Town",
+      "countryCode": "MY",
+      "latitude": 5.4141,
+      "longitude": 100.3288,
+      "timezone": "Asia/Kuala_Lumpur",
+      "population": 800000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "johor-bahru",
+      "name": "Johor Bahru",
+      "countryCode": "MY",
+      "latitude": 1.4927,
+      "longitude": 103.7414,
+      "timezone": "Asia/Kuala_Lumpur",
+      "population": 1700000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "kota-kinabalu",
+      "name": "Kota Kinabalu",
+      "countryCode": "MY",
+      "latitude": 5.9804,
+      "longitude": 116.0735,
+      "timezone": "Asia/Kuching",
+      "population": 500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "kuala-lumpur",
+      "name": "Kuala Lumpur",
+      "countryCode": "MY",
+      "latitude": 3.139,
+      "longitude": 101.6869,
+      "timezone": "Asia/Kuala_Lumpur",
+      "population": 8400000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "kuching",
+      "name": "Kuching",
+      "countryCode": "MY",
+      "latitude": 1.5533,
+      "longitude": 110.3592,
+      "timezone": "Asia/Kuching",
+      "population": 700000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "puchong",
+      "name": "Puchong",
+      "countryCode": "MY",
+      "latitude": 3.0119,
+      "longitude": 101.6168,
+      "timezone": "Asia/Kuala_Lumpur",
+      "population": 500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "lagos",
+      "name": "Lagos",
+      "countryCode": "NG",
+      "latitude": 6.5244,
+      "longitude": 3.3792,
+      "timezone": "Africa/Lagos",
+      "population": 15300000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "amsterdam",
+      "name": "Amsterdam",
+      "countryCode": "NL",
+      "latitude": 52.3676,
+      "longitude": 4.9041,
+      "timezone": "Europe/Amsterdam",
+      "population": 2500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "oslo",
+      "name": "Oslo",
+      "countryCode": "NO",
+      "latitude": 59.9139,
+      "longitude": 10.7522,
+      "timezone": "Europe/Oslo",
+      "population": 1100000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "kathmandu",
+      "name": "Kathmandu",
+      "countryCode": "NP",
+      "latitude": 27.7172,
+      "longitude": 85.324,
+      "timezone": "Asia/Kathmandu",
+      "population": 1400000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "auckland",
+      "name": "Auckland",
+      "countryCode": "NZ",
+      "latitude": -36.8509,
+      "longitude": 174.7645,
+      "timezone": "Pacific/Auckland",
+      "population": 1700000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "muscat",
+      "name": "Muscat",
+      "countryCode": "OM",
+      "latitude": 23.588,
+      "longitude": 58.3829,
+      "timezone": "Asia/Muscat",
+      "population": 1500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "lima",
+      "name": "Lima",
+      "countryCode": "PE",
+      "latitude": -12.0464,
+      "longitude": -77.0428,
+      "timezone": "America/Lima",
+      "population": 11000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "port-moresby",
+      "name": "Port Moresby",
+      "countryCode": "PG",
+      "latitude": -9.4438,
+      "longitude": 147.1803,
+      "timezone": "Pacific/Port_Moresby",
+      "population": 400000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "manila",
+      "name": "Manila",
+      "countryCode": "PH",
+      "latitude": 14.5995,
+      "longitude": 120.9842,
+      "timezone": "Asia/Manila",
+      "population": 14700000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "islamabad",
+      "name": "Islamabad",
+      "countryCode": "PK",
+      "latitude": 33.6844,
+      "longitude": 73.0479,
+      "timezone": "Asia/Karachi",
+      "population": 1200000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "karachi",
+      "name": "Karachi",
+      "countryCode": "PK",
+      "latitude": 24.8607,
+      "longitude": 67.0011,
+      "timezone": "Asia/Karachi",
+      "population": 15700000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "lahore",
+      "name": "Lahore",
+      "countryCode": "PK",
+      "latitude": 31.5204,
+      "longitude": 74.3587,
+      "timezone": "Asia/Karachi",
+      "population": 13000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "warsaw",
+      "name": "Warsaw",
+      "countryCode": "PL",
+      "latitude": 52.2297,
+      "longitude": 21.0122,
+      "timezone": "Europe/Warsaw",
+      "population": 1800000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "jerusalem",
+      "name": "Jerusalem",
+      "countryCode": "PS",
+      "latitude": 31.7683,
+      "longitude": 35.2137,
+      "timezone": "Asia/Jerusalem",
+      "population": 950000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "lisbon",
+      "name": "Lisbon",
+      "countryCode": "PT",
+      "latitude": 38.7223,
+      "longitude": -9.1393,
+      "timezone": "Europe/Lisbon",
+      "population": 2900000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "doha",
+      "name": "Doha",
+      "countryCode": "QA",
+      "latitude": 25.2854,
+      "longitude": 51.531,
+      "timezone": "Asia/Qatar",
+      "population": 1200000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "moscow",
+      "name": "Moscow",
+      "countryCode": "RU",
+      "latitude": 55.7558,
+      "longitude": 37.6173,
+      "timezone": "Europe/Moscow",
+      "population": 12500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "jeddah",
+      "name": "Jeddah",
+      "countryCode": "SA",
+      "latitude": 21.4858,
+      "longitude": 39.1925,
+      "timezone": "Asia/Riyadh",
+      "population": 4700000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "mecca",
+      "name": "Mecca",
+      "countryCode": "SA",
+      "latitude": 21.3891,
+      "longitude": 39.8579,
+      "timezone": "Asia/Riyadh",
+      "population": 2200000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "medina",
+      "name": "Medina",
+      "countryCode": "SA",
+      "latitude": 24.5247,
+      "longitude": 39.5692,
+      "timezone": "Asia/Riyadh",
+      "population": 1500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "riyadh",
+      "name": "Riyadh",
+      "countryCode": "SA",
+      "latitude": 24.7136,
+      "longitude": 46.6753,
+      "timezone": "Asia/Riyadh",
+      "population": 7000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "stockholm",
+      "name": "Stockholm",
+      "countryCode": "SE",
+      "latitude": 59.3293,
+      "longitude": 18.0686,
+      "timezone": "Europe/Stockholm",
+      "population": 2400000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "singapore",
+      "name": "Singapore",
+      "countryCode": "SG",
+      "latitude": 1.3521,
+      "longitude": 103.8198,
+      "timezone": "Asia/Singapore",
+      "population": 5900000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "bangkok",
+      "name": "Bangkok",
+      "countryCode": "TH",
+      "latitude": 13.7563,
+      "longitude": 100.5018,
+      "timezone": "Asia/Bangkok",
+      "population": 11000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "tunis",
+      "name": "Tunis",
+      "countryCode": "TN",
+      "latitude": 36.8065,
+      "longitude": 10.1815,
+      "timezone": "Africa/Tunis",
+      "population": 2400000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "ankara",
+      "name": "Ankara",
+      "countryCode": "TR",
+      "latitude": 39.9334,
+      "longitude": 32.8597,
+      "timezone": "Europe/Istanbul",
+      "population": 5700000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "istanbul",
+      "name": "Istanbul",
+      "countryCode": "TR",
+      "latitude": 41.0082,
+      "longitude": 28.9784,
+      "timezone": "Europe/Istanbul",
+      "population": 15300000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "taipei",
+      "name": "Taipei",
+      "countryCode": "TW",
+      "latitude": 25.033,
+      "longitude": 121.5654,
+      "timezone": "Asia/Taipei",
+      "population": 2600000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "dar-es-salaam",
+      "name": "Dar es Salaam",
+      "countryCode": "TZ",
+      "latitude": -6.7924,
+      "longitude": 39.2083,
+      "timezone": "Africa/Dar_es_Salaam",
+      "population": 7500000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "kyiv",
+      "name": "Kyiv",
+      "countryCode": "UA",
+      "latitude": 50.4501,
+      "longitude": 30.5234,
+      "timezone": "Europe/Kyiv",
+      "population": 3000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "anchorage",
+      "name": "Anchorage",
+      "countryCode": "US",
+      "latitude": 61.2181,
+      "longitude": -149.9003,
+      "timezone": "America/Anchorage",
+      "population": 290000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "chicago",
+      "name": "Chicago",
+      "countryCode": "US",
+      "latitude": 41.8781,
+      "longitude": -87.6298,
+      "timezone": "America/Chicago",
+      "population": 8900000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "dallas",
+      "name": "Dallas",
+      "countryCode": "US",
+      "latitude": 32.7767,
+      "longitude": -96.797,
+      "timezone": "America/Chicago",
+      "population": 5900000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "honolulu",
+      "name": "Honolulu",
+      "countryCode": "US",
+      "latitude": 21.3099,
+      "longitude": -157.8581,
+      "timezone": "Pacific/Honolulu",
+      "population": 1000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "los-angeles",
+      "name": "Los Angeles",
+      "countryCode": "US",
+      "latitude": 34.0522,
+      "longitude": -118.2437,
+      "timezone": "America/Los_Angeles",
+      "population": 12400000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "miami",
+      "name": "Miami",
+      "countryCode": "US",
+      "latitude": 25.7617,
+      "longitude": -80.1918,
+      "timezone": "America/New_York",
+      "population": 6200000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "new-york",
+      "name": "New York",
+      "countryCode": "US",
+      "latitude": 40.7128,
+      "longitude": -74.006,
+      "timezone": "America/New_York",
+      "population": 18900000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "san-francisco",
+      "name": "San Francisco",
+      "countryCode": "US",
+      "latitude": 37.7749,
+      "longitude": -122.4194,
+      "timezone": "America/Los_Angeles",
+      "population": 3300000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "washington-dc",
+      "name": "Washington, D.C.",
+      "countryCode": "US",
+      "latitude": 38.9072,
+      "longitude": -77.0369,
+      "timezone": "America/New_York",
+      "population": 630000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "tashkent",
+      "name": "Tashkent",
+      "countryCode": "UZ",
+      "latitude": 41.2995,
+      "longitude": 69.2401,
+      "timezone": "Asia/Tashkent",
+      "population": 3000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "hanoi",
+      "name": "Hanoi",
+      "countryCode": "VN",
+      "latitude": 21.0278,
+      "longitude": 105.8342,
+      "timezone": "Asia/Ho_Chi_Minh",
+      "population": 5000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "ho-chi-minh-city",
+      "name": "Ho Chi Minh City",
+      "countryCode": "VN",
+      "latitude": 10.8231,
+      "longitude": 106.6297,
+      "timezone": "Asia/Ho_Chi_Minh",
+      "population": 9000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "cape-town",
+      "name": "Cape Town",
+      "countryCode": "ZA",
+      "latitude": -33.9249,
+      "longitude": 18.4241,
+      "timezone": "Africa/Johannesburg",
+      "population": 4800000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "johannesburg",
+      "name": "Johannesburg",
+      "countryCode": "ZA",
+      "latitude": -26.2041,
+      "longitude": 28.0473,
+      "timezone": "Africa/Johannesburg",
+      "population": 6000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    }
+  ]
+}

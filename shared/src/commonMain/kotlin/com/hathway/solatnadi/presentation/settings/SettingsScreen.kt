@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -34,7 +33,8 @@ import com.hathway.solatnadi.presentation.theme.SolatNadiPalette
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onNavigateToLocationSelection: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -79,48 +79,40 @@ fun SettingsScreen(
         SettingsSectionHeader(title = "Location")
 
         Surface(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onNavigateToLocationSelection() },
             shape = RoundedCornerShape(16.dp),
             color = Color.White
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(
-                    text = "Current: ${uiState.selectedLocation?.name ?: "Kuala Lumpur"}, ${uiState.selectedLocation?.country ?: "Malaysia"}",
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = SolatNadiPalette.TextPrimary
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                Text(
-                    text = "Available Locations:",
-                    fontSize = 13.sp,
-                    color = Color(0xFF6B7A85)
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                uiState.availableLocations.forEach { loc ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { viewModel.selectLocation(loc) }
-                            .padding(vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = loc.id == uiState.selectedLocation?.id,
-                            onClick = { viewModel.selectLocation(loc) }
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "${loc.name}, ${loc.country}",
-                            fontSize = 14.sp,
-                            color = SolatNadiPalette.TextPrimary
-                        )
-                    }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(
+                        text = "Current Location",
+                        fontSize = 13.sp,
+                        color = Color(0xFF6B7A85)
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = "${uiState.selectedLocation?.name ?: "Kuala Lumpur"}, ${uiState.selectedLocation?.country ?: "Malaysia"}",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = SolatNadiPalette.TextPrimary
+                    )
                 }
+
+                Text(
+                    text = "Change ›",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = SolatNadiPalette.ForestGreen
+                )
             }
         }
 

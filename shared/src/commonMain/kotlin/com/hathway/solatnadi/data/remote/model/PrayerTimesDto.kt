@@ -47,7 +47,14 @@ data class HijriDateDto(
     val date: String,
     val day: String,
     val month: HijriMonthDto? = null,
-    val year: String
+    val year: String,
+    val designation: DesignationDto? = null
+)
+
+@Serializable
+data class DesignationDto(
+    val abbreviated: String? = "AH",
+    val expanded: String? = null
 )
 
 @Serializable
