@@ -23,11 +23,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
+import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
+@OptIn(ExperimentalCoroutinesApi::class, kotlin.time.ExperimentalTime::class)
 class HomeViewModel(
     private val observePrayerTimesUseCase: ObservePrayerTimesUseCase,
     private val refreshPrayerTimesUseCase: RefreshPrayerTimesUseCase,
@@ -64,7 +64,7 @@ class HomeViewModel(
                     } catch (e: Exception) {
                         TimeZone.currentSystemDefault()
                     }
-                    val today = Clock.System.now().toLocalDateTime(locationTz).date
+                    val today = Instant.fromEpochMilliseconds(Clock.System.now().toEpochMilliseconds()).toLocalDateTime(locationTz).date
 
                     _uiState.update {
                         it.copy(
@@ -110,7 +110,7 @@ class HomeViewModel(
                 } catch (e: Exception) {
                     TimeZone.currentSystemDefault()
                 }
-                val today = Clock.System.now().toLocalDateTime(locationTz).date
+                val today = Instant.fromEpochMilliseconds(Clock.System.now().toEpochMilliseconds()).toLocalDateTime(locationTz).date
 
                 viewModelScope.launch {
                     _uiState.update { it.copy(isRefreshing = true) }
@@ -146,7 +146,7 @@ class HomeViewModel(
                     } catch (e: Exception) {
                         TimeZone.currentSystemDefault()
                     }
-                    val now = Clock.System.now().toLocalDateTime(locationTz)
+                    val now = Instant.fromEpochMilliseconds(Clock.System.now().toEpochMilliseconds()).toLocalDateTime(locationTz)
                     val nextInfo = getNextPrayerUseCase.execute(currentTimes, now)
 
                     if (nextInfo != null) {
