@@ -14,11 +14,13 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 
-actual class NotificationScheduler(private val context: Context) {
+actual open class NotificationScheduler(private val context: Context) {
+
+    actual constructor() : this(org.koin.core.context.GlobalContext.get().get())
 
     private var previewMediaPlayer: MediaPlayer? = null
 
-    actual fun schedulePrayerNotification(prayerName: PrayerName, scheduledTime: LocalDateTime) {
+    actual open fun schedulePrayerNotification(prayerName: PrayerName, scheduledTime: LocalDateTime) {
         try {
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, PrayerAlarmReceiver::class.java).apply {
@@ -88,7 +90,7 @@ actual class NotificationScheduler(private val context: Context) {
         }
     }
 
-    actual fun cancelPrayerNotification(prayerName: PrayerName) {
+    actual open fun cancelPrayerNotification(prayerName: PrayerName) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, PrayerAlarmReceiver::class.java)
         val pendingIntentId = prayerName.ordinal + 100
@@ -105,7 +107,7 @@ actual class NotificationScheduler(private val context: Context) {
         }
     }
 
-    actual fun playAzanPreview() {
+    actual open fun playAzanPreview() {
         try {
             stopAzanPreview()
             previewMediaPlayer = MediaPlayer.create(context, R.raw.alarm_azan)?.apply {
@@ -122,7 +124,7 @@ actual class NotificationScheduler(private val context: Context) {
         }
     }
 
-    actual fun stopAzanPreview() {
+    actual open fun stopAzanPreview() {
         try {
             previewMediaPlayer?.let {
                 if (it.isPlaying) {

@@ -19,10 +19,8 @@ class ToggleNotificationUseCase(
                 prayerName = prayerTime.prayerName,
                 scheduledTime = prayerTime.scheduledDateTime
             )
-            notificationScheduler.playAzanPreview()
         } else {
             notificationScheduler.cancelPrayerNotification(prayerTime.prayerName)
-            notificationScheduler.stopAzanPreview()
         }
     }
 
@@ -31,11 +29,8 @@ class ToggleNotificationUseCase(
         enabled: Boolean
     ) {
         preferencesRepository.toggleNotificationPreference(prayerName, enabled)
-        if (enabled) {
-            notificationScheduler.playAzanPreview()
-        } else {
+        if (!enabled) {
             notificationScheduler.cancelPrayerNotification(prayerName)
-            notificationScheduler.stopAzanPreview()
         }
     }
 }
