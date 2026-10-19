@@ -1,7 +1,7 @@
 /* SolatNadi Design System & Master Stylesheet */
 
 /* Light Theme (Default) */
-:root, [data-theme="light"] {
+html, html[data-theme="light"] {
     /* Brand Greens (from SolatNadiPalette) */
     --color-forest-green: #075747;
     --color-deep-green: #064638;
@@ -37,8 +37,9 @@
     --color-horizon-peach: #FFF0D7;
     --color-ring-track: #C7EBDD;
 
-    /* Navbar Background */
+    /* Components Backgrounds */
     --nav-bg: rgba(255, 255, 255, 0.9);
+    --footer-bg: #064638;
 
     /* Corner Radii */
     --radius-xs: 8px;
@@ -54,8 +55,8 @@
     --shadow-lg: 0 16px 40px rgba(7, 87, 71, 0.12);
 }
 
-/* Dark Theme (from SolatNadiDarkColorScheme in Theme.kt) */
-[data-theme="dark"] {
+/* Dark Theme Overrides (from SolatNadiDarkColorScheme in Theme.kt) */
+html[data-theme="dark"] {
     --color-forest-green: #8DD5B7;
     --color-deep-green: #145B48;
     --color-emerald-green: #9BDCC5;
@@ -79,10 +80,11 @@
     --color-night-blue: #8BB2DC;
 
     --nav-bg: rgba(16, 25, 22, 0.92);
+    --footer-bg: #0B1914;
 
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
-    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
 }
 
 /* Reset & Global */
@@ -196,7 +198,7 @@ a:hover {
     align-items: center;
     gap: 8px;
     box-shadow: var(--shadow-md);
-    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
     border: none;
     cursor: pointer;
 }
@@ -218,7 +220,7 @@ a:hover {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     cursor: pointer;
 }
 
@@ -239,7 +241,7 @@ a:hover {
     justify-content: center;
     font-size: 1.2rem;
     cursor: pointer;
-    transition: background-color 0.2s, transform 0.2s, border-color 0.2s;
+    transition: background-color 0.2s, transform 0.2s, border-color 0.2s, color 0.2s;
 }
 
 .btn-theme-toggle:hover {
@@ -281,6 +283,7 @@ a:hover {
     font-weight: 700;
     margin-bottom: 24px;
     border: 1px solid var(--color-active-mint-strong);
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .hero-title {
@@ -315,7 +318,7 @@ a:hover {
     max-width: 320px;
     margin: 0 auto;
     border-radius: 40px;
-    box-shadow: 0 30px 70px rgba(7, 87, 71, 0.2);
+    box-shadow: var(--shadow-lg);
     border: 8px solid var(--color-deep-green);
     background: #101916;
     overflow: hidden;
@@ -366,7 +369,7 @@ a:hover {
     padding: 36px 28px;
     border-radius: var(--radius-md);
     border: 1px solid var(--color-border);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.3s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .feature-card:hover {
@@ -384,6 +387,7 @@ a:hover {
     justify-content: center;
     font-size: 1.8rem;
     margin-bottom: 20px;
+    transition: background-color 0.3s ease;
 }
 
 .feature-card h3 {
@@ -419,7 +423,7 @@ a:hover {
     overflow: hidden;
     box-shadow: var(--shadow-md);
     border: 4px solid var(--color-white);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 .showcase-item:hover {
@@ -576,6 +580,7 @@ a:hover {
     justify-content: center;
     font-size: 1.3rem;
     flex-shrink: 0;
+    transition: background-color 0.3s ease;
 }
 
 .info-item h4 {
@@ -610,7 +615,7 @@ a:hover {
     font-size: 0.95rem;
     color: var(--color-text-primary);
     outline: none;
-    transition: border-color 0.2s, background-color 0.2s;
+    transition: border-color 0.2s, background-color 0.2s, color 0.2s;
 }
 
 .form-control:focus {
@@ -648,10 +653,11 @@ textarea.form-control {
 
 /* Footer */
 .footer {
-    background-color: var(--color-deep-green);
+    background-color: var(--footer-bg);
     color: #A0B2A8;
     padding: 60px 8% 30px;
-    border-top: 1px solid #0F5E4C;
+    border-top: 1px solid var(--color-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .footer-inner {
@@ -663,7 +669,7 @@ textarea.form-control {
     max-width: 1200px;
     margin: 0 auto 30px;
     padding-bottom: 30px;
-    border-bottom: 1px solid #0F5E4C;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .footer-brand {
@@ -681,7 +687,7 @@ textarea.form-control {
 .footer-brand span {
     font-size: 1.3rem;
     font-weight: 800;
-    color: var(--color-white);
+    color: var(--color-text-primary);
 }
 
 .footer-links {
@@ -691,19 +697,19 @@ textarea.form-control {
 }
 
 .footer-links a {
-    color: #A0B2A8;
+    color: var(--color-text-secondary);
     font-size: 0.92rem;
     font-weight: 500;
 }
 
 .footer-links a:hover {
-    color: var(--color-white);
+    color: var(--color-forest-green);
 }
 
 .footer-copyright {
     text-align: center;
     font-size: 0.88rem;
-    color: #6C8277;
+    color: var(--color-text-tertiary);
 }
 
 /* Mobile Responsive */
