@@ -1,6 +1,7 @@
 /* SolatNadi Design System & Master Stylesheet */
 
-:root {
+/* Light Theme (Default) */
+:root, [data-theme="light"] {
     /* Brand Greens (from SolatNadiPalette) */
     --color-forest-green: #075747;
     --color-deep-green: #064638;
@@ -22,7 +23,7 @@
     --color-text-tertiary: #89949C;
     --color-text-on-primary: #FFFFFF;
 
-    /* Prayer and State Accents */
+    /* Accents */
     --color-sunrise-gold: #FFB000;
     --color-sunset-orange: #F26A3D;
     --color-night-blue: #31547A;
@@ -36,7 +37,10 @@
     --color-horizon-peach: #FFF0D7;
     --color-ring-track: #C7EBDD;
 
-    /* Corner Radii (from SolatNadiShapes) */
+    /* Navbar Background */
+    --nav-bg: rgba(255, 255, 255, 0.9);
+
+    /* Corner Radii */
     --radius-xs: 8px;
     --radius-sm: 12px;
     --radius-md: 16px;
@@ -48,6 +52,37 @@
     --shadow-sm: 0 2px 8px rgba(7, 87, 71, 0.04);
     --shadow-md: 0 8px 24px rgba(7, 87, 71, 0.08);
     --shadow-lg: 0 16px 40px rgba(7, 87, 71, 0.12);
+}
+
+/* Dark Theme (from SolatNadiDarkColorScheme in Theme.kt) */
+[data-theme="dark"] {
+    --color-forest-green: #8DD5B7;
+    --color-deep-green: #145B48;
+    --color-emerald-green: #9BDCC5;
+    --color-soft-green: #204F42;
+
+    --color-white: #17211D;
+    --color-warm-white: #131B18;
+    --color-soft-mint: #101916;
+    --color-active-mint: #204F42;
+    --color-active-mint-strong: #145B48;
+    --color-border: #2B3D36;
+    --color-divider: #23322C;
+
+    --color-text-primary: #E5EEE9;
+    --color-text-secondary: #B8C8C0;
+    --color-text-tertiary: #82948C;
+    --color-text-on-primary: #00382C;
+
+    --color-sunrise-gold: #FFD078;
+    --color-sunset-orange: #FFB39A;
+    --color-night-blue: #8BB2DC;
+
+    --nav-bg: rgba(16, 25, 22, 0.92);
+
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
 }
 
 /* Reset & Global */
@@ -67,6 +102,7 @@ body {
     color: var(--color-text-primary);
     line-height: 1.6;
     overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Typography */
@@ -96,12 +132,13 @@ a:hover {
     justify-content: space-between;
     align-items: center;
     padding: 18px 8%;
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--nav-bg);
     backdrop-filter: blur(12px);
     position: sticky;
     top: 0;
     z-index: 100;
     border-bottom: 1px solid var(--color-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .brand-logo {
@@ -140,6 +177,12 @@ a:hover {
 
 .nav-links a:hover, .nav-links a.active {
     color: var(--color-forest-green);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .btn-primary {
@@ -182,6 +225,27 @@ a:hover {
 .btn-secondary:hover {
     background-color: var(--color-active-mint);
     transform: translateY(-2px);
+}
+
+.btn-theme-toggle {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-pill);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s, border-color 0.2s;
+}
+
+.btn-theme-toggle:hover {
+    background: var(--color-active-mint);
+    border-color: var(--color-forest-green);
+    transform: scale(1.05);
 }
 
 /* Mobile Nav Toggle */
@@ -268,6 +332,7 @@ a:hover {
     padding: 100px 8%;
     border-top: 1px solid var(--color-border);
     border-bottom: 1px solid var(--color-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .section-title {
@@ -301,7 +366,7 @@ a:hover {
     padding: 36px 28px;
     border-radius: var(--radius-md);
     border: 1px solid var(--color-border);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.3s ease;
 }
 
 .feature-card:hover {
@@ -405,6 +470,7 @@ a:hover {
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-border);
     box-shadow: var(--shadow-sm);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Privacy Layout with Sidebar */
@@ -422,6 +488,7 @@ a:hover {
     padding: 24px;
     border-radius: var(--radius-md);
     border: 1px solid var(--color-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .privacy-sidebar h4 {
@@ -489,6 +556,7 @@ a:hover {
     padding: 32px;
     border-radius: var(--radius-md);
     border: 1px solid var(--color-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .info-item {
