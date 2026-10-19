@@ -55,14 +55,19 @@ class PreferencesRepositoryImpl(
     init {
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                val queries = database.solatNadiDatabaseQueries
+                val existingSelected = queries.selectSelectedLocation().executeAsOneOrNull()
+                val currentSelectedId = existingSelected?.id
+                    ?: settings.getString("selected_location_id", "kuala-lumpur")
+
                 val bytes = Res.readBytes("files/solatnadi_world_cities.json")
                 val jsonStr = bytes.decodeToString()
                 val parsed = Json { ignoreUnknownKeys = true }.decodeFromString<WorldCitiesResponse>(jsonStr)
 
-                val queries = database.solatNadiDatabaseQueries
                 database.solatNadiDatabaseQueries.transaction {
                     parsed.cities.forEach { city ->
                         val countryName = getCountryName(city.countryCode)
+                        val isSel = if (city.id == currentSelectedId || (currentSelectedId == "kuala-lumpur" && city.id == "kl_my")) 1L else 0L
                         queries.insertLocation(
                             id = city.id,
                             name = city.name,
@@ -70,12 +75,16 @@ class PreferencesRepositoryImpl(
                             latitude = city.latitude,
                             longitude = city.longitude,
                             timezone = city.timezone,
-                            isSelected = if (city.id == "kuala-lumpur" || city.id == "kl_my") 1L else 0L
+                            isSelected = isSel
                         )
                     }
                 }
             } catch (e: Exception) {
                 val queries = database.solatNadiDatabaseQueries
+                val existingSelected = queries.selectSelectedLocation().executeAsOneOrNull()
+                val currentSelectedId = existingSelected?.id
+                    ?: settings.getString("selected_location_id", "kuala-lumpur")
+
                 presetLocations.forEach { loc ->
                     queries.insertLocation(
                         id = loc.id,
@@ -84,7 +93,7 @@ class PreferencesRepositoryImpl(
                         latitude = loc.latitude,
                         longitude = loc.longitude,
                         timezone = loc.timezone,
-                        isSelected = if (loc.id == defaultLocation.id) 1L else 0L
+                        isSelected = if (loc.id == currentSelectedId) 1L else 0L
                     )
                 }
             }
@@ -97,11 +106,18 @@ class PreferencesRepositoryImpl(
             .asFlow()
             .mapToOneOrNull(Dispatchers.IO)
             .map { entity ->
-                entity?.toDomain() ?: defaultLocation
+                if (entity != null) {
+                    entity.toDomain()
+                } else {
+                    val savedId = settings.getString("selected_location_id", "kuala-lumpur")
+                    val savedEntity = database.solatNadiDatabaseQueries.selectLocationById(savedId).executeAsOneOrNull()
+                    savedEntity?.toDomain() ?: defaultLocation
+                }
             }
     }
 
     override suspend fun setSelectedLocation(location: PrayerLocation) = withContext(Dispatchers.IO) {
+        settings.putString("selected_location_id", location.id)
         val queries = database.solatNadiDatabaseQueries
         queries.clearSelectedLocation()
         queries.insertLocation(
@@ -149,7 +165,7 @@ class PreferencesRepositoryImpl(
         database.solatNadiDatabaseQueries.insertOrUpdateNotificationPreference(
             prayerName = prayerName.name,
             enabled = if (enabled) 1L else 0L,
-            soundPreference = "DEFAULT"
+            soundPreference = "ALARM_AZAN"
         )
     }
 

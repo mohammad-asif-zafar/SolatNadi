@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import com.hathway.solatnadi.core.notification.NotificationScheduler
 import kotlin.time.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -33,7 +34,8 @@ class HomeViewModel(
     private val refreshPrayerTimesUseCase: RefreshPrayerTimesUseCase,
     private val getNextPrayerUseCase: GetNextPrayerUseCase,
     private val toggleNotificationUseCase: ToggleNotificationUseCase,
-    private val preferencesRepository: PreferencesRepository
+    private val preferencesRepository: PreferencesRepository,
+    private val notificationScheduler: NotificationScheduler
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -94,6 +96,16 @@ class HomeViewModel(
                                 hijriDateFormatted = schedule.hijriDateFormatted,
                                 prayerTimes = schedule.prayerTimes
                             )
+                        }
+                        schedule.prayerTimes.forEach { prayer ->
+                            if (prayer.isNotificationEnabled) {
+                                notificationScheduler.schedulePrayerNotification(
+                                    prayerName = prayer.prayerName,
+                                    scheduledTime = prayer.scheduledDateTime
+                                )
+                            } else {
+                                notificationScheduler.cancelPrayerNotification(prayer.prayerName)
+                            }
                         }
                         startCountdownTicker()
                     }

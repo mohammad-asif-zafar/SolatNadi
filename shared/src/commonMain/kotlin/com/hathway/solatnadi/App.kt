@@ -1,11 +1,13 @@
 package com.hathway.solatnadi
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import com.hathway.solatnadi.domain.model.AppTheme
 import com.hathway.solatnadi.domain.model.PrayerLocation
+import com.hathway.solatnadi.presentation.components.BackHandler
 import com.hathway.solatnadi.presentation.home.HomeScreen
 import com.hathway.solatnadi.presentation.home.HomeViewModel
 import com.hathway.solatnadi.presentation.location.LocationSelectionScreen
@@ -13,6 +15,7 @@ import com.hathway.solatnadi.presentation.location.PrayerPreferencesScreen
 import com.hathway.solatnadi.presentation.settings.SettingsScreen
 import com.hathway.solatnadi.presentation.settings.SettingsViewModel
 import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
+import com.hathway.solatnadi.presentation.theme.SolatNadiThemeMode
 import org.koin.compose.koinInject
 
 sealed interface Screen {
@@ -24,8 +27,40 @@ sealed interface Screen {
 
 @Composable
 fun App() {
-    SolatNadiTheme {
-        var currentScreen by remember { mutableStateOf<Screen>(Screen.Home) }
+    val settingsViewModel: SettingsViewModel = koinInject()
+    val settingsUiState by settingsViewModel.uiState.collectAsState()
+
+    val themeMode = when (settingsUiState.preferences.appTheme) {
+        AppTheme.LIGHT -> SolatNadiThemeMode.LIGHT
+        AppTheme.DARK -> SolatNadiThemeMode.DARK
+        AppTheme.SYSTEM -> SolatNadiThemeMode.SYSTEM
+    }
+
+    SolatNadiTheme(themeMode = themeMode) {
+        val backStack = remember { mutableStateListOf<Screen>(Screen.Home) }
+        val currentScreen = backStack.lastOrNull() ?: Screen.Home
+
+        fun navigateTo(screen: Screen) {
+            if (currentScreen != screen) {
+                backStack.add(screen)
+            }
+        }
+
+        fun popBackStack() {
+            if (backStack.size > 1) {
+                backStack.removeAt(backStack.lastIndex)
+            }
+        }
+
+        fun popToHome() {
+            while (backStack.size > 1) {
+                backStack.removeAt(backStack.lastIndex)
+            }
+        }
+
+        BackHandler(enabled = backStack.size > 1) {
+            popBackStack()
+        }
 
         val homeViewModel: HomeViewModel = koinInject()
         val settingsViewModel: SettingsViewModel = koinInject()
@@ -34,32 +69,32 @@ fun App() {
             is Screen.Home -> {
                 HomeScreen(
                     viewModel = homeViewModel,
-                    onNavigateToSettings = { currentScreen = Screen.Settings },
-                    onNavigateToLocationSelection = { currentScreen = Screen.LocationSelection }
+                    onNavigateToSettings = { navigateTo(Screen.Settings) },
+                    onNavigateToLocationSelection = { navigateTo(Screen.LocationSelection) }
                 )
             }
             is Screen.Settings -> {
                 SettingsScreen(
                     viewModel = settingsViewModel,
-                    onNavigateBack = { currentScreen = Screen.Home },
-                    onNavigateToLocationSelection = { currentScreen = Screen.LocationSelection }
+                    onNavigateBack = { popBackStack() },
+                    onNavigateToLocationSelection = { navigateTo(Screen.LocationSelection) }
                 )
             }
             is Screen.LocationSelection -> {
                 LocationSelectionScreen(
                     viewModel = settingsViewModel,
                     onLocationSelected = { selectedLoc ->
-                        currentScreen = Screen.PrayerPreferences(selectedLoc)
+                        navigateTo(Screen.PrayerPreferences(selectedLoc))
                     },
-                    onNavigateBack = { currentScreen = Screen.Home }
+                    onNavigateBack = { popBackStack() }
                 )
             }
             is Screen.PrayerPreferences -> {
                 PrayerPreferencesScreen(
                     targetLocation = screen.location,
                     viewModel = settingsViewModel,
-                    onComplete = { currentScreen = Screen.Home },
-                    onNavigateBack = { currentScreen = Screen.LocationSelection }
+                    onComplete = { popToHome() },
+                    onNavigateBack = { popBackStack() }
                 )
             }
         }

@@ -148,7 +148,7 @@ fun HomeScreenContent(
                         color = colorScheme.primary
                     ) {
                         Box(contentAlignment = Alignment.Center) {
-                            Text(text = "📍", style = typography.titleMedium)
+                            Text(text = " 📍", style = typography.titleMedium)
                         }
                     }
 
@@ -182,21 +182,6 @@ fun HomeScreenContent(
 
                 // Header Secondary Option Buttons
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Surface(
-                        modifier = Modifier
-                            .size(38.dp)
-                            .clip(CircleShape)
-                            .clickable { },
-                        shape = CircleShape,
-                        color = colorScheme.onSurface.copy(alpha = 0.1f) // Translucent theme-neutral touch target
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Text("ℹ", style = typography.titleMedium, fontWeight = FontWeight.Bold, color = colorScheme.onSurface)
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.width(spacing.Small))
-
                     Surface(
                         modifier = Modifier
                             .size(38.dp)

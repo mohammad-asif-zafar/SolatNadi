@@ -9,4 +9,10 @@ actual class NotificationScheduler {
 
     actual fun cancelPrayerNotification(prayerName: PrayerName) {
     }
+
+    actual fun playAzanPreview() {
+    }
+
+    actual fun stopAzanPreview() {
+    }
 }
