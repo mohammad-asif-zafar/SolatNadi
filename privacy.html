@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy — SolatNadi</title>
+    <meta name="description" content="Privacy Policy for SolatNadi Islamic Prayer Times application. Learn how we handle data with 100% privacy and local storage.">
+    <link rel="icon" type="image/png" href="assets/logo.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="brand-logo">
+            <img src="assets/logo.png" alt="SolatNadi Logo">
+            <span>SolatNadi</span>
+        </a>
+        <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation menu">☰</button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="privacy.html" class="active">Privacy Policy</a></li>
+            <li><a href="contact.html">Contact & Support</a></li>
+        </ul>
+        <a href="index.html" class="btn-secondary">
+            <span>← Back to Home</span>
+        </a>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="page-container">
+        <div class="page-header">
+            <h1>Privacy Policy</h1>
+            <p>Last Updated: October 2026 • Effective Date: October 2026</p>
+        </div>
+
+        <div class="content-card">
+            <div class="privacy-layout">
+                <!-- Sidebar TOC -->
+                <aside class="privacy-sidebar">
+                    <h4>Contents</h4>
+                    <ul>
+                        <li><a href="#section-1">1. Introduction</a></li>
+                        <li><a href="#section-2">2. Information Collected</a></li>
+                        <li><a href="#section-3">3. How Information Is Used</a></li>
+                        <li><a href="#section-4">4. Location Permissions</a></li>
+                        <li><a href="#section-5">5. Calculation Preferences</a></li>
+                        <li><a href="#section-6">6. Notifications & Alarms</a></li>
+                        <li><a href="#section-7">7. Third-Party APIs</a></li>
+                        <li><a href="#section-8">8. Data Storage & Retention</a></li>
+                        <li><a href="#section-9">9. Data Security</a></li>
+                        <li><a href="#section-10">10. Children's Privacy</a></li>
+                        <li><a href="#section-11">11. User Rights & Deletion</a></li>
+                        <li><a href="#section-12">12. Policy Updates</a></li>
+                        <li><a href="#section-13">13. Contact Information</a></li>
+                    </ul>
+                </aside>
+
+                <!-- Privacy Main Body -->
+                <div class="privacy-body">
+                    <h2 id="section-1">1. Introduction</h2>
+                    <p>Welcome to <strong>SolatNadi</strong> ("we", "our", or "us"). SolatNadi is dedicated to providing accurate, respectful Islamic prayer timing services with complete user privacy. This Privacy Policy explains our offline-first data handling principles and how your data is treated when using the SolatNadi mobile application and website.</p>
+
+                    <h2 id="section-2">2. Information Collected</h2>
+                    <p>SolatNadi is engineered with a strict <strong>privacy-by-design</strong> architecture:</p>
+                    <ul>
+                        <li><strong>No Personally Identifiable Information (PII):</strong> We do NOT collect, transmit, track, or sell your name, email address, phone number, contacts, or account credentials.</li>
+                        <li><strong>No Account Required:</strong> SolatNadi functions completely without sign-in, user accounts, or registration.</li>
+                    </ul>
+
+                    <h2 id="section-3">3. How Information Is Used</h2>
+                    <p>Any technical data processed locally on your device (such as your chosen city or device timezone) is utilized solely to calculate accurate prayer times, update countdown timers, and schedule local Azan reminders.</p>
+
+                    <h2 id="section-4">4. Location Permissions</h2>
+                    <p>To provide accurate Islamic prayer schedules, SolatNadi processes location information in two ways:</p>
+                    <ul>
+                        <li><strong>User Selected City:</strong> When you manually choose a city, its latitude, longitude, and timezone are stored locally in your on-device SQLite database.</li>
+                        <li><strong>Device Location / GPS (Optional):</strong> If you enable automatic location detection, your GPS coordinates are accessed on-device solely to determine your location's prayer schedule parameters. Your location is <strong>never uploaded or shared</strong> with tracking servers.</li>
+                    </ul>
+
+                    <h2 id="section-5">5. Prayer Calculation Preferences</h2>
+                    <p>Your chosen calculation method (e.g. Muslim World League, ISNA, JAKIM), Juristic Method (Shafi'i or Hanafi), time format (12-hour or 24-hour), and visual theme settings are saved locally on your device via platform settings and local database storage.</p>
+
+                    <h2 id="section-6">6. Notifications & Exact Alarms</h2>
+                    <p>SolatNadi uses local device exact alarms (via Android's <code>AlarmManager</code>) to trigger Azan audio reminders (<code>alarm_azan.mp3</code>) at exact prayer times. These alarms execute 100% locally on your device without relying on external push notification servers.</p>
+
+                    <h2 id="section-7">7. Third-Party Services and APIs</h2>
+                    <p>When internet connectivity is available, the app queries the public Aladhan API to fetch raw prayer timing calculation data for your specified city coordinates and calculation method. No personal or device tracking tokens are transmitted in these requests.</p>
+
+                    <h2 id="section-8">8. Data Storage and Retention</h2>
+                    <p>SolatNadi uses an <strong>offline-first local database (SQLDelight)</strong>. All prayer schedules, city lists, and user preference toggles remain stored on your physical device and persist until you choose to modify them or clear the app's cache.</p>
+
+                    <h2 id="section-9">9. Data Security</h2>
+                    <p>Because your preference data remains on your personal device and is not transmitted to external servers, the security of your data is backed by your device's native operating system security mechanisms.</p>
+
+                    <h2 id="section-10">10. Children's Privacy</h2>
+                    <p>SolatNadi does not collect any personal information from children or adults. The application is suitable and safe for users of all ages.</p>
+
+                    <h2 id="section-11">11. User Rights and Data Deletion</h2>
+                    <p>You have total control over your data. You can clear your location and notification preferences at any time by selecting a new city, toggling notification switches, or resetting the app data through your device Settings.</p>
+
+                    <h2 id="section-12">12. Policy Updates</h2>
+                    <p>We may update this Privacy Policy periodically to reflect new features or legal requirements. Any revisions will be published directly on this page with an updated "Last Updated" timestamp.</p>
+
+                    <h2 id="section-13">13. Contact Information</h2>
+                    <p>If you have any questions, concerns, or inquiries regarding this Privacy Policy or SolatNadi's privacy practices, please contact us:</p>
+                    <p>📧 Email: <a href="mailto:support@solatnadi.app">support@solatnadi.app</a><br>🌐 Support Page: <a href="contact.html">Contact & Support</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="assets/logo.png" alt="SolatNadi Logo">
+                <span>SolatNadi</span>
+            </div>
+            <ul class="footer-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="contact.html">Contact & Support</a></li>
+            </ul>
+        </div>
+        <div class="footer-copyright">
+            &copy; 2026 SolatNadi. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

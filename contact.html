@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact & Support — SolatNadi</title>
+    <meta name="description" content="Get support, send feedback, or report issues for SolatNadi Islamic Prayer Times app. Contact our developer team.">
+    <link rel="icon" type="image/png" href="assets/logo.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="brand-logo">
+            <img src="assets/logo.png" alt="SolatNadi Logo">
+            <span>SolatNadi</span>
+        </a>
+        <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation menu">☰</button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="contact.html" class="active">Contact & Support</a></li>
+        </ul>
+        <a href="index.html" class="btn-secondary">
+            <span>← Back to Home</span>
+        </a>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="page-container">
+        <div class="page-header">
+            <h1>Contact & Support</h1>
+            <p>Have questions, feedback, or need help? We'd love to hear from you.</p>
+        </div>
+
+        <div class="content-card">
+            <div class="contact-grid">
+                <!-- Info Column -->
+                <div class="contact-info-card">
+                    <div class="info-item">
+                        <div class="info-item-icon">📧</div>
+                        <div>
+                            <h4>Email Support</h4>
+                            <p><a href="mailto:support@solatnadi.app">support@solatnadi.app</a></p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-item-icon">🌐</div>
+                        <div>
+                            <h4>Official Website</h4>
+                            <p><a href="https://solatnadi.app" target="_blank">https://solatnadi.app</a></p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-item-icon">⏱️</div>
+                        <div>
+                            <h4>Response Time</h4>
+                            <p>We typically respond within 24 to 48 hours on business days.</p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-item-icon">🛡️</div>
+                        <div>
+                            <h4>Privacy & Safety</h4>
+                            <p>Read our full <a href="privacy.html">Privacy Policy</a> regarding your device location and local preferences.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Column -->
+                <div>
+                    <div id="formFeedback" class="form-feedback"></div>
+
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="senderName">Your Name *</label>
+                            <input type="text" id="senderName" class="form-control" placeholder="Enter your full name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="senderEmail">Your Email *</label>
+                            <input type="email" id="senderEmail" class="form-control" placeholder="name@example.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inquiryType">Inquiry Category</label>
+                            <select id="inquiryType" class="form-control">
+                                <option value="General Support">General Support</option>
+                                <option value="Bug Report">Bug Report / Issue</option>
+                                <option value="Feature Request">Feature Request</option>
+                                <option value="Privacy Inquiry">Privacy Inquiry</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emailSubject">Subject</label>
+                            <input type="text" id="emailSubject" class="form-control" placeholder="How can we help you?">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emailMessage">Message *</label>
+                            <textarea id="emailMessage" class="form-control" placeholder="Describe your question or feedback in detail..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+                            <span>✉️ Send Message</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="assets/logo.png" alt="SolatNadi Logo">
+                <span>SolatNadi</span>
+            </div>
+            <ul class="footer-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="contact.html">Contact & Support</a></li>
+            </ul>
+        </div>
+        <div class="footer-copyright">
+            &copy; 2026 SolatNadi. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

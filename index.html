@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolatNadi — Accurate Islamic Prayer Times & Azan Alarms</title>
+    <meta name="description" content="SolatNadi is a modern, offline-first Islamic prayer times application featuring custom Azan audio notifications, worldwide city calculation, and beautiful light/dark themes.">
+    <link rel="icon" type="image/png" href="assets/logo.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="brand-logo">
+            <img src="assets/logo.png" alt="SolatNadi Launcher Icon">
+            <span>SolatNadi</span>
+        </a>
+        <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation menu">☰</button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#screenshots">Screenshots</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="contact.html">Contact & Support</a></li>
+        </ul>
+        <a href="https://play.google.com/store/apps/details?id=com.hathway.solatnadi" class="btn-primary" target="_blank">
+            <span>📲 Get the App</span>
+        </a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div>
+            <div class="badge">✨ Modern • Offline-First • Accurate</div>
+            <h1 class="hero-title">Stay Connected to Your <span>Prayer Times</span></h1>
+            <p class="hero-subtitle">Experience precise, location-based Islamic prayer times with custom Azan notifications, offline calculations, and an elegant Compose design.</p>
+            <div class="hero-buttons">
+                <a href="https://play.google.com/store/apps/details?id=com.hathway.solatnadi" class="btn-primary" target="_blank">
+                    <span>Google Play Store</span>
+                </a>
+                <a href="privacy.html" class="btn-secondary">
+                    <span>Privacy Policy</span>
+                </a>
+            </div>
+        </div>
+        <div>
+            <div class="phone-mockup">
+                <img src="assets/home.png" alt="SolatNadi App Home Screen Preview">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="section-title">
+            <h2>Designed for Peace of Mind</h2>
+            <p>Built with modern Kotlin Multiplatform and Jetpack Compose to give you a fast, respectful, and battery-friendly experience.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">📍</div>
+                <h3>Worldwide City Support</h3>
+                <p>Saved user city preferences for precise prayer timing across thousands of locations globally.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">🔔</div>
+                <h3>Custom Azan Audio</h3>
+                <p>High-priority Azan alarm notifications with full support for background and closed-app alerts.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">💾</div>
+                <h3>100% Offline-First</h3>
+                <p>Powered by local SQLDelight caching so prayer times are instant without requiring constant internet.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">🎨</div>
+                <h3>Light & Dark Themes</h3>
+                <p>Seamless Material 3 Islamic green and teal design that adapts cleanly to system theme changes.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Showcase Section -->
+    <section class="showcase-section" id="screenshots">
+        <div class="section-title">
+            <h2>App Experience</h2>
+            <p>Clean, distraction-free interface focused purely on your daily worship schedule.</p>
+        </div>
+        <div class="showcase-grid">
+            <div>
+                <div class="showcase-item">
+                    <img src="assets/home.png" alt="Home Screen Dashboard">
+                </div>
+                <div class="showcase-caption">Prayer Dashboard</div>
+            </div>
+            <div>
+                <div class="showcase-item">
+                    <img src="assets/select_city.png" alt="Global City Search Screen">
+                </div>
+                <div class="showcase-caption">Global City Search</div>
+            </div>
+            <div>
+                <div class="showcase-item">
+                    <img src="assets/app_perfeence.png" alt="Prayer Calculation Preferences">
+                </div>
+                <div class="showcase-caption">Calculation Methods</div>
+            </div>
+            <div>
+                <div class="showcase-item">
+                    <img src="assets/setting.png" alt="Settings & Appearance">
+                </div>
+                <div class="showcase-caption">Settings & Theme</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="assets/logo.png" alt="SolatNadi Logo">
+                <span>SolatNadi</span>
+            </div>
+            <ul class="footer-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#screenshots">Screenshots</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="contact.html">Contact & Support</a></li>
+            </ul>
+        </div>
+        <div class="footer-copyright">
+            &copy; 2026 SolatNadi. All rights reserved. Powered by Kotlin Multiplatform & Compose.
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
