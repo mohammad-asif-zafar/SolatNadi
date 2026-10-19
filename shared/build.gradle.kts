@@ -55,6 +55,7 @@ kotlin {
             implementation(libs.compose.uiTooling)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.sqldelight.android.driver)
+            implementation(libs.koinAndroid)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
