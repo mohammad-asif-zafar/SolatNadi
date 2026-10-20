@@ -18,7 +18,10 @@ import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
 import com.hathway.solatnadi.presentation.theme.SolatNadiThemeMode
 import org.koin.compose.koinInject
 
+import com.hathway.solatnadi.presentation.splash.SplashScreen
+
 sealed interface Screen {
+    data object Splash : Screen
     data object Home : Screen
     data object Settings : Screen
     data object LocationSelection : Screen
@@ -37,8 +40,8 @@ fun App() {
     }
 
     SolatNadiTheme(themeMode = themeMode) {
-        val backStack = remember { mutableStateListOf<Screen>(Screen.Home) }
-        val currentScreen = backStack.lastOrNull() ?: Screen.Home
+        val backStack = remember { mutableStateListOf<Screen>(Screen.Splash) }
+        val currentScreen = backStack.lastOrNull() ?: Screen.Splash
 
         fun navigateTo(screen: Screen) {
             if (currentScreen != screen) {
@@ -58,14 +61,21 @@ fun App() {
             }
         }
 
-        BackHandler(enabled = backStack.size > 1) {
+        BackHandler(enabled = backStack.size > 1 && currentScreen != Screen.Splash) {
             popBackStack()
         }
 
         val homeViewModel: HomeViewModel = koinInject()
-        val settingsViewModel: SettingsViewModel = koinInject()
 
         when (val screen = currentScreen) {
+            is Screen.Splash -> {
+                SplashScreen(
+                    onSplashComplete = {
+                        backStack.clear()
+                        backStack.add(Screen.Home)
+                    }
+                )
+            }
             is Screen.Home -> {
                 HomeScreen(
                     viewModel = homeViewModel,

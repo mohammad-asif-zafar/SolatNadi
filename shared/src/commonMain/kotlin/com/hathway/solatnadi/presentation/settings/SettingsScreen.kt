@@ -399,12 +399,12 @@ fun SettingsScreenContent(
                         color = colorScheme.onSurface
                     )
                     Text(
-                        text = "https://solatnadi.app",
+                        text = "https://mohammad-asif-zafar.github.io/SolatNadi/",
                         style = typography.bodyMedium,
                         color = colorScheme.primary,
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier.clickable {
-                            try { uriHandler.openUri("https://solatnadi.app") } catch (_: Exception) {}
+                            try { uriHandler.openUri("https://mohammad-asif-zafar.github.io/SolatNadi/") } catch (_: Exception) {}
                         }
                     )
                     Spacer(modifier = Modifier.height(spacing.Small))
@@ -415,12 +415,12 @@ fun SettingsScreenContent(
                         color = colorScheme.onSurface
                     )
                     Text(
-                        text = "support@solatnadi.app",
+                        text = "mohammadasifzafar000@gmail.com",
                         style = typography.bodyMedium,
                         color = colorScheme.primary,
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier.clickable {
-                            try { uriHandler.openUri("mailto:support@solatnadi.app") } catch (_: Exception) {}
+                            try { uriHandler.openUri("mailto:mohammadasifzafar000@gmail.com") } catch (_: Exception) {}
                         }
                     )
                 }
@@ -459,12 +459,12 @@ fun SettingsScreenContent(
                         color = colorScheme.onSurface
                     )
                     Text(
-                        text = "support@solatnadi.app",
+                        text = "mohammadasifzafar000@gmail.com",
                         style = typography.bodyLarge,
                         color = colorScheme.primary,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.clickable {
-                            try { uriHandler.openUri("mailto:support@solatnadi.app") } catch (_: Exception) {}
+                            try { uriHandler.openUri("mohammadasifzafar000@gmail.com") } catch (_: Exception) {}
                         }
                     )
                     Spacer(modifier = Modifier.height(spacing.Medium))
@@ -475,12 +475,12 @@ fun SettingsScreenContent(
                         color = colorScheme.onSurface
                     )
                     Text(
-                        text = "https://solatnadi.app",
+                        text = "https://mohammad-asif-zafar.github.io/SolatNadi/",
                         style = typography.bodyMedium,
                         color = colorScheme.primary,
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier.clickable {
-                            try { uriHandler.openUri("https://solatnadi.app") } catch (_: Exception) {}
+                            try { uriHandler.openUri("https://mohammad-asif-zafar.github.io/SolatNadi/") } catch (_: Exception) {}
                         }
                     )
                 }
@@ -488,7 +488,7 @@ fun SettingsScreenContent(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        try { uriHandler.openUri("mailto:support@solatnadi.app") } catch (_: Exception) {}
+                        try { uriHandler.openUri("mailto:mohammadasifzafar000@gmail.com") } catch (_: Exception) {}
                         showHelpDialog = false
                     }
                 ) {
@@ -535,12 +535,12 @@ fun SettingsScreenContent(
                         color = colorScheme.onSurface
                     )
                     Text(
-                        text = "https://solatnadi.app/privacy",
+                        text = "https://mohammad-asif-zafar.github.io/SolatNadi/privacy.html",
                         style = typography.bodyMedium,
                         color = colorScheme.primary,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.clickable {
-                            try { uriHandler.openUri("https://solatnadi.app/privacy") } catch (_: Exception) {}
+                            try { uriHandler.openUri("https://mohammad-asif-zafar.github.io/SolatNadi/privacy.html") } catch (_: Exception) {}
                         }
                     )
                 }

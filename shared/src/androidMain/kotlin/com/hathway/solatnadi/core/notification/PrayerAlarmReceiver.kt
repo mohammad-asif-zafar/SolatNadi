@@ -71,8 +71,13 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
         }
 
         try {
+            val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? android.media.AudioManager
+            val currentVol = audioManager?.getStreamVolume(android.media.AudioManager.STREAM_ALARM) ?: 10
+            val maxVol = audioManager?.getStreamMaxVolume(android.media.AudioManager.STREAM_ALARM) ?: 10
+            val volRatio = if (maxVol > 0) currentVol.toFloat() / maxVol.toFloat() else 1.0f
+
             val audioAttributes = AudioAttributes.Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .setUsage(AudioAttributes.USAGE_ALARM)
                 .build()
 
@@ -80,6 +85,7 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
                 ?: MediaPlayer.create(context, R.raw.alarm_azan)
 
             mediaPlayer?.apply {
+                setVolume(volRatio, volRatio)
                 isLooping = false
                 start()
                 setOnCompletionListener {
@@ -99,7 +105,19 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
         val titleText = if (cityName.isNotEmpty()) "SolatNadi — $prayerDisplayName ($cityName)" else "SolatNadi — $prayerDisplayName"
         val contentText = if (cityName.isNotEmpty()) "It is time for $prayerDisplayName prayer in $cityName." else "It is time for $prayerDisplayName prayer."
 
-        val notification = NotificationCompat.Builder(context, channelId)
+        val launchIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        val pendingContentIntent = launchIntent?.let {
+            android.app.PendingIntent.getActivity(
+                context,
+                prayerKey.hashCode(),
+                it,
+                android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE
+            )
+        }
+
+        val notificationBuilder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
             .setContentTitle(titleText)
             .setContentText(contentText)
@@ -107,9 +125,12 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setSound(soundUri)
             .setAutoCancel(true)
-            .build()
+
+        if (pendingContentIntent != null) {
+            notificationBuilder.setContentIntent(pendingContentIntent)
+        }
 
         val notificationId = prayerKey.hashCode()
-        notificationManager.notify(notificationId, notification)
+        notificationManager.notify(notificationId, notificationBuilder.build())
     }
 }

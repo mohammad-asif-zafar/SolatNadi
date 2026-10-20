@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const mailtoUrl = `mailto:support@solatnadi.app?subject=${mailtoSubject}&body=${mailtoBody}`;
 
             formFeedback.className = 'form-feedback success';
-            formFeedback.innerHTML = `Thank you, <strong>${name}</strong>! Opening your email client to send message to support@solatnadi.app...`;
+            formFeedback.innerHTML = `Thank you, <strong>${name}</strong>! Opening your email client to send message to mohammadasifzafar000@gmail.com....`;
 
             setTimeout(() => {
                 window.location.href = mailtoUrl;

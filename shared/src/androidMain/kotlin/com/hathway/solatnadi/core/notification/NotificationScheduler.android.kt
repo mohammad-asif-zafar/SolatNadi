@@ -56,8 +56,20 @@ actual open class NotificationScheduler(private val context: Context) {
 
             val triggerAtMillis = targetInstant.toEpochMilliseconds()
 
+            val launchIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+            val showPendingIntent = if (launchIntent != null) {
+                PendingIntent.getActivity(
+                    context,
+                    pendingIntentId + 500,
+                    launchIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+            } else {
+                pendingIntent
+            }
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val alarmClockInfo = AlarmManager.AlarmClockInfo(triggerAtMillis, pendingIntent)
+                val alarmClockInfo = AlarmManager.AlarmClockInfo(triggerAtMillis, showPendingIntent)
                 alarmManager.setAlarmClock(alarmClockInfo, pendingIntent)
             } else {
                 alarmManager.setExact(
@@ -110,7 +122,20 @@ actual open class NotificationScheduler(private val context: Context) {
     actual open fun playAzanPreview() {
         try {
             stopAzanPreview()
-            previewMediaPlayer = MediaPlayer.create(context, R.raw.alarm_azan)?.apply {
+            val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? android.media.AudioManager
+            val currentVol = audioManager?.getStreamVolume(android.media.AudioManager.STREAM_ALARM) ?: 10
+            val maxVol = audioManager?.getStreamMaxVolume(android.media.AudioManager.STREAM_ALARM) ?: 10
+            val volRatio = if (maxVol > 0) currentVol.toFloat() / maxVol.toFloat() else 1.0f
+
+            val audioAttributes = android.media.AudioAttributes.Builder()
+                .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(android.media.AudioAttributes.USAGE_ALARM)
+                .build()
+
+            previewMediaPlayer = (MediaPlayer.create(context, R.raw.alarm_azan, audioAttributes, 0)
+                ?: MediaPlayer.create(context, R.raw.alarm_azan))?.apply {
+                setVolume(volRatio, volRatio)
+                isLooping = false
                 start()
                 setOnCompletionListener {
                     it.release()
