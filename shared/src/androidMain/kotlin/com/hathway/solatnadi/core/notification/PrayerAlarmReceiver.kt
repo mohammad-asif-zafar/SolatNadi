@@ -24,18 +24,25 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
         val prayerKey = intent.getStringExtra("EXTRA_PRAYER_KEY") ?: intent.getStringExtra("EXTRA_PRAYER_NAME")?.uppercase() ?: "FAJR"
         val prayerDisplayName = intent.getStringExtra("EXTRA_PRAYER_NAME") ?: "Prayer"
 
+        val isTestNotification = intent.getBooleanExtra("EXTRA_TEST_NOTIFICATION", false)
+
         var cityName = ""
+        var soundKey = "default_adhan"
         try {
             val database = createDatabase(DatabaseDriverFactory(context))
             val pref = database.solatNadiDatabaseQueries
                 .getNotificationPreferenceForPrayer(prayerKey)
                 .executeAsOneOrNull()
 
-            if (pref != null && pref.enabled == 0L) {
+            if (!isTestNotification && pref != null && pref.enabled == 0L) {
                 if (wakeLock?.isHeld == true) {
                     try { wakeLock.release() } catch (_: Exception) {}
                 }
                 return
+            }
+
+            if (pref != null) {
+                soundKey = pref.soundPreference
             }
 
             val selectedLocation = database.solatNadiDatabaseQueries
@@ -48,10 +55,11 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
             e.printStackTrace()
         }
 
+        val rawSoundRes = getRawResourceForSoundKey(soundKey)
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val soundUri = Uri.parse("android.resource://${context.packageName}/${R.raw.alarm_azan}")
+        val soundUri = Uri.parse("android.resource://${context.packageName}/$rawSoundRes")
 
-        val channelId = "solatnadi_prayer_channel_v3"
+        val channelId = "solatnadi_prayer_channel_$soundKey"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val audioAttributes = AudioAttributes.Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -60,45 +68,47 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
 
             val channel = NotificationChannel(
                 channelId,
-                "Prayer Time Azan Notifications",
+                "Prayer Time Notifications",
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
-                description = "Notifications for Islamic prayer times with Azan audio"
+                description = "Notifications for Islamic prayer times"
                 enableVibration(true)
                 setSound(soundUri, audioAttributes)
             }
             notificationManager.createNotificationChannel(channel)
         }
 
-        try {
-            val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? android.media.AudioManager
-            val currentVol = audioManager?.getStreamVolume(android.media.AudioManager.STREAM_ALARM) ?: 10
-            val maxVol = audioManager?.getStreamMaxVolume(android.media.AudioManager.STREAM_ALARM) ?: 10
-            val volRatio = if (maxVol > 0) currentVol.toFloat() / maxVol.toFloat() else 1.0f
+        if (soundKey != "silent") {
+            try {
+                val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? android.media.AudioManager
+                val currentVol = audioManager?.getStreamVolume(android.media.AudioManager.STREAM_ALARM) ?: 10
+                val maxVol = audioManager?.getStreamMaxVolume(android.media.AudioManager.STREAM_ALARM) ?: 10
+                val volRatio = if (maxVol > 0) currentVol.toFloat() / maxVol.toFloat() else 1.0f
 
-            val audioAttributes = AudioAttributes.Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .setUsage(AudioAttributes.USAGE_ALARM)
-                .build()
+                val audioAttributes = AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .build()
 
-            val mediaPlayer = MediaPlayer.create(context, R.raw.alarm_azan, audioAttributes, 0)
-                ?: MediaPlayer.create(context, R.raw.alarm_azan)
+                val mediaPlayer = MediaPlayer.create(context, rawSoundRes, audioAttributes, 0)
+                    ?: MediaPlayer.create(context, rawSoundRes)
 
-            mediaPlayer?.apply {
-                setVolume(volRatio, volRatio)
-                isLooping = false
-                start()
-                setOnCompletionListener {
-                    it.release()
-                    if (wakeLock?.isHeld == true) {
-                        try { wakeLock.release() } catch (_: Exception) {}
+                mediaPlayer?.apply {
+                    setVolume(volRatio, volRatio)
+                    isLooping = false
+                    start()
+                    setOnCompletionListener {
+                        it.release()
+                        if (wakeLock?.isHeld == true) {
+                            try { wakeLock.release() } catch (_: Exception) {}
+                        }
                     }
                 }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            if (wakeLock?.isHeld == true) {
-                try { wakeLock.release() } catch (_: Exception) {}
+            } catch (e: Exception) {
+                e.printStackTrace()
+                if (wakeLock?.isHeld == true) {
+                    try { wakeLock.release() } catch (_: Exception) {}
+                }
             }
         }
 
@@ -132,5 +142,19 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
 
         val notificationId = prayerKey.hashCode()
         notificationManager.notify(notificationId, notificationBuilder.build())
+    }
+
+    private fun getRawResourceForSoundKey(soundKey: String): Int {
+        return when (soundKey) {
+            "allahu_akbar" -> R.raw.allahu_akbar
+            "makkah_adhan", "default_adhan" -> R.raw.lebanon_adhan
+            "oman_adhan" -> R.raw.oman_adhan
+            "qatar_adhan" -> R.raw.qatar_adhan
+            "egypt_fajr_adhan" -> R.raw.egypt_fajr_adhan
+            "lebanon_adhan" -> R.raw.lebanon_adhan
+            "abdel_mobdi_adhan" -> R.raw.ressources_audio_allahuakbar
+            "alarm_azan" -> R.raw.alarm_azan
+            else -> R.raw.alarm_azan
+        }
     }
 }

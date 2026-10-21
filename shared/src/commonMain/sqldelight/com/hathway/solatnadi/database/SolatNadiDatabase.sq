@@ -27,7 +27,10 @@ CREATE TABLE PrayerTimeEntity (
 CREATE TABLE NotificationPreferenceEntity (
     prayerName TEXT NOT NULL PRIMARY KEY,
     enabled INTEGER NOT NULL DEFAULT 1,
-    soundPreference TEXT NOT NULL DEFAULT 'DEFAULT'
+    soundPreference TEXT NOT NULL DEFAULT 'default_adhan',
+    reminderMinutes INTEGER NOT NULL DEFAULT 10,
+    vibrationEnabled INTEGER NOT NULL DEFAULT 1,
+    repeatReminderEnabled INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE AppPreferenceEntity (
@@ -80,8 +83,22 @@ getNotificationPreferenceForPrayer:
 SELECT * FROM NotificationPreferenceEntity WHERE prayerName = :prayerName;
 
 insertOrUpdateNotificationPreference:
-INSERT OR REPLACE INTO NotificationPreferenceEntity (prayerName, enabled, soundPreference)
-VALUES (:prayerName, :enabled, :soundPreference);
+INSERT OR REPLACE INTO NotificationPreferenceEntity (
+    prayerName,
+    enabled,
+    soundPreference,
+    reminderMinutes,
+    vibrationEnabled,
+    repeatReminderEnabled
+)
+VALUES (
+    :prayerName,
+    :enabled,
+    :soundPreference,
+    :reminderMinutes,
+    :vibrationEnabled,
+    :repeatReminderEnabled
+);
 
 -- Queries for App Preferences
 getAppPreference:

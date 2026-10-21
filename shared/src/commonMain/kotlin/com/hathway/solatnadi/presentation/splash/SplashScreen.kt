@@ -29,8 +29,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
 import org.jetbrains.compose.resources.painterResource
 import solatnadi.shared.generated.resources.Res
 import solatnadi.shared.generated.resources.solatNadi_splash
@@ -133,5 +135,13 @@ fun SplashScreen(
                 color = Color.White.copy(alpha = 0.9f)
             )
         }
+    }
+}
+
+@Preview(name = "Splash Screen Preview", showBackground = true)
+@Composable
+fun SplashScreenPreview() {
+    SolatNadiTheme {
+        SplashScreen(onSplashComplete = {})
     }
 }

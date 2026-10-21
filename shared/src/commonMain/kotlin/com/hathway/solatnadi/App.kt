@@ -20,12 +20,24 @@ import org.koin.compose.koinInject
 
 import com.hathway.solatnadi.presentation.splash.SplashScreen
 
+import com.hathway.solatnadi.domain.model.PrayerName
+import com.hathway.solatnadi.presentation.notification.ChooseAlarmToneScreen
+import com.hathway.solatnadi.presentation.notification.ChooseAlarmToneViewModel
+import com.hathway.solatnadi.presentation.notification.PrayerNotificationDetailScreen
+import com.hathway.solatnadi.presentation.notification.PrayerNotificationDetailViewModel
+import com.hathway.solatnadi.presentation.notification.PrayerNotificationsListScreen
+import com.hathway.solatnadi.presentation.notification.PrayerNotificationsListViewModel
+import org.koin.core.parameter.parametersOf
+
 sealed interface Screen {
     data object Splash : Screen
     data object Home : Screen
     data object Settings : Screen
     data object LocationSelection : Screen
     data class PrayerPreferences(val location: PrayerLocation) : Screen
+    data object PrayerNotificationsList : Screen
+    data class PrayerNotificationDetail(val prayerName: PrayerName) : Screen
+    data class ChooseAlarmTone(val prayerName: PrayerName) : Screen
 }
 
 @Composable
@@ -87,7 +99,8 @@ fun App() {
                 SettingsScreen(
                     viewModel = settingsViewModel,
                     onNavigateBack = { popBackStack() },
-                    onNavigateToLocationSelection = { navigateTo(Screen.LocationSelection) }
+                    onNavigateToLocationSelection = { navigateTo(Screen.LocationSelection) },
+                    onNavigateToPrayerNotificationsList = { navigateTo(Screen.PrayerNotificationsList) }
                 )
             }
             is Screen.LocationSelection -> {
@@ -104,6 +117,33 @@ fun App() {
                     targetLocation = screen.location,
                     viewModel = settingsViewModel,
                     onComplete = { popToHome() },
+                    onNavigateBack = { popBackStack() }
+                )
+            }
+            is Screen.PrayerNotificationsList -> {
+                val listViewModel: PrayerNotificationsListViewModel = koinInject()
+                PrayerNotificationsListScreen(
+                    viewModel = listViewModel,
+                    onNavigateBack = { popBackStack() },
+                    onNavigateToPrayerDetail = { prayerName ->
+                        navigateTo(Screen.PrayerNotificationDetail(prayerName))
+                    }
+                )
+            }
+            is Screen.PrayerNotificationDetail -> {
+                val detailViewModel: PrayerNotificationDetailViewModel = koinInject { parametersOf(screen.prayerName) }
+                PrayerNotificationDetailScreen(
+                    viewModel = detailViewModel,
+                    onNavigateBack = { popBackStack() },
+                    onNavigateToChooseTone = { prayerName ->
+                        navigateTo(Screen.ChooseAlarmTone(prayerName))
+                    }
+                )
+            }
+            is Screen.ChooseAlarmTone -> {
+                val toneViewModel: ChooseAlarmToneViewModel = koinInject { parametersOf(screen.prayerName) }
+                ChooseAlarmToneScreen(
+                    viewModel = toneViewModel,
                     onNavigateBack = { popBackStack() }
                 )
             }

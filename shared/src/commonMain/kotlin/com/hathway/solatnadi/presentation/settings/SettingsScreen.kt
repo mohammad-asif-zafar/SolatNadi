@@ -47,14 +47,16 @@ import com.hathway.solatnadi.presentation.theme.SolatNadiThemeMode
 fun SettingsScreen(
     viewModel: SettingsViewModel,
     onNavigateBack: () -> Unit,
-    onNavigateToLocationSelection: () -> Unit
+    onNavigateToLocationSelection: () -> Unit,
+    onNavigateToPrayerNotificationsList: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
     SettingsScreenContent(
         uiState = uiState,
         onUpdatePreferences = viewModel::updatePreferences,
         onNavigateBack = onNavigateBack,
-        onNavigateToLocationSelection = onNavigateToLocationSelection
+        onNavigateToLocationSelection = onNavigateToLocationSelection,
+        onNavigateToPrayerNotificationsList = onNavigateToPrayerNotificationsList
     )
 }
 
@@ -64,6 +66,7 @@ fun SettingsScreenContent(
     onUpdatePreferences: (AppPreferences) -> Unit,
     onNavigateBack: () -> Unit,
     onNavigateToLocationSelection: () -> Unit,
+    onNavigateToPrayerNotificationsList: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val spacing = SolatNadiTheme.spacing
@@ -181,7 +184,7 @@ fun SettingsScreenContent(
                 icon = "🔔",
                 title = "Prayer Notifications",
                 subtitle = "Sound, vibration, reminder time",
-                onClick = { onNavigateToLocationSelection() }
+                onClick = { onNavigateToPrayerNotificationsList() }
             )
         }
 

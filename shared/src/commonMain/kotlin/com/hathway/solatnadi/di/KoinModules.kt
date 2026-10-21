@@ -8,13 +8,23 @@ import com.hathway.solatnadi.data.repository.PreferencesRepositoryImpl
 import com.hathway.solatnadi.data.repository.PrayerTimesRepositoryImpl
 import com.hathway.solatnadi.domain.repository.PreferencesRepository
 import com.hathway.solatnadi.domain.repository.PrayerTimesRepository
+import com.hathway.solatnadi.domain.model.PrayerName
 import com.hathway.solatnadi.domain.usecase.GetAppPreferencesUseCase
 import com.hathway.solatnadi.domain.usecase.GetNextPrayerUseCase
+import com.hathway.solatnadi.domain.usecase.GetPrayerNotificationConfigUseCase
+import com.hathway.solatnadi.domain.usecase.ObservePrayerNotificationConfigsUseCase
 import com.hathway.solatnadi.domain.usecase.ObservePrayerTimesUseCase
+import com.hathway.solatnadi.domain.usecase.PlayTonePreviewUseCase
 import com.hathway.solatnadi.domain.usecase.RefreshPrayerTimesUseCase
+import com.hathway.solatnadi.domain.usecase.SavePrayerNotificationConfigUseCase
+import com.hathway.solatnadi.domain.usecase.StopTonePreviewUseCase
 import com.hathway.solatnadi.domain.usecase.ToggleNotificationUseCase
+import com.hathway.solatnadi.domain.usecase.TriggerTestNotificationUseCase
 import com.hathway.solatnadi.domain.usecase.UpdateAppPreferencesUseCase
 import com.hathway.solatnadi.presentation.home.HomeViewModel
+import com.hathway.solatnadi.presentation.notification.ChooseAlarmToneViewModel
+import com.hathway.solatnadi.presentation.notification.PrayerNotificationDetailViewModel
+import com.hathway.solatnadi.presentation.notification.PrayerNotificationsListViewModel
 import com.hathway.solatnadi.presentation.settings.SettingsViewModel
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModel
@@ -42,11 +52,20 @@ val useCaseModule = module {
     factory { ToggleNotificationUseCase(get(), get()) }
     factory { GetAppPreferencesUseCase(get()) }
     factory { UpdateAppPreferencesUseCase(get()) }
+    factory { ObservePrayerNotificationConfigsUseCase(get()) }
+    factory { GetPrayerNotificationConfigUseCase(get()) }
+    factory { SavePrayerNotificationConfigUseCase(get(), get()) }
+    factory { PlayTonePreviewUseCase(get()) }
+    factory { StopTonePreviewUseCase(get()) }
+    factory { TriggerTestNotificationUseCase(get()) }
 }
 
 val viewModelModule = module {
     viewModel { HomeViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SettingsViewModel(get(), get(), get()) }
+    viewModel { PrayerNotificationsListViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { (prayerName: PrayerName) -> PrayerNotificationDetailViewModel(prayerName, get(), get(), get(), get()) }
+    viewModel { (prayerName: PrayerName) -> ChooseAlarmToneViewModel(prayerName, get(), get(), get(), get()) }
 }
 
 val appModule = module {

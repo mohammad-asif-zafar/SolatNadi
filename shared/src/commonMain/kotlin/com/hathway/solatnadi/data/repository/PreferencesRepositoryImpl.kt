@@ -4,6 +4,7 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOneOrNull
 import com.hathway.solatnadi.data.mapper.getCountryName
+import com.hathway.solatnadi.data.mapper.getSystemCountryCode
 import com.hathway.solatnadi.data.mapper.toDomain
 import com.hathway.solatnadi.data.remote.model.WorldCitiesResponse
 import com.hathway.solatnadi.database.SolatNadiDatabase
@@ -12,6 +13,7 @@ import com.hathway.solatnadi.domain.model.AppTheme
 import com.hathway.solatnadi.domain.model.Madhab
 import com.hathway.solatnadi.domain.model.PrayerLocation
 import com.hathway.solatnadi.domain.model.PrayerName
+import com.hathway.solatnadi.domain.model.PrayerNotificationConfig
 import com.hathway.solatnadi.domain.model.TimeFormat
 import com.hathway.solatnadi.domain.repository.PreferencesRepository
 import com.russhwolf.settings.Settings
@@ -22,6 +24,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.TimeZone
 import kotlinx.serialization.json.Json
 import solatnadi.shared.generated.resources.Res
 
@@ -57,17 +60,29 @@ class PreferencesRepositoryImpl(
             try {
                 val queries = database.solatNadiDatabaseQueries
                 val existingSelected = queries.selectSelectedLocation().executeAsOneOrNull()
-                val currentSelectedId = existingSelected?.id
-                    ?: settings.getString("selected_location_id", "kuala-lumpur")
+                val savedSelectedId = settings.getStringOrNull("selected_location_id")
 
                 val bytes = Res.readBytes("files/solatnadi_world_cities.json")
                 val jsonStr = bytes.decodeToString()
                 val parsed = Json { ignoreUnknownKeys = true }.decodeFromString<WorldCitiesResponse>(jsonStr)
 
+                val systemTz = TimeZone.currentSystemDefault().id
+                val systemCountry = getSystemCountryCode()
+
+                val matchedInitialCity = if (savedSelectedId == null && existingSelected == null) {
+                    parsed.cities.find { it.timezone == systemTz }
+                        ?: parsed.cities.find { it.countryCode.uppercase() == systemCountry }
+                } else null
+
+                val targetSelectedId = existingSelected?.id
+                    ?: savedSelectedId
+                    ?: matchedInitialCity?.id
+                    ?: "kuala-lumpur"
+
                 database.solatNadiDatabaseQueries.transaction {
                     parsed.cities.forEach { city ->
                         val countryName = getCountryName(city.countryCode)
-                        val isSel = if (city.id == currentSelectedId || (currentSelectedId == "kuala-lumpur" && city.id == "kl_my")) 1L else 0L
+                        val isSel = if (city.id == targetSelectedId || (targetSelectedId == "kuala-lumpur" && city.id == "kl_my")) 1L else 0L
                         queries.insertLocation(
                             id = city.id,
                             name = city.name,
@@ -82,8 +97,20 @@ class PreferencesRepositoryImpl(
             } catch (e: Exception) {
                 val queries = database.solatNadiDatabaseQueries
                 val existingSelected = queries.selectSelectedLocation().executeAsOneOrNull()
-                val currentSelectedId = existingSelected?.id
-                    ?: settings.getString("selected_location_id", "kuala-lumpur")
+                val savedSelectedId = settings.getStringOrNull("selected_location_id")
+
+                val systemTz = TimeZone.currentSystemDefault().id
+                val systemCountry = getSystemCountryCode()
+
+                val matchedPreset = if (savedSelectedId == null && existingSelected == null) {
+                    presetLocations.find { it.timezone == systemTz }
+                        ?: presetLocations.find { it.country.equals(systemCountry, ignoreCase = true) }
+                } else null
+
+                val targetSelectedId = existingSelected?.id
+                    ?: savedSelectedId
+                    ?: matchedPreset?.id
+                    ?: defaultLocation.id
 
                 presetLocations.forEach { loc ->
                     queries.insertLocation(
@@ -93,7 +120,7 @@ class PreferencesRepositoryImpl(
                         latitude = loc.latitude,
                         longitude = loc.longitude,
                         timezone = loc.timezone,
-                        isSelected = if (loc.id == currentSelectedId) 1L else 0L
+                        isSelected = if (loc.id == targetSelectedId) 1L else 0L
                     )
                 }
             }
@@ -142,30 +169,70 @@ class PreferencesRepositoryImpl(
     }
 
     override fun observeNotificationPreferences(): Flow<Map<PrayerName, Boolean>> {
+        return observePrayerNotificationConfigs().map { map ->
+            map.mapValues { it.value.enabled }
+        }
+    }
+
+    override suspend fun toggleNotificationPreference(prayerName: PrayerName, enabled: Boolean) = withContext(Dispatchers.IO) {
+        val current = getPrayerNotificationConfig(prayerName)
+        savePrayerNotificationConfig(current.copy(enabled = enabled))
+    }
+
+    override fun observePrayerNotificationConfigs(): Flow<Map<PrayerName, PrayerNotificationConfig>> {
         return database.solatNadiDatabaseQueries
             .getNotificationPreferences()
             .asFlow()
             .mapToList(Dispatchers.IO)
             .map { list ->
-                val map = list.associate { entity ->
-                    val prayerName = PrayerName.entries.find { it.name == entity.prayerName }
-                    (prayerName ?: PrayerName.FAJR) to (entity.enabled == 1L)
-                }.toMutableMap()
+                val map = list.mapNotNull { entity ->
+                    val prayerName = PrayerName.entries.find { it.name == entity.prayerName } ?: return@mapNotNull null
+                    prayerName to PrayerNotificationConfig(
+                        prayerName = prayerName,
+                        enabled = entity.enabled == 1L,
+                        reminderMinutes = entity.reminderMinutes.toInt(),
+                        soundKey = entity.soundPreference,
+                        vibrationEnabled = entity.vibrationEnabled == 1L,
+                        repeatReminderEnabled = entity.repeatReminderEnabled == 1L
+                    )
+                }.toMap().toMutableMap()
 
                 PrayerName.entries.forEach { prayer ->
                     if (!map.containsKey(prayer)) {
-                        map[prayer] = true
+                        map[prayer] = PrayerNotificationConfig(prayerName = prayer)
                     }
                 }
                 map
             }
     }
 
-    override suspend fun toggleNotificationPreference(prayerName: PrayerName, enabled: Boolean) = withContext(Dispatchers.IO) {
+    override suspend fun getPrayerNotificationConfig(prayerName: PrayerName): PrayerNotificationConfig = withContext(Dispatchers.IO) {
+        val entity = database.solatNadiDatabaseQueries
+            .getNotificationPreferenceForPrayer(prayerName.name)
+            .executeAsOneOrNull()
+
+        if (entity != null) {
+            PrayerNotificationConfig(
+                prayerName = prayerName,
+                enabled = entity.enabled == 1L,
+                reminderMinutes = entity.reminderMinutes.toInt(),
+                soundKey = entity.soundPreference,
+                vibrationEnabled = entity.vibrationEnabled == 1L,
+                repeatReminderEnabled = entity.repeatReminderEnabled == 1L
+            )
+        } else {
+            PrayerNotificationConfig(prayerName = prayerName)
+        }
+    }
+
+    override suspend fun savePrayerNotificationConfig(config: PrayerNotificationConfig) = withContext(Dispatchers.IO) {
         database.solatNadiDatabaseQueries.insertOrUpdateNotificationPreference(
-            prayerName = prayerName.name,
-            enabled = if (enabled) 1L else 0L,
-            soundPreference = "ALARM_AZAN"
+            prayerName = config.prayerName.name,
+            enabled = if (config.enabled) 1L else 0L,
+            soundPreference = config.soundKey,
+            reminderMinutes = config.reminderMinutes.toLong(),
+            vibrationEnabled = if (config.vibrationEnabled) 1L else 0L,
+            repeatReminderEnabled = if (config.repeatReminderEnabled) 1L else 0L
         )
     }
 
