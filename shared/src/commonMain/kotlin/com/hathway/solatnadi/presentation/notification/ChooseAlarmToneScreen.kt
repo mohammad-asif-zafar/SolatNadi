@@ -197,21 +197,37 @@ fun ChooseAlarmToneScreenContent(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.weight(1f)
                         ) {
-                            // Play/Pause Button
-                            Surface(
-                                modifier = Modifier
-                                    .size(36.dp)
-                                    .clip(CircleShape)
-                                    .clickable { onTogglePreview(tone) },
-                                shape = CircleShape,
-                                color = if (isPlaying) colorScheme.primary else colorScheme.primaryContainer
-                            ) {
-                                Box(contentAlignment = Alignment.Center) {
-                                    Text(
-                                        text = if (isPlaying) "⏸" else "▶",
-                                        fontSize = 14.sp,
-                                        color = if (isPlaying) colorScheme.onPrimary else colorScheme.primary
-                                    )
+                            if (tone.key == "silent") {
+                                Surface(
+                                    modifier = Modifier
+                                        .size(36.dp)
+                                        .clip(CircleShape),
+                                    shape = CircleShape,
+                                    color = colorScheme.surfaceVariant
+                                ) {
+                                    Box(contentAlignment = Alignment.Center) {
+                                        Text(
+                                            text = "🔕",
+                                            fontSize = 16.sp
+                                        )
+                                    }
+                                }
+                            } else {
+                                Surface(
+                                    modifier = Modifier
+                                        .size(36.dp)
+                                        .clip(CircleShape)
+                                        .clickable { onTogglePreview(tone) },
+                                    shape = CircleShape,
+                                    color = if (isPlaying) colorScheme.primary else colorScheme.primaryContainer
+                                ) {
+                                    Box(contentAlignment = Alignment.Center) {
+                                        Text(
+                                            text = if (isPlaying) "⏸" else "▶",
+                                            fontSize = 14.sp,
+                                            color = if (isPlaying) colorScheme.onPrimary else colorScheme.primary
+                                        )
+                                    }
                                 }
                             }
 

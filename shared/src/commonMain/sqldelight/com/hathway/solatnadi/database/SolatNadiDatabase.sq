@@ -29,7 +29,7 @@ CREATE TABLE NotificationPreferenceEntity (
     enabled INTEGER NOT NULL DEFAULT 1,
     soundPreference TEXT NOT NULL DEFAULT 'default_adhan',
     reminderMinutes INTEGER NOT NULL DEFAULT 10,
-    vibrationEnabled INTEGER NOT NULL DEFAULT 1,
+    vibrationEnabled INTEGER NOT NULL DEFAULT 0,
     repeatReminderEnabled INTEGER NOT NULL DEFAULT 0
 );
 

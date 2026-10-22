@@ -12,13 +12,12 @@ enum class ToneCategory {
 }
 
 object AdhanTones {
-    val DefaultMakkah = AdhanTone("default_adhan", "Default Adhan", "Makkah", ToneCategory.ADHAN)
-    val Takbeer = AdhanTone("allahu_akbar", "Allahu Akbar", "Short Takbeer", ToneCategory.ADHAN)
+    val DefaultMakkah = AdhanTone("default_adhan", "Adhan Makkah", "Mecca", ToneCategory.ADHAN)
     val Oman = AdhanTone("oman_adhan", "Adhan Muscat", "Oman", ToneCategory.ADHAN)
     val Qatar = AdhanTone("qatar_adhan", "Ali Hassan", "Qatar", ToneCategory.ADHAN)
     val EgyptFajr = AdhanTone("egypt_fajr_adhan", "Abdulbasit Abdusamad", "Fajr Egypt", ToneCategory.ADHAN)
     val Lebanon = AdhanTone("lebanon_adhan", "Abd Alrazaq Saleh", "Lebanon", ToneCategory.ADHAN)
-    val AbdelMobdi = AdhanTone("abdel_mobdi_adhan", "Abdel Moneim", "Abdel Mobdi", ToneCategory.ADHAN)
+    val Takbeer = AdhanTone("allahu_akbar", "Allahu Akbar", "Short Takbeer", ToneCategory.ADHAN)
     val ClassicAzan = AdhanTone("alarm_azan", "Classic Azan", "Full Adhan", ToneCategory.ADHAN)
 
     val SystemDefault = AdhanTone("system_default", "System Default Tone", "Device Notification", ToneCategory.ALARMS)
@@ -26,7 +25,7 @@ object AdhanTones {
     val Silent = AdhanTone("silent", "Silent / Mute", "Vibration only or silent", ToneCategory.DEVICE)
 
     val allTones = listOf(
-        DefaultMakkah, Takbeer, Oman, Qatar, EgyptFajr, Lebanon, AbdelMobdi, ClassicAzan, SystemDefault, GentleChime, Silent
+        DefaultMakkah, Oman, Qatar, EgyptFajr, Lebanon, Takbeer, ClassicAzan, SystemDefault, GentleChime, Silent
     )
 
     fun findByKey(key: String): AdhanTone {
@@ -41,7 +40,7 @@ data class PrayerNotificationConfig(
     val enabled: Boolean = true,
     val reminderMinutes: Int = 10,
     val soundKey: String = "default_adhan",
-    val vibrationEnabled: Boolean = true,
+    val vibrationEnabled: Boolean = false,
     val repeatReminderEnabled: Boolean = false
 ) {
     val soundTone: AdhanTone

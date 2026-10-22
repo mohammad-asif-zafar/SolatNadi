@@ -4,7 +4,6 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Build
 import com.hathway.solatnadi.domain.model.PrayerName
 import com.hathway.solatnadi.shared.R
@@ -18,8 +17,6 @@ import kotlinx.datetime.toInstant
 actual open class NotificationScheduler(private val context: Context) {
 
     actual constructor() : this(org.koin.core.context.GlobalContext.get().get())
-
-    private var previewMediaPlayer: MediaPlayer? = null
 
     actual open fun schedulePrayerNotification(prayerName: PrayerName, scheduledTime: LocalDateTime, reminderMinutes: Int) {
         try {
@@ -131,51 +128,19 @@ actual open class NotificationScheduler(private val context: Context) {
 
     actual open fun playAzanPreview(soundKey: String) {
         try {
-            stopAzanPreview()
-            if (soundKey == "silent") return
-
-            val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? android.media.AudioManager
-            val currentVol = audioManager?.getStreamVolume(android.media.AudioManager.STREAM_ALARM) ?: 10
-            val maxVol = audioManager?.getStreamMaxVolume(android.media.AudioManager.STREAM_ALARM) ?: 10
-            val volRatio = if (maxVol > 0) currentVol.toFloat() / maxVol.toFloat() else 1.0f
-
-            val rawRes = getRawResourceForSoundKey(soundKey)
-
-            val audioAttributes = android.media.AudioAttributes.Builder()
-                .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .setUsage(android.media.AudioAttributes.USAGE_ALARM)
-                .build()
-
-            previewMediaPlayer = (MediaPlayer.create(context, rawRes, audioAttributes, 0)
-                ?: MediaPlayer.create(context, rawRes))?.apply {
-                setVolume(volRatio, volRatio)
-                isLooping = false
-                start()
-                setOnCompletionListener {
-                    it.release()
-                    if (previewMediaPlayer == it) {
-                        previewMediaPlayer = null
-                    }
-                }
+            if (soundKey == "silent") {
+                AudioPlayerManager.stopSound()
+                return
             }
+            val rawRes = getRawResourceForSoundKey(soundKey)
+            AudioPlayerManager.playSound(context, rawRes)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
     actual open fun stopAzanPreview() {
-        try {
-            previewMediaPlayer?.let {
-                if (it.isPlaying) {
-                    it.stop()
-                }
-                it.release()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            previewMediaPlayer = null
-        }
+        AudioPlayerManager.stopSound()
     }
 
     actual open fun triggerTestNotification(prayerName: PrayerName) {
@@ -194,14 +159,13 @@ actual open class NotificationScheduler(private val context: Context) {
     private fun getRawResourceForSoundKey(soundKey: String): Int {
         return when (soundKey) {
             "allahu_akbar" -> R.raw.allahu_akbar
-            "makkah_adhan", "default_adhan" -> R.raw.lebanon_adhan
+            "makkah_adhan", "default_adhan" -> R.raw.adhan_mecca
             "oman_adhan" -> R.raw.oman_adhan
             "qatar_adhan" -> R.raw.qatar_adhan
             "egypt_fajr_adhan" -> R.raw.egypt_fajr_adhan
             "lebanon_adhan" -> R.raw.lebanon_adhan
-            "abdel_mobdi_adhan" -> R.raw.ressources_audio_allahuakbar
             "alarm_azan" -> R.raw.alarm_azan
-            else -> R.raw.alarm_azan
+            else -> R.raw.adhan_mecca
         }
     }
 }

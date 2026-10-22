@@ -5,8 +5,6 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.media.AudioAttributes
-import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
@@ -19,7 +17,8 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val powerManager = context.getSystemService(Context.POWER_SERVICE) as? PowerManager
         val wakeLock = powerManager?.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SolatNadi:AzanAlarmWakeLock")
-        wakeLock?.acquire(30000)
+        // Acquire for 5 minutes max to ensure full Adhan plays
+        wakeLock?.acquire(5 * 60 * 1000L)
 
         val prayerKey = intent.getStringExtra("EXTRA_PRAYER_KEY") ?: intent.getStringExtra("EXTRA_PRAYER_NAME")?.uppercase() ?: "FAJR"
         val prayerDisplayName = intent.getStringExtra("EXTRA_PRAYER_NAME") ?: "Prayer"
@@ -28,6 +27,7 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
 
         var cityName = ""
         var soundKey = "default_adhan"
+        var vibrationEnabled = false
         try {
             val database = createDatabase(DatabaseDriverFactory(context))
             val pref = database.solatNadiDatabaseQueries
@@ -43,6 +43,7 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
 
             if (pref != null) {
                 soundKey = pref.soundPreference
+                vibrationEnabled = pref.vibrationEnabled == 1L
             }
 
             val selectedLocation = database.solatNadiDatabaseQueries
@@ -57,63 +58,41 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
 
         val rawSoundRes = getRawResourceForSoundKey(soundKey)
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val soundUri = Uri.parse("android.resource://${context.packageName}/$rawSoundRes")
 
-        val channelId = "solatnadi_prayer_channel_$soundKey"
+        // Create a new channel ID version to ensure previous channel sound and vibration settings are overridden
+        val channelId = if (soundKey == "silent") "solatnadi_silent_channel_v3" else "solatnadi_prayer_channel_v3_${soundKey}_vib_${vibrationEnabled}"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val audioAttributes = AudioAttributes.Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                .setUsage(AudioAttributes.USAGE_ALARM)
-                .build()
-
             val channel = NotificationChannel(
                 channelId,
-                "Prayer Time Notifications",
+                if (soundKey == "silent") "Silent Prayer Notifications" else "Prayer Time Notifications",
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 description = "Notifications for Islamic prayer times"
-                enableVibration(true)
-                setSound(soundUri, audioAttributes)
+                enableVibration(vibrationEnabled)
+                if (!vibrationEnabled) {
+                    vibrationPattern = longArrayOf(0L)
+                }
+                // We use AudioPlayerManager to play the sound, so the system notification should be silent.
+                setSound(null, null)
             }
             notificationManager.createNotificationChannel(channel)
         }
 
         if (soundKey != "silent") {
-            try {
-                val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? android.media.AudioManager
-                val currentVol = audioManager?.getStreamVolume(android.media.AudioManager.STREAM_ALARM) ?: 10
-                val maxVol = audioManager?.getStreamMaxVolume(android.media.AudioManager.STREAM_ALARM) ?: 10
-                val volRatio = if (maxVol > 0) currentVol.toFloat() / maxVol.toFloat() else 1.0f
-
-                val audioAttributes = AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .setUsage(AudioAttributes.USAGE_ALARM)
-                    .build()
-
-                val mediaPlayer = MediaPlayer.create(context, rawSoundRes, audioAttributes, 0)
-                    ?: MediaPlayer.create(context, rawSoundRes)
-
-                mediaPlayer?.apply {
-                    setVolume(volRatio, volRatio)
-                    isLooping = false
-                    start()
-                    setOnCompletionListener {
-                        it.release()
-                        if (wakeLock?.isHeld == true) {
-                            try { wakeLock.release() } catch (_: Exception) {}
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
+            AudioPlayerManager.playSound(context, rawSoundRes) {
                 if (wakeLock?.isHeld == true) {
                     try { wakeLock.release() } catch (_: Exception) {}
                 }
             }
+        } else {
+            if (wakeLock?.isHeld == true) {
+                try { wakeLock.release() } catch (_: Exception) {}
+            }
         }
 
-        val titleText = if (cityName.isNotEmpty()) "SolatNadi — $prayerDisplayName ($cityName)" else "SolatNadi — $prayerDisplayName"
-        val contentText = if (cityName.isNotEmpty()) "It is time for $prayerDisplayName prayer in $cityName." else "It is time for $prayerDisplayName prayer."
+        val titleText = "It's time for $prayerDisplayName"
+        val contentText = "Let's prepare for prayer 💚"
+        val subText = if (cityName.isNotEmpty()) cityName else "SolatNadi"
 
         val launchIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -131,10 +110,14 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
             .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
             .setContentTitle(titleText)
             .setContentText(contentText)
+            .setSubText(subText)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
-            .setSound(soundUri)
             .setAutoCancel(true)
+
+        if (!vibrationEnabled) {
+            notificationBuilder.setVibrate(longArrayOf(0L))
+        }
 
         if (pendingContentIntent != null) {
             notificationBuilder.setContentIntent(pendingContentIntent)
@@ -147,14 +130,13 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
     private fun getRawResourceForSoundKey(soundKey: String): Int {
         return when (soundKey) {
             "allahu_akbar" -> R.raw.allahu_akbar
-            "makkah_adhan", "default_adhan" -> R.raw.lebanon_adhan
+            "makkah_adhan", "default_adhan" -> R.raw.adhan_mecca
             "oman_adhan" -> R.raw.oman_adhan
             "qatar_adhan" -> R.raw.qatar_adhan
             "egypt_fajr_adhan" -> R.raw.egypt_fajr_adhan
             "lebanon_adhan" -> R.raw.lebanon_adhan
-            "abdel_mobdi_adhan" -> R.raw.ressources_audio_allahuakbar
             "alarm_azan" -> R.raw.alarm_azan
-            else -> R.raw.alarm_azan
+            else -> R.raw.adhan_mecca
         }
     }
 }

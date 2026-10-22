@@ -145,8 +145,23 @@ fun CircularCountdownRing(
         }
     }
 }
+@Preview(name = "Light Theme", showBackground = true, backgroundColor = 0xFFF5FBF7)
+@Composable
+fun CountdownRingLightPreview() {
+    SolatNadiTheme(themeMode = SolatNadiThemeMode.LIGHT) {
+        Box(
+            modifier = Modifier.background(MaterialTheme.colorScheme.background)
+                .padding(SolatNadiTheme.spacing.XXLarge), contentAlignment = Alignment.Center
+        ) {
+            CircularCountdownRing(
+                countdownText = "00:42:12", nextPrayerName = "Asr", progress = 0.30f, prayerName = PrayerName.ASR
+            )
+        }
+    }
+}
 
-@Preview(name = "Light Mode", showBackground = true, backgroundColor = 0xFFF5FBF7)
+
+@Preview(name = "Light DARK", showBackground = true, backgroundColor = 0xFFF5FBF7)
 @Composable
 fun CountdownRingDarkPreview() {
     SolatNadiTheme(themeMode = SolatNadiThemeMode.DARK) {

@@ -1,19 +1,76 @@
 package com.hathway.solatnadi.domain.usecase
 
+import com.hathway.solatnadi.core.notification.NotificationScheduler
+import com.hathway.solatnadi.domain.model.AppPreferences
+import com.hathway.solatnadi.domain.model.PrayerLocation
 import com.hathway.solatnadi.domain.model.PrayerName
 import com.hathway.solatnadi.domain.model.PrayerNotificationConfig
+import com.hathway.solatnadi.domain.repository.PreferencesRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+import kotlinx.coroutines.flow.flowOf
+
+class FakeNotificationUseCaseRepo : PreferencesRepository {
+    val notificationMap = mutableMapOf<PrayerName, Boolean>()
+    val configMap = mutableMapOf<PrayerName, PrayerNotificationConfig>()
+
+    override fun observeSelectedLocation(): Flow<PrayerLocation> = error("Not used")
+    override suspend fun setSelectedLocation(location: PrayerLocation) {}
+    override fun observeAvailableLocations(): Flow<List<PrayerLocation>> = error("Not used")
+    override fun observeNotificationPreferences(): Flow<Map<PrayerName, Boolean>> = flowOf(notificationMap)
+
+    override suspend fun toggleNotificationPreference(prayerName: PrayerName, enabled: Boolean) {
+        notificationMap[prayerName] = enabled
+    }
+
+    override fun observePrayerNotificationConfigs(): Flow<Map<PrayerName, PrayerNotificationConfig>> {
+        val fullMap = PrayerName.entries.associateWith { name -> configMap[name] ?: PrayerNotificationConfig(name) }
+        return flowOf(fullMap)
+    }
+
+    override suspend fun getPrayerNotificationConfig(prayerName: PrayerName): PrayerNotificationConfig {
+        return configMap[prayerName] ?: PrayerNotificationConfig(prayerName)
+    }
+
+    override suspend fun savePrayerNotificationConfig(config: PrayerNotificationConfig) {
+        configMap[config.prayerName] = config
+        notificationMap[config.prayerName] = config.enabled
+    }
+
+    override fun observeAppPreferences(): Flow<AppPreferences> = error("Not used")
+    override suspend fun updateAppPreferences(preferences: AppPreferences) {}
+}
+
+class TestNotificationUseCaseScheduler : NotificationScheduler() {
+    val scheduledList = mutableListOf<Pair<PrayerName, LocalDateTime>>()
+    val cancelledList = mutableListOf<PrayerName>()
+
+    override fun schedulePrayerNotification(prayerName: PrayerName, scheduledTime: LocalDateTime, reminderMinutes: Int) {
+        scheduledList.add(prayerName to scheduledTime)
+    }
+
+    override fun cancelPrayerNotification(prayerName: PrayerName) {
+        cancelledList.add(prayerName)
+    }
+
+    override fun playAzanPreview(soundKey: String) {}
+    override fun stopAzanPreview() {}
+    override fun triggerTestNotification(prayerName: PrayerName) {}
+}
+
 class PrayerNotificationUseCasesTest {
 
-    private val repository = FakePreferencesRepository()
-    private val scheduler = TestNotificationScheduler()
+    private val repository = FakeNotificationUseCaseRepo()
+    private val scheduler = TestNotificationUseCaseScheduler()
 
     private val observeConfigsUseCase = ObservePrayerNotificationConfigsUseCase(repository)
     private val getConfigUseCase = GetPrayerNotificationConfigUseCase(repository)
@@ -78,10 +135,11 @@ class PrayerNotificationUseCasesTest {
         val map = observeConfigsUseCase().first()
 
         assertNotNull(map)
-        assertTrue(map.containsKey(PrayerName.FAJR))
-        assertTrue(map.containsKey(PrayerName.DHUHR))
-        assertTrue(map.containsKey(PrayerName.ASR))
-        assertTrue(map.containsKey(PrayerName.MAGHRIB))
-        assertTrue(map.containsKey(PrayerName.ISHA))
+        assertEquals(5, map.size)
+        assertNotNull(map[PrayerName.FAJR])
+        assertNotNull(map[PrayerName.DHUHR])
+        assertNotNull(map[PrayerName.ASR])
+        assertNotNull(map[PrayerName.MAGHRIB])
+        assertNotNull(map[PrayerName.ISHA])
     }
 }

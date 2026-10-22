@@ -15,29 +15,46 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class FakePreferencesRepository : PreferencesRepository {
+import com.hathway.solatnadi.domain.model.PrayerNotificationConfig
+
+import kotlinx.coroutines.flow.flowOf
+
+class FakeTogglePreferencesRepository : PreferencesRepository {
     val notificationMap = mutableMapOf<PrayerName, Boolean>()
+    val configMap = mutableMapOf<PrayerName, PrayerNotificationConfig>()
 
     override fun observeSelectedLocation(): Flow<PrayerLocation> = error("Not used")
     override suspend fun setSelectedLocation(location: PrayerLocation) {}
     override fun observeAvailableLocations(): Flow<List<PrayerLocation>> = error("Not used")
-    override fun observeNotificationPreferences(): Flow<Map<PrayerName, Boolean>> = MutableStateFlow(notificationMap)
+    override fun observeNotificationPreferences(): Flow<Map<PrayerName, Boolean>> = flowOf(notificationMap)
 
     override suspend fun toggleNotificationPreference(prayerName: PrayerName, enabled: Boolean) {
         notificationMap[prayerName] = enabled
+        configMap[prayerName] = (configMap[prayerName] ?: PrayerNotificationConfig(prayerName)).copy(enabled = enabled)
+    }
+
+    override fun observePrayerNotificationConfigs(): Flow<Map<PrayerName, PrayerNotificationConfig>> = flowOf(configMap)
+
+    override suspend fun getPrayerNotificationConfig(prayerName: PrayerName): PrayerNotificationConfig {
+        return configMap[prayerName] ?: PrayerNotificationConfig(prayerName, enabled = notificationMap[prayerName] ?: true)
+    }
+
+    override suspend fun savePrayerNotificationConfig(config: PrayerNotificationConfig) {
+        configMap[config.prayerName] = config
+        notificationMap[config.prayerName] = config.enabled
     }
 
     override fun observeAppPreferences(): Flow<AppPreferences> = error("Not used")
     override suspend fun updateAppPreferences(preferences: AppPreferences) {}
 }
 
-class TestNotificationScheduler : NotificationScheduler() {
+class TestToggleNotificationScheduler : NotificationScheduler() {
     val scheduledList = mutableListOf<Pair<PrayerName, LocalDateTime>>()
     val cancelledList = mutableListOf<PrayerName>()
     var playPreviewCallCount = 0
     var stopPreviewCallCount = 0
 
-    override fun schedulePrayerNotification(prayerName: PrayerName, scheduledTime: LocalDateTime) {
+    override fun schedulePrayerNotification(prayerName: PrayerName, scheduledTime: LocalDateTime, reminderMinutes: Int) {
         scheduledList.add(prayerName to scheduledTime)
     }
 
@@ -45,19 +62,22 @@ class TestNotificationScheduler : NotificationScheduler() {
         cancelledList.add(prayerName)
     }
 
-    override fun playAzanPreview() {
+    override fun playAzanPreview(soundKey: String) {
         playPreviewCallCount++
     }
 
     override fun stopAzanPreview() {
         stopPreviewCallCount++
     }
+
+    override fun triggerTestNotification(prayerName: PrayerName) {
+    }
 }
 
 class ToggleNotificationUseCaseTest {
 
-    private val repository = FakePreferencesRepository()
-    private val scheduler = TestNotificationScheduler()
+    private val repository = FakeTogglePreferencesRepository()
+    private val scheduler = TestToggleNotificationScheduler()
     private val useCase = ToggleNotificationUseCase(repository, scheduler)
 
     @Test

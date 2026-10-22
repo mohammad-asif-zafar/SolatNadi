@@ -49,7 +49,7 @@ class PlayTonePreviewUseCase(
     private val notificationScheduler: NotificationScheduler
 ) {
     operator fun invoke(soundKey: String) {
-        notificationScheduler.playAzanPreview()
+        notificationScheduler.playAzanPreview(soundKey)
     }
 }
 
@@ -65,6 +65,6 @@ class TriggerTestNotificationUseCase(
     private val notificationScheduler: NotificationScheduler
 ) {
     operator fun invoke(prayerName: PrayerName = PrayerName.FAJR) {
-        notificationScheduler.playAzanPreview()
+        notificationScheduler.triggerTestNotification(prayerName)
     }
 }

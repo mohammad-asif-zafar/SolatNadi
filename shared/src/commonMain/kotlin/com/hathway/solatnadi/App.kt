@@ -4,10 +4,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.hathway.solatnadi.core.notification.NotificationScheduler
 import com.hathway.solatnadi.domain.model.AppTheme
 import com.hathway.solatnadi.domain.model.PrayerLocation
+import com.hathway.solatnadi.presentation.components.ActiveAlarmData
 import com.hathway.solatnadi.presentation.components.BackHandler
+import com.hathway.solatnadi.presentation.components.PrayerAlarmDialog
 import com.hathway.solatnadi.presentation.home.HomeScreen
 import com.hathway.solatnadi.presentation.home.HomeViewModel
 import com.hathway.solatnadi.presentation.location.LocationSelectionScreen
@@ -147,6 +152,27 @@ fun App() {
                     onNavigateBack = { popBackStack() }
                 )
             }
+        }
+
+        var activeAlarmData by remember { mutableStateOf<ActiveAlarmData?>(null) }
+        val scheduler = remember { NotificationScheduler() }
+
+        activeAlarmData?.let { alarm ->
+            PrayerAlarmDialog(
+                alarmData = alarm,
+                onStopAlarm = {
+                    scheduler.stopAzanPreview()
+                    activeAlarmData = null
+                },
+                onSnooze = {
+                    scheduler.stopAzanPreview()
+                    activeAlarmData = null
+                },
+                onDismissRequest = {
+                    scheduler.stopAzanPreview()
+                    activeAlarmData = null
+                }
+            )
         }
     }
 }

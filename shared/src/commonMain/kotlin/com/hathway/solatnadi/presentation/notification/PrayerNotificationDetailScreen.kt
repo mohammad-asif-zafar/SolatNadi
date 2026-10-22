@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -312,73 +313,102 @@ fun PrayerNotificationDetailScreenContent(
 
         Surface(
             modifier = Modifier.fillMaxWidth(),
-            shape = shapes.Medium,
-            color = colorScheme.surface,
+            shape = RoundedCornerShape(20.dp),
+            color = colorScheme.surfaceVariant.copy(alpha = 0.5f),
             tonalElevation = 2.dp
         ) {
-            Column(modifier = Modifier.padding(spacing.Large)) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                // Header Row
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Surface(
+                            modifier = Modifier.size(24.dp),
+                            shape = RoundedCornerShape(6.dp),
+                            color = Color(0xFF135A46)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Text(text = "🕌", fontSize = 12.sp)
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Text(
+                            text = "SolatNadi",
+                            style = typography.titleSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = colorScheme.onSurface
+                        )
+
+                        Text(
+                            text = " • now",
+                            style = typography.bodySmall,
+                            color = colorScheme.onSurfaceVariant
+                        )
+                    }
+
+                    Text(
+                        text = "∨",
+                        style = typography.titleSmall,
+                        color = colorScheme.onSurfaceVariant,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Body Content Row
+                Row(
+                    verticalAlignment = Alignment.Top,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Surface(
-                        modifier = Modifier
-                            .size(24.dp)
-                            .clip(CircleShape),
-                        color = colorScheme.primary
+                        modifier = Modifier.size(52.dp),
+                        shape = RoundedCornerShape(14.dp),
+                        color = Color(0xFF135A46)
                     ) {
                         Box(contentAlignment = Alignment.Center) {
-                            Text(
-                                text = "🕌",
-                                fontSize = 12.sp
-                            )
+                            Text(text = "🕌", fontSize = 28.sp)
                         }
                     }
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(14.dp))
 
-                    Text(
-                        text = "SolatNadi",
-                        style = typography.labelMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = colorScheme.onSurface
-                    )
+                    Column {
+                        val titleText = if (config.reminderMinutes > 0) {
+                            "${prayerName.displayName} in ${config.reminderText}"
+                        } else {
+                            "It's time for ${prayerName.displayName}"
+                        }
 
-                    Text(
-                        text = " • now",
-                        style = typography.labelSmall,
-                        color = colorScheme.onSurfaceVariant
-                    )
+                        Text(
+                            text = titleText,
+                            style = typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = colorScheme.onSurface
+                        )
+
+                        Spacer(modifier = Modifier.height(2.dp))
+
+                        Text(
+                            text = "${uiState.timeFormatted} · 23 Oct 2025",
+                            style = typography.bodySmall,
+                            color = colorScheme.onSurfaceVariant
+                        )
+
+                        Spacer(modifier = Modifier.height(6.dp))
+
+                        Text(
+                            text = "Let's prepare for prayer 💚",
+                            style = typography.bodyMedium,
+                            color = colorScheme.onSurface
+                        )
+                    }
                 }
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                val previewTitle = if (config.reminderMinutes > 0) {
-                    "${prayerName.displayName} prayer in ${config.reminderText}"
-                } else {
-                    "It is time for ${prayerName.displayName} prayer"
-                }
-
-                val previewBody = if (config.reminderMinutes > 0) {
-                    "Get ready for ${prayerName.displayName} (${uiState.timeFormatted})"
-                } else {
-                    "Time for ${prayerName.displayName} (${uiState.timeFormatted}). May Allah accept your prayer."
-                }
-
-                Text(
-                    text = previewTitle,
-                    style = typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = colorScheme.onSurface
-                )
-
-                Spacer(modifier = Modifier.height(2.dp))
-
-                Text(
-                    text = previewBody,
-                    style = typography.bodyMedium,
-                    color = colorScheme.onSurfaceVariant
-                )
             }
         }
 
