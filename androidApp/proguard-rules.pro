@@ -35,3 +35,8 @@
 # --- Keep Application specific receiver classes ---
 -keep class com.hathway.solatnadi.core.notification.PrayerAlarmReceiver { *; }
 -keep class com.hathway.solatnadi.core.notification.BootReceiver { *; }
+
+# --- SQLDelight and Database rules ---
+-keep class app.cash.sqldelight.** { *; }
+-keep class com.hathway.solatnadi.database.** { *; }
+-keep class com.hathway.solatnadi.core.database.** { *; }
