@@ -57,7 +57,8 @@ fun SplashScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFFE3F0E9))
+            .background(MaterialTheme.colorScheme.background)
+            .navigationBarsPadding()
     ) {
         // Fullscreen Splash Background Image
         Image(
@@ -75,8 +76,8 @@ fun SplashScreen(
                     Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent,
-                            Color(0x20000000),
-                            Color(0x900B3C2F)
+                            MaterialTheme.colorScheme.scrim.copy(alpha = 0.2f),
+                            MaterialTheme.colorScheme.scrim.copy(alpha = 0.6f)
                         )
                     )
                 )
@@ -94,7 +95,7 @@ fun SplashScreen(
                 text = stringResource(Res.string.app_name),
                 fontSize = 42.sp,
                 fontWeight = FontWeight.ExtraBold,
-                color = Color(0xFF075747),
+                color = MaterialTheme.colorScheme.primary,
                 letterSpacing = (-1).sp
             )
 
@@ -104,7 +105,7 @@ fun SplashScreen(
                 text = stringResource(Res.string.tagline),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Color(0xFF163A38),
+                color = MaterialTheme.colorScheme.onBackground,
                 letterSpacing = 0.5.sp
             )
         }
@@ -123,8 +124,8 @@ fun SplashScreen(
                     .fillMaxWidth(0.7f)
                     .height(6.dp)
                     .clip(RoundedCornerShape(percent = 50)),
-                color = Color(0xFFFFB000),
-                trackColor = Color(0x60FFFFFF)
+                color = MaterialTheme.colorScheme.tertiary,
+                trackColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -133,7 +134,7 @@ fun SplashScreen(
                 text = stringResource(Res.string.loading_prayer_times),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color.White.copy(alpha = 0.9f)
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.9f)
             )
         }
     }

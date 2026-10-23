@@ -164,7 +164,7 @@ fun CountdownRingLightPreview() {
 }
 
 
-@Preview(name = "Light DARK", showBackground = true, backgroundColor = 0xFFF5FBF7)
+@Preview(name = "Dark Theme", showBackground = true, backgroundColor = 0xFF17211D)
 @Composable
 fun CountdownRingDarkPreview() {
     SolatNadiTheme(themeMode = SolatNadiThemeMode.DARK) {

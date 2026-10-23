@@ -14,8 +14,24 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
-#-renamesourcefileattribute SourceFile
+-renamesourcefileattribute SourceFile
+
+# --- Compose and Coroutines specific rules ---
+-keepclassmembers class * {
+    @androidx.compose.runtime.Composable *;
+}
+-keep class androidx.compose.ui.tooling.preview.Preview
+-keepclassmembers class * {
+    @androidx.compose.ui.tooling.preview.Preview *;
+}
+-keepclassmembers class * {
+    @androidx.compose.ui.tooling.preview.PreviewParameter *;
+}
+
+# --- Keep Application specific receiver classes ---
+-keep class com.hathway.solatnadi.core.notification.PrayerAlarmReceiver { *; }
+-keep class com.hathway.solatnadi.core.notification.BootReceiver { *; }

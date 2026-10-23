@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -122,6 +123,7 @@ fun HomeScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
+                .navigationBarsPadding()
                 .verticalScroll(rememberScrollState())
                 .padding(
                     horizontal = dimens.ScreenHorizontalPadding,
@@ -256,7 +258,7 @@ fun HomeScreenContent(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF9FBF9))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Box(
             modifier = Modifier
@@ -277,8 +279,8 @@ fun HomeScreenContent(
                         Brush.verticalGradient(
                             colors = listOf(
                                 Color.Transparent,
-                                Color(0x66FFFFFF),
-                                Color(0xFFF9FBF9)
+                                MaterialTheme.colorScheme.background.copy(alpha = 0.4f),
+                                MaterialTheme.colorScheme.background
                             )
                         )
                     )
@@ -341,7 +343,7 @@ fun HomeScreenContent(
                             text = "${uiState.gregorianDateFormatted}  •  ${uiState.hijriDateFormatted}",
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Color(0xFF6B7A85)
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -353,7 +355,7 @@ fun HomeScreenContent(
                             .clip(CircleShape)
                             .clickable { },
                         shape = CircleShape,
-                        color = Color(0x33000000)
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Text("ℹ", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = SolatNadiPalette.TextPrimary)
@@ -368,7 +370,7 @@ fun HomeScreenContent(
                             .clip(CircleShape)
                             .clickable { onNavigateToSettings() },
                         shape = CircleShape,
-                        color = Color(0x33000000)
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Text("⚙", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = SolatNadiPalette.TextPrimary)
@@ -392,12 +394,12 @@ fun HomeScreenContent(
                 Surface(
                     modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
                     shape = RoundedCornerShape(12.dp),
-                    color = Color(0xFFFFF3CD)
+                    color = MaterialTheme.colorScheme.tertiaryContainer
                 ) {
                     Text(
                         text = stringResource(Res.string.working_offline),
                         fontSize = 12.sp,
-                        color = Color(0xFF856404),
+                        color = MaterialTheme.colorScheme.onTertiaryContainer,
                         modifier = Modifier.padding(12.dp),
                         fontWeight = FontWeight.Medium
                     )

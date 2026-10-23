@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
@@ -120,7 +121,7 @@ fun AsrIcon(modifier: Modifier = Modifier) {
         }
         drawPath(
             path = cloudPath,
-            color = Color(0xFFD6E4EE)
+            color = SolatNadiPalette.TextTertiary
         )
     }
 }

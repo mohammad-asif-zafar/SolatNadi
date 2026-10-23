@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -23,6 +24,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -93,8 +95,9 @@ fun PrayerPreferencesScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF9FBF9))
+            .background(MaterialTheme.colorScheme.background)
             .statusBarsPadding()
+            .navigationBarsPadding()
             .verticalScroll(rememberScrollState())
             .padding(20.dp)
     ) {
@@ -129,7 +132,7 @@ fun PrayerPreferencesScreenContent(
         Text(
             text = stringResource(Res.string.choose_calculation_settings),
             fontSize = 14.sp,
-            color = Color(0xFF687782)
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(modifier = Modifier.height(28.dp))
@@ -139,7 +142,7 @@ fun PrayerPreferencesScreenContent(
                 .fillMaxWidth()
                 .shadow(2.dp, RoundedCornerShape(20.dp)),
             shape = RoundedCornerShape(20.dp),
-            color = Color.White
+             color = MaterialTheme.colorScheme.surface
         ) {
             Column(modifier = Modifier.padding(20.dp)) {
                 Row(
@@ -153,7 +156,7 @@ fun PrayerPreferencesScreenContent(
                         fontWeight = FontWeight.Bold,
                         color = SolatNadiPalette.TextPrimary
                     )
-                    Text("ⓘ", fontSize = 18.sp, color = Color(0xFF687782))
+                    Text("ⓘ", fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
 
                 Spacer(modifier = Modifier.height(14.dp))
@@ -163,10 +166,10 @@ fun PrayerPreferencesScreenContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(14.dp))
-                            .border(1.dp, Color(0xFFE2E7E4), RoundedCornerShape(14.dp))
+                            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(14.dp))
                             .clickable { showMethodDropdown = true },
                         shape = RoundedCornerShape(14.dp),
-                        color = Color(0xFFFAFCFA)
+                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
                     ) {
                         Row(
                             modifier = Modifier
@@ -206,12 +209,12 @@ fun PrayerPreferencesScreenContent(
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
-                    color = Color(0xFFF4F7F5)
+                    color = MaterialTheme.colorScheme.surfaceVariant
                 ) {
                     Text(
                         text = currentMethod.description,
                         fontSize = 13.sp,
-                        color = Color(0xFF687782),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(12.dp)
                     )
                 }
@@ -231,7 +234,7 @@ fun PrayerPreferencesScreenContent(
                 fontWeight = FontWeight.Bold,
                 color = SolatNadiPalette.TextPrimary
             )
-            Text("ⓘ", fontSize = 18.sp, color = Color(0xFF687782))
+            Text("ⓘ", fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
 
         Spacer(modifier = Modifier.height(14.dp))
@@ -245,9 +248,9 @@ fun PrayerPreferencesScreenContent(
                 val borderMod = if (isSelected) {
                     Modifier.border(2.dp, SolatNadiPalette.ForestGreen, RoundedCornerShape(18.dp))
                 } else {
-                    Modifier.border(1.dp, Color(0xFFE2E7E4), RoundedCornerShape(18.dp))
+                    Modifier.border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(18.dp))
                 }
-                val cardBg = if (isSelected) Color(0xFFEAF8EE) else Color.White
+                val cardBg = if (isSelected) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface
 
                 Surface(
                     modifier = Modifier
@@ -264,14 +267,14 @@ fun PrayerPreferencesScreenContent(
                         Surface(
                             modifier = Modifier.size(20.dp),
                             shape = CircleShape,
-                            color = if (isSelected) SolatNadiPalette.ForestGreen else Color(0xFFE0E5E2)
+                            color = if (isSelected) SolatNadiPalette.ForestGreen else MaterialTheme.colorScheme.outlineVariant
                         ) {
                             if (isSelected) {
                                 Box(contentAlignment = Alignment.Center) {
                                     Surface(
                                         modifier = Modifier.size(8.dp),
                                         shape = CircleShape,
-                                        color = Color.White
+                                        color = MaterialTheme.colorScheme.surface
                                     ) {}
                                 }
                             }
@@ -289,7 +292,7 @@ fun PrayerPreferencesScreenContent(
                             Text(
                                 text = madhabOption.subtitle,
                                 fontSize = 12.sp,
-                                color = Color(0xFF788590)
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
@@ -302,12 +305,12 @@ fun PrayerPreferencesScreenContent(
         Surface(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(14.dp),
-            color = Color(0xFFF4F7F5)
+            color = MaterialTheme.colorScheme.surfaceVariant
         ) {
             Text(
                 text = stringResource(Res.string.madhab_desc),
                 fontSize = 13.sp,
-                color = Color(0xFF687782),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(14.dp)
             )
         }
@@ -331,7 +334,7 @@ fun PrayerPreferencesScreenContent(
             shape = RoundedCornerShape(28.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = SolatNadiPalette.ForestGreen,
-                contentColor = Color.White
+                contentColor = MaterialTheme.colorScheme.surface
             )
         ) {
             Text(
