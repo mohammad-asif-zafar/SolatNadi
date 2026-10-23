@@ -24,6 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hathway.solatnadi.domain.model.PrayerName
 import com.hathway.solatnadi.presentation.theme.*
+import org.jetbrains.compose.resources.stringResource
+import solatnadi.shared.generated.resources.Res
+import solatnadi.shared.generated.resources.*
 
 @Composable
 fun CircularCountdownRing(
@@ -99,7 +102,7 @@ fun CircularCountdownRing(
                     modifier = Modifier.padding(horizontal = themeSpacing.Large)
                 ) {
                     Text(
-                        text = "NEXT PRAYER",
+                        text = stringResource(Res.string.next_prayer),
                         style = materialTypography.labelSmall,
                         color = materialColorScheme.onSurfaceVariant,
                         letterSpacing = 1.sp
@@ -116,7 +119,7 @@ fun CircularCountdownRing(
                     Spacer(modifier = Modifier.height(2.dp))
 
                     Text(
-                        text = "Time remaining",
+                        text = stringResource(Res.string.time_remaining),
                         style = materialTypography.bodySmall,
                         color = materialColorScheme.onSurfaceVariant
                     )

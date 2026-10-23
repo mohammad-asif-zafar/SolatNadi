@@ -47,6 +47,9 @@ import com.hathway.solatnadi.presentation.settings.SettingsClickableRow
 import com.hathway.solatnadi.presentation.settings.SettingsSectionHeader
 import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
 import com.hathway.solatnadi.presentation.theme.SolatNadiThemeMode
+import org.jetbrains.compose.resources.stringResource
+import solatnadi.shared.generated.resources.Res
+import solatnadi.shared.generated.resources.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -130,7 +133,7 @@ fun PrayerNotificationDetailScreenContent(
             Spacer(modifier = Modifier.width(spacing.Medium))
 
             Text(
-                text = "${prayerName.displayName} Notification",
+                text = stringResource(Res.string.notification_title, prayerName.displayName),
                 style = typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = colorScheme.onSurface
@@ -204,7 +207,7 @@ fun PrayerNotificationDetailScreenContent(
                 // Reminder before prayer row
                 SettingsClickableRow(
                     icon = "🕒",
-                    title = "Reminder before prayer",
+                    title = stringResource(Res.string.reminder_before_prayer),
                     trailingText = config.reminderText,
                     onClick = onOpenReminderBottomSheet
                 )
@@ -217,7 +220,7 @@ fun PrayerNotificationDetailScreenContent(
                 // Sound row
                 SettingsClickableRow(
                     icon = "🎵",
-                    title = "Sound",
+                    title = stringResource(Res.string.sound),
                     trailingText = config.soundTone.title,
                     onClick = onNavigateToChooseTone
                 )
@@ -242,7 +245,7 @@ fun PrayerNotificationDetailScreenContent(
                             modifier = Modifier.padding(end = spacing.Medium)
                         )
                         Text(
-                            text = "Vibration",
+                            text = stringResource(Res.string.vibration),
                             style = typography.bodyLarge,
                             fontWeight = FontWeight.Medium,
                             color = colorScheme.onSurface
@@ -282,13 +285,13 @@ fun PrayerNotificationDetailScreenContent(
                         )
                         Column {
                             Text(
-                                text = "Repeat reminder",
+                                text = stringResource(Res.string.repeat_reminder),
                                 style = typography.bodyLarge,
                                 fontWeight = FontWeight.Medium,
                                 color = colorScheme.onSurface
                             )
                             Text(
-                                text = "Repeat after 5 minutes if not dismissed",
+                                text = stringResource(Res.string.repeat_reminder_desc),
                                 style = typography.bodySmall,
                                 color = colorScheme.onSurfaceVariant
                             )
@@ -309,7 +312,7 @@ fun PrayerNotificationDetailScreenContent(
         Spacer(modifier = Modifier.height(spacing.Large))
 
         // Notification Preview Section
-        SettingsSectionHeader(title = "Notification preview", icon = "👁️")
+        SettingsSectionHeader(title = stringResource(Res.string.notification_preview), icon = "👁️")
 
         Surface(
             modifier = Modifier.fillMaxWidth(),
@@ -403,7 +406,7 @@ fun PrayerNotificationDetailScreenContent(
                         Spacer(modifier = Modifier.height(6.dp))
 
                         Text(
-                            text = "Let's prepare for prayer 💚",
+                            text = stringResource(Res.string.prepare_prayer_msg),
                             style = typography.bodyMedium,
                             color = colorScheme.onSurface
                         )
@@ -427,7 +430,7 @@ fun PrayerNotificationDetailScreenContent(
             )
         ) {
             Text(
-                text = "💾 Save settings",
+                text = "💾 " + stringResource(Res.string.save_settings),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )

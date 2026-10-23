@@ -41,6 +41,9 @@ import androidx.compose.ui.window.DialogProperties
 import com.hathway.solatnadi.domain.model.PrayerName
 import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
 import com.hathway.solatnadi.presentation.theme.SolatNadiThemeMode
+import org.jetbrains.compose.resources.stringResource
+import solatnadi.shared.generated.resources.Res
+import solatnadi.shared.generated.resources.*
 
 data class ActiveAlarmData(
     val prayerName: PrayerName = PrayerName.FAJR, val timeFormatted: String = "05:47 AM"
@@ -163,7 +166,7 @@ fun PrayerAlarmDialogContent(
 
             // Title: It's time for [PrayerName]
             Text(
-                text = "It's time for ${alarmData.prayerName.displayName}",
+                text = stringResource(Res.string.time_for_prayer, alarmData.prayerName.displayName),
                 style = typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = colorScheme.onSurface
@@ -183,7 +186,7 @@ fun PrayerAlarmDialogContent(
 
             // Subtitle: It's time to prepare for prayer
             Text(
-                text = "It's time to prepare for prayer",
+                text = stringResource(Res.string.time_to_prepare),
                 style = typography.bodySmall,
                 color = colorScheme.onSurfaceVariant
             )
@@ -210,7 +213,7 @@ fun PrayerAlarmDialogContent(
                     ) {}
                     Spacer(modifier = Modifier.width(spacing.Medium))
                     Text(
-                        text = "Stop Alarm", fontSize = 16.sp, fontWeight = FontWeight.Bold
+                        text = stringResource(Res.string.stop_alarm), fontSize = 16.sp, fontWeight = FontWeight.Bold
                     )
                 }
             }
@@ -236,7 +239,7 @@ fun PrayerAlarmDialogContent(
                     )
                     Spacer(modifier = Modifier.width(spacing.Medium))
                     Text(
-                        text = "Snooze 5 minutes",
+                        text = stringResource(Res.string.snooze_5_min),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold
                     )

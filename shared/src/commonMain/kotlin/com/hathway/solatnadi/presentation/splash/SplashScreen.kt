@@ -34,8 +34,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import solatnadi.shared.generated.resources.Res
-import solatnadi.shared.generated.resources.solatNadi_splash
+import solatnadi.shared.generated.resources.*
 
 
 @Composable
@@ -61,7 +62,7 @@ fun SplashScreen(
         // Fullscreen Splash Background Image
         Image(
             painter = painterResource(Res.drawable.solatNadi_splash),
-            contentDescription = "SolatNadi Splash Artwork",
+            contentDescription = stringResource(Res.string.splash_artwork),
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
@@ -90,7 +91,7 @@ fun SplashScreen(
                 .padding(horizontal = 24.dp)
         ) {
             Text(
-                text = "SolatNadi",
+                text = stringResource(Res.string.app_name),
                 fontSize = 42.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = Color(0xFF075747),
@@ -100,7 +101,7 @@ fun SplashScreen(
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Your Prayer. Your Time.",
+                text = stringResource(Res.string.tagline),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color(0xFF163A38),
@@ -129,7 +130,7 @@ fun SplashScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "Loading Prayer Times...",
+                text = stringResource(Res.string.loading_prayer_times),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color.White.copy(alpha = 0.9f)

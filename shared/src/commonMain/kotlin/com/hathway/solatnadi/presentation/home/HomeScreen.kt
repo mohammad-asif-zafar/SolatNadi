@@ -46,8 +46,9 @@ import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
 import com.hathway.solatnadi.presentation.theme.SolatNadiThemeMode
 import kotlinx.datetime.LocalDateTime
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import solatnadi.shared.generated.resources.Res
-import solatnadi.shared.generated.resources.misty_kuala_lumpur_sunrise_skyline_bg
+import solatnadi.shared.generated.resources.*
 
 @Composable
 fun HomeScreen(
@@ -95,7 +96,7 @@ fun HomeScreenContent(
         ) {
             Image(
                 painter = painterResource(Res.drawable.misty_kuala_lumpur_sunrise_skyline_bg),
-                contentDescription = "Skyline Background",
+                contentDescription = stringResource(Res.string.skyline_background),
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
@@ -218,7 +219,7 @@ fun HomeScreenContent(
                     color = customColors.warning.copy(alpha = 0.15f) // Flips container to dark amber nicely
                 ) {
                     Text(
-                        text = "⚡ Working Offline — Displaying cached prayer schedule",
+                        text = stringResource(Res.string.working_offline),
                         style = typography.bodySmall,
                         color = customColors.warning,
                         modifier = Modifier.padding(spacing.Medium),
@@ -264,7 +265,7 @@ fun HomeScreenContent(
         ) {
             Image(
                 painter = painterResource(Res.drawable.misty_kuala_lumpur_sunrise_skyline_bg),
-                contentDescription = "Kuala Lumpur Skyline Background",
+                contentDescription = stringResource(Res.string.kl_skyline_background),
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
@@ -394,7 +395,7 @@ fun HomeScreenContent(
                     color = Color(0xFFFFF3CD)
                 ) {
                     Text(
-                        text = "⚡ Working Offline — Displaying cached prayer schedule",
+                        text = stringResource(Res.string.working_offline),
                         fontSize = 12.sp,
                         color = Color(0xFF856404),
                         modifier = Modifier.padding(12.dp),

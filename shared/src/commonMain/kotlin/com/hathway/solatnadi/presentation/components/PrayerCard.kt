@@ -31,6 +31,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.hathway.solatnadi.domain.model.PrayerTime
 import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
+import org.jetbrains.compose.resources.stringResource
+import solatnadi.shared.generated.resources.Res
+import solatnadi.shared.generated.resources.*
+import androidx.compose.ui.tooling.preview.Preview
+
+import com.hathway.solatnadi.domain.model.PrayerName
+import kotlinx.datetime.LocalDateTime
 
 @Composable
 fun PrayerCard(
@@ -113,7 +120,7 @@ fun PrayerCard(
                             )
                     ) {
                         Text(
-                            text = "Next Prayer",
+                            text = stringResource(Res.string.next_prayer_card),
                             style = typography.labelSmall,
                             fontWeight = FontWeight.Bold,
                             color = customColors.success
@@ -176,6 +183,70 @@ fun BellIcon(
         } else {
             drawPath(path = bellPath, color = color, style = Stroke(width = w * 0.08f))
             drawCircle(color = color, radius = w * 0.08f, center = Offset(w * 0.5f, h * 0.82f), style = Stroke(width = w * 0.08f))
+        }
+    }
+}
+
+
+private object PreviewPrayerData {
+    // Safely generate a dummy local datetime for the mock instances
+    val currentMockDateTime = LocalDateTime(
+        year = 2026,
+        monthNumber = 10,
+        dayOfMonth = 23,
+        hour = 5,
+        minute = 42
+    )
+    val fajrNext = PrayerTime(
+        prayerName = PrayerName.FAJR,
+        timeString = "05:42 AM",
+        scheduledDateTime = currentMockDateTime,
+        isNotificationEnabled = true,
+        isNext = true
+    )
+
+    val dhuhrNormal = PrayerTime(
+        prayerName = PrayerName.DHUHR,
+        timeString = "01:15 PM",
+        scheduledDateTime = currentMockDateTime,
+        isNotificationEnabled = false,
+        isNext = false
+    )
+}
+
+@Preview
+@Composable
+fun PrayerCardPreview() {
+    SolatNadiTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Next Prayer State",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+            PrayerCard(
+                prayerTime = PreviewPrayerData.fajrNext,
+                onToggleNotification = {}
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "Standard State",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+            PrayerCard(
+                prayerTime = PreviewPrayerData.dhuhrNormal,
+                onToggleNotification = {}
+            )
         }
     }
 }

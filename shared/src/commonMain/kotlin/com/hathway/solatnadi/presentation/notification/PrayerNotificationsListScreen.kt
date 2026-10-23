@@ -38,6 +38,9 @@ import com.hathway.solatnadi.presentation.settings.SettingsClickableRow
 import com.hathway.solatnadi.presentation.settings.SettingsSectionHeader
 import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
 import com.hathway.solatnadi.presentation.theme.SolatNadiThemeMode
+import org.jetbrains.compose.resources.stringResource
+import solatnadi.shared.generated.resources.Res
+import solatnadi.shared.generated.resources.*
 
 @Composable
 fun PrayerNotificationsListScreen(
@@ -102,13 +105,13 @@ fun PrayerNotificationsListScreenContent(
 
             Column {
                 Text(
-                    text = "Prayer Notifications",
+                    text = stringResource(Res.string.prayer_notifications),
                     style = typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     color = colorScheme.onSurface
                 )
                 Text(
-                    text = "Choose which prayers to configure",
+                    text = stringResource(Res.string.choose_prayers_configure),
                     style = typography.bodySmall,
                     color = colorScheme.onSurfaceVariant
                 )
@@ -155,7 +158,7 @@ fun PrayerNotificationsListScreenContent(
         Spacer(modifier = Modifier.height(spacing.Large))
 
         // Default Notification Settings Section
-        SettingsSectionHeader(title = "Default notification settings", icon = "⚙️")
+        SettingsSectionHeader(title = stringResource(Res.string.default_notification_settings), icon = "⚙️")
 
         Surface(
             modifier = Modifier.fillMaxWidth(),
@@ -166,7 +169,7 @@ fun PrayerNotificationsListScreenContent(
             Column(modifier = Modifier.padding(spacing.Medium)) {
                 SettingsClickableRow(
                     icon = "🔊",
-                    title = "Sound",
+                    title = stringResource(Res.string.sound),
                     trailingText = uiState.defaultConfig.soundTone.title,
                     onClick = { onNavigateToPrayerDetail(PrayerName.FAJR) }
                 )
@@ -190,7 +193,7 @@ fun PrayerNotificationsListScreenContent(
                             modifier = Modifier.padding(end = spacing.Medium)
                         )
                         Text(
-                            text = "Vibration",
+                            text = stringResource(Res.string.vibration),
                             style = typography.bodyLarge,
                             fontWeight = FontWeight.Medium,
                             color = colorScheme.onSurface
@@ -211,7 +214,7 @@ fun PrayerNotificationsListScreenContent(
 
                 SettingsClickableRow(
                     icon = "🕒",
-                    title = "Reminder before prayer",
+                    title = stringResource(Res.string.reminder_before_prayer),
                     trailingText = uiState.defaultConfig.reminderText,
                     onClick = { onNavigateToPrayerDetail(PrayerName.FAJR) }
                 )

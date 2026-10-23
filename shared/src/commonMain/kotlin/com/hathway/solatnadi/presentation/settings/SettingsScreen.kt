@@ -42,6 +42,9 @@ import com.hathway.solatnadi.domain.model.PrayerLocation
 import com.hathway.solatnadi.domain.model.TimeFormat
 import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
 import com.hathway.solatnadi.presentation.theme.SolatNadiThemeMode
+import org.jetbrains.compose.resources.stringResource
+import solatnadi.shared.generated.resources.Res
+import solatnadi.shared.generated.resources.*
 
 @Composable
 fun SettingsScreen(
@@ -114,7 +117,7 @@ fun SettingsScreenContent(
             Spacer(modifier = Modifier.width(spacing.Medium))
 
             Text(
-                text = "Settings",
+                text = stringResource(Res.string.settings),
                 style = typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = colorScheme.onSurface
@@ -126,7 +129,7 @@ fun SettingsScreenContent(
         // ==========================================
         // LOCATION SECTION
         // ==========================================
-        SettingsSectionHeader(title = "Location", icon = "📍")
+        SettingsSectionHeader(title = stringResource(Res.string.category_location), icon = "📍")
 
         Surface(
             modifier = Modifier
@@ -145,7 +148,7 @@ fun SettingsScreenContent(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Current Location",
+                        text = stringResource(Res.string.current_location),
                         style = typography.labelSmall,
                         color = colorScheme.onSurfaceVariant
                     )
@@ -159,7 +162,7 @@ fun SettingsScreenContent(
                 }
 
                 Text(
-                    text = "Change ›",
+                    text = stringResource(Res.string.change),
                     style = typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = colorScheme.primary
@@ -172,7 +175,7 @@ fun SettingsScreenContent(
         // ==========================================
         // NOTIFICATIONS SECTION
         // ==========================================
-        SettingsSectionHeader(title = "Notifications", icon = "🔔")
+        SettingsSectionHeader(title = stringResource(Res.string.category_notifications), icon = "🔔")
 
         Surface(
             modifier = Modifier.fillMaxWidth(),
@@ -182,8 +185,8 @@ fun SettingsScreenContent(
         ) {
             SettingsClickableRow(
                 icon = "🔔",
-                title = "Prayer Notifications",
-                subtitle = "Sound, vibration, reminder time",
+                title = stringResource(Res.string.category_prayer_notifications),
+                subtitle = stringResource(Res.string.category_sound_vibration),
                 onClick = { onNavigateToPrayerNotificationsList() }
             )
         }
@@ -193,7 +196,7 @@ fun SettingsScreenContent(
         // ==========================================
         // APPEARANCE SECTION
         // ==========================================
-        SettingsSectionHeader(title = "Appearance", icon = "🎨")
+        SettingsSectionHeader(title = stringResource(Res.string.category_appearance), icon = "🎨")
 
         Surface(
             modifier = Modifier.fillMaxWidth(),
@@ -211,7 +214,7 @@ fun SettingsScreenContent(
 
                 SettingsClickableRow(
                     icon = "⚙️",
-                    title = "Theme",
+                    title = stringResource(Res.string.category_theme),
                     trailingText = themeLabel,
                     onClick = { showThemeDialog = true }
                 )
@@ -231,7 +234,7 @@ fun SettingsScreenContent(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "12-Hour Format",
+                            text = stringResource(Res.string.twelve_hour_format),
                             style = typography.bodyLarge,
                             fontWeight = FontWeight.Medium,
                             color = colorScheme.onSurface
@@ -268,7 +271,7 @@ fun SettingsScreenContent(
         // ==========================================
         // MORE SECTION
         // ==========================================
-        SettingsSectionHeader(title = "More", icon = "ℹ️")
+        SettingsSectionHeader(title = stringResource(Res.string.category_more), icon = "ℹ️")
 
         Surface(
             modifier = Modifier.fillMaxWidth(),
@@ -279,7 +282,7 @@ fun SettingsScreenContent(
             Column(modifier = Modifier.padding(spacing.Medium)) {
                 SettingsClickableRow(
                     icon = "ℹ️",
-                    title = "About SolatNadi",
+                    title = stringResource(Res.string.about_solatnadi),
                     onClick = { showAboutDialog = true }
                 )
 
@@ -290,7 +293,7 @@ fun SettingsScreenContent(
 
                 SettingsClickableRow(
                     icon = "💬",
-                    title = "Help & Feedback",
+                    title = stringResource(Res.string.help_feedback),
                     onClick = { showHelpDialog = true }
                 )
 
@@ -301,7 +304,7 @@ fun SettingsScreenContent(
 
                 SettingsClickableRow(
                     icon = "🛡️",
-                    title = "Data & Privacy",
+                    title = stringResource(Res.string.data_privacy),
                     onClick = { showPrivacyDialog = true }
                 )
             }
@@ -320,7 +323,7 @@ fun SettingsScreenContent(
             onDismissRequest = { showThemeDialog = false },
             title = {
                 Text(
-                    text = "Select Theme",
+                    text = stringResource(Res.string.select_theme),
                     style = typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -363,7 +366,7 @@ fun SettingsScreenContent(
             },
             confirmButton = {
                 TextButton(onClick = { showThemeDialog = false }) {
-                    Text("Close", color = colorScheme.primary)
+                    Text(stringResource(Res.string.close), color = colorScheme.primary)
                 }
             }
         )
@@ -375,7 +378,7 @@ fun SettingsScreenContent(
             onDismissRequest = { showAboutDialog = false },
             title = {
                 Text(
-                    text = "About SolatNadi",
+                    text = stringResource(Res.string.about_solatnadi),
                     style = typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -390,13 +393,13 @@ fun SettingsScreenContent(
                     )
                     Spacer(modifier = Modifier.height(spacing.Small))
                     Text(
-                        text = "SolatNadi is a modern, offline-first Islamic prayer times and Qibla application built with Kotlin Multiplatform and Jetpack Compose.",
+                        text = stringResource(Res.string.solatnadi_desc),
                         style = typography.bodyMedium,
                         color = colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(spacing.Medium))
                     Text(
-                        text = "🌐 Official Website:",
+                        text = stringResource(Res.string.official_website),
                         style = typography.labelLarge,
                         fontWeight = FontWeight.Bold,
                         color = colorScheme.onSurface
@@ -412,7 +415,7 @@ fun SettingsScreenContent(
                     )
                     Spacer(modifier = Modifier.height(spacing.Small))
                     Text(
-                        text = "👨‍💻 Developer Contact:",
+                        text = stringResource(Res.string.developer_contact),
                         style = typography.labelLarge,
                         fontWeight = FontWeight.Bold,
                         color = colorScheme.onSurface
@@ -430,7 +433,7 @@ fun SettingsScreenContent(
             },
             confirmButton = {
                 TextButton(onClick = { showAboutDialog = false }) {
-                    Text("Close", color = colorScheme.primary)
+                    Text(stringResource(Res.string.close), color = colorScheme.primary)
                 }
             }
         )
@@ -442,7 +445,7 @@ fun SettingsScreenContent(
             onDismissRequest = { showHelpDialog = false },
             title = {
                 Text(
-                    text = "Help & Feedback",
+                    text = stringResource(Res.string.help_feedback),
                     style = typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -450,13 +453,13 @@ fun SettingsScreenContent(
             text = {
                 Column {
                     Text(
-                        text = "Have questions, feedback, or need assistance? Reach out directly to the developer:",
+                        text = stringResource(Res.string.help_desc),
                         style = typography.bodyMedium,
                         color = colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(spacing.Medium))
                     Text(
-                        text = "📧 Email Support:",
+                        text = stringResource(Res.string.email_support),
                         style = typography.labelLarge,
                         fontWeight = FontWeight.Bold,
                         color = colorScheme.onSurface
@@ -472,7 +475,7 @@ fun SettingsScreenContent(
                     )
                     Spacer(modifier = Modifier.height(spacing.Medium))
                     Text(
-                        text = "🌐 Website & FAQ:",
+                        text = stringResource(Res.string.website_faq),
                         style = typography.labelLarge,
                         fontWeight = FontWeight.Bold,
                         color = colorScheme.onSurface
@@ -495,12 +498,12 @@ fun SettingsScreenContent(
                         showHelpDialog = false
                     }
                 ) {
-                    Text("Send Email", color = colorScheme.primary, fontWeight = FontWeight.Bold)
+                    Text(stringResource(Res.string.send_email), color = colorScheme.primary, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showHelpDialog = false }) {
-                    Text("Close", color = colorScheme.onSurfaceVariant)
+                    Text(stringResource(Res.string.close), color = colorScheme.onSurfaceVariant)
                 }
             }
         )
@@ -512,7 +515,7 @@ fun SettingsScreenContent(
             onDismissRequest = { showPrivacyDialog = false },
             title = {
                 Text(
-                    text = "Data & Privacy",
+                    text = stringResource(Res.string.data_privacy),
                     style = typography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
@@ -520,19 +523,13 @@ fun SettingsScreenContent(
             text = {
                 Column {
                     Text(
-                        text = "Your privacy is important to us. SolatNadi is designed with an offline-first architecture:",
+                        text = stringResource(Res.string.privacy_desc),
                         style = typography.bodyMedium,
                         color = colorScheme.onSurfaceVariant
                     )
-                    Spacer(modifier = Modifier.height(spacing.Small))
-                    Text(
-                        text = "• Local Data Storage: All preferences and prayer schedules are stored locally in your device SQLDelight database.\n• No Personal Tracking: SolatNadi does not collect or sell any personal data.\n• Location Privacy: Location data is used strictly to compute accurate prayer times.",
-                        style = typography.bodySmall,
-                        color = colorScheme.onSurface
-                    )
                     Spacer(modifier = Modifier.height(spacing.Medium))
                     Text(
-                        text = "📄 Read Privacy Policy:",
+                        text = stringResource(Res.string.read_privacy_policy),
                         style = typography.labelLarge,
                         fontWeight = FontWeight.Bold,
                         color = colorScheme.onSurface
@@ -555,12 +552,12 @@ fun SettingsScreenContent(
                         showPrivacyDialog = false
                     }
                 ) {
-                    Text("Open Policy Link", color = colorScheme.primary, fontWeight = FontWeight.Bold)
+                    Text(stringResource(Res.string.open_policy_link), color = colorScheme.primary, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showPrivacyDialog = false }) {
-                    Text("Close", color = colorScheme.onSurfaceVariant)
+                    Text(stringResource(Res.string.close), color = colorScheme.onSurfaceVariant)
                 }
             }
         )

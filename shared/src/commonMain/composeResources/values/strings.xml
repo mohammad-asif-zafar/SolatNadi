@@ -1,0 +1,94 @@
+<resources>
+    <!-- App & General -->
+    <string name="app_name">SolatNadi</string>
+    <string name="back">Back</string>
+    <string name="close">Close</string>
+    <string name="save_settings">Save settings</string>
+    <string name="continue_text">Continue</string>
+    <string name="done">Done</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">Settings</string>
+    <string name="current_location">Current Location</string>
+    <string name="change">Change ›</string>
+    <string name="twelve_hour_format">12-Hour Format</string>
+    <string name="select_theme">Select Theme</string>
+    <string name="about_solatnadi">About SolatNadi</string>
+    <string name="solatnadi_desc">SolatNadi is a modern, offline-first Islamic prayer times and Qibla application built with Kotlin Multiplatform and Jetpack Compose.</string>
+    <string name="official_website">🌐 Official Website:</string>
+    <string name="developer_contact">👨‍💻 Developer Contact:</string>
+    <string name="help_feedback">Help &amp; Feedback</string>
+    <string name="help_desc">Have questions, feedback, or need assistance? Reach out directly to the developer:</string>
+    <string name="email_support">📧 Email Support:</string>
+    <string name="website_faq">🌐 Website &amp; FAQ:</string>
+    <string name="send_email">Send Email</string>
+    <string name="data_privacy">Data &amp; Privacy</string>
+    <string name="privacy_desc">Your privacy is important to us. SolatNadi is designed with an offline-first architecture:\n• Local Data Storage: All preferences and prayer schedules are stored locally in your device SQLDelight database.\n• No Personal Tracking: SolatNadi does not collect or sell any personal data.\n• Location Privacy: Location data is used strictly to compute accurate prayer times.</string>
+    <string name="read_privacy_policy">📄 Read Privacy Policy:</string>
+    <string name="open_policy_link">Open Policy Link</string>
+    <string name="category_location">Location</string>
+    <string name="category_notifications">Notifications</string>
+    <string name="category_prayer_notifications">Prayer Notifications</string>
+    <string name="category_sound_vibration">Sound, vibration, reminder time</string>
+    <string name="category_appearance">Appearance</string>
+    <string name="category_theme">Theme</string>
+    <string name="category_more">More</string>
+
+    <!-- Home Screen -->
+    <string name="working_offline">⚡ Working Offline — Displaying cached prayer schedule</string>
+    <string name="skyline_background">Skyline Background</string>
+    <string name="kl_skyline_background">Kuala Lumpur Skyline Background</string>
+
+    <!-- Splash Screen -->
+    <string name="tagline">Your Prayer. Your Time.</string>
+    <string name="loading_prayer_times">Loading Prayer Times...</string>
+    <string name="splash_artwork">SolatNadi Splash Artwork</string>
+
+    <!-- Reminder Bottom Sheet -->
+    <string name="reminder_before_prayer">Reminder before prayer</string>
+    <string name="choose_reminder_time">Choose when the reminder appears</string>
+
+    <!-- Prayer Notifications List -->
+    <string name="prayer_notifications">Prayer Notifications</string>
+    <string name="choose_prayers_configure">Choose which prayers to configure</string>
+    <string name="vibration">Vibration</string>
+    <string name="default_notification_settings">Default notification settings</string>
+    <string name="sound">Sound</string>
+
+    <!-- Prayer Notification Detail Screen -->
+    <string name="notification_title">%1$s Notification</string>
+    <string name="repeat_reminder">Repeat reminder</string>
+    <string name="repeat_reminder_desc">Repeat after 5 minutes if not dismissed</string>
+    <string name="now">now</string>
+    <string name="prepare_prayer_msg">Let\'s prepare for prayer 💚</string>
+    <string name="notification_preview">Notification preview</string>
+
+    <!-- Choose Alarm Tone Screen -->
+    <string name="choose_alarm_tone">Choose alarm tone</string>
+    <string name="select_sound_msg">Select a sound for %1$s notification</string>
+
+    <!-- Prayer Preferences Screen -->
+    <string name="prayer_preferences">Prayer Preferences</string>
+    <string name="choose_calculation_settings">Choose calculation settings for accurate prayer times</string>
+    <string name="calculation_method">Calculation Method</string>
+    <string name="madhab_asr_method">Madhab (Asr method)</string>
+    <string name="madhab_desc">Madhab affects the Asr prayer time only. Other prayer times remain the same.</string>
+
+    <!-- Location Selection Screen -->
+    <string name="select_your_city">Select Your City</string>
+    <string name="search_city_msg">Search for your city to get accurate prayer times</string>
+    <string name="search_hint">Search city or country...</string>
+    <string name="popular_cities">Popular Cities</string>
+    <string name="available_locations">Available Locations</string>
+
+    <!-- Prayer Alarm Dialog -->
+    <string name="time_for_prayer">It\'s time for %1$s</string>
+    <string name="time_to_prepare">It\'s time to prepare for prayer</string>
+    <string name="stop_alarm">Stop Alarm</string>
+    <string name="snooze_5_min">Snooze 5 minutes</string>
+
+    <!-- Circular Countdown Ring / Prayer Card -->
+    <string name="next_prayer">NEXT PRAYER</string>
+    <string name="next_prayer_card">Next Prayer</string>
+    <string name="time_remaining">Time remaining</string>
+</resources>

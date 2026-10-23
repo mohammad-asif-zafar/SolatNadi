@@ -48,6 +48,9 @@ import com.hathway.solatnadi.presentation.settings.SettingsViewModel
 import com.hathway.solatnadi.presentation.theme.SolatNadiPalette
 import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
 import com.hathway.solatnadi.presentation.theme.SolatNadiThemeMode
+import org.jetbrains.compose.resources.stringResource
+import solatnadi.shared.generated.resources.Res
+import solatnadi.shared.generated.resources.*
 
 @Composable
 fun PrayerPreferencesScreen(
@@ -115,7 +118,7 @@ fun PrayerPreferencesScreenContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "Prayer Preferences",
+            text = stringResource(Res.string.prayer_preferences),
             fontSize = 26.sp,
             fontWeight = FontWeight.ExtraBold,
             color = SolatNadiPalette.TextPrimary
@@ -124,7 +127,7 @@ fun PrayerPreferencesScreenContent(
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = "Choose calculation settings for accurate prayer times",
+            text = stringResource(Res.string.choose_calculation_settings),
             fontSize = 14.sp,
             color = Color(0xFF687782)
         )
@@ -145,7 +148,7 @@ fun PrayerPreferencesScreenContent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Calculation Method",
+                        text = stringResource(Res.string.calculation_method),
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
                         color = SolatNadiPalette.TextPrimary
@@ -223,7 +226,7 @@ fun PrayerPreferencesScreenContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Madhab (Asr method)",
+                text = stringResource(Res.string.madhab_asr_method),
                 fontSize = 17.sp,
                 fontWeight = FontWeight.Bold,
                 color = SolatNadiPalette.TextPrimary
@@ -302,7 +305,7 @@ fun PrayerPreferencesScreenContent(
             color = Color(0xFFF4F7F5)
         ) {
             Text(
-                text = "Madhab affects the Asr prayer time only. Other prayer times remain the same.",
+                text = stringResource(Res.string.madhab_desc),
                 fontSize = 13.sp,
                 color = Color(0xFF687782),
                 modifier = Modifier.padding(14.dp)
@@ -332,7 +335,7 @@ fun PrayerPreferencesScreenContent(
             )
         ) {
             Text(
-                text = "Continue",
+                text = stringResource(Res.string.continue_text),
                 fontSize = 17.sp,
                 fontWeight = FontWeight.Bold
             )

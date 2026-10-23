@@ -41,6 +41,9 @@ import com.hathway.solatnadi.domain.model.ToneCategory
 import com.hathway.solatnadi.presentation.settings.SettingsSectionHeader
 import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
 import com.hathway.solatnadi.presentation.theme.SolatNadiThemeMode
+import org.jetbrains.compose.resources.stringResource
+import solatnadi.shared.generated.resources.Res
+import solatnadi.shared.generated.resources.*
 
 @Composable
 fun ChooseAlarmToneScreen(
@@ -107,13 +110,13 @@ fun ChooseAlarmToneScreenContent(
 
             Column {
                 Text(
-                    text = "Choose alarm tone",
+                    text = stringResource(Res.string.choose_alarm_tone),
                     style = typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     color = colorScheme.onSurface
                 )
                 Text(
-                    text = "Select a sound for ${uiState.prayerName.displayName} notification",
+                    text = stringResource(Res.string.select_sound_msg, uiState.prayerName.displayName),
                     style = typography.bodySmall,
                     color = colorScheme.onSurfaceVariant
                 )

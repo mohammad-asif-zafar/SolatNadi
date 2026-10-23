@@ -30,6 +30,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hathway.solatnadi.presentation.theme.SolatNadiTheme
+import org.jetbrains.compose.resources.stringResource
+import solatnadi.shared.generated.resources.Res
+import solatnadi.shared.generated.resources.*
 
 data class ReminderOption(
     val minutes: Int,
@@ -73,7 +76,7 @@ fun ReminderTimeBottomSheet(
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
             Text(
-                text = "Reminder before prayer",
+                text = stringResource(Res.string.reminder_before_prayer),
                 style = typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = colorScheme.onSurface
@@ -82,7 +85,7 @@ fun ReminderTimeBottomSheet(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "Choose when the reminder appears",
+                text = stringResource(Res.string.choose_reminder_time),
                 style = typography.bodySmall,
                 color = colorScheme.onSurfaceVariant
             )
@@ -132,7 +135,7 @@ fun ReminderTimeBottomSheet(
                 )
             ) {
                 Text(
-                    text = "Done",
+                    text = stringResource(Res.string.done),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
