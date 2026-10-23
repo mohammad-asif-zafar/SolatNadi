@@ -11,7 +11,13 @@ import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import com.hathway.solatnadi.core.database.DatabaseDriverFactory
 import com.hathway.solatnadi.core.database.createDatabase
+import com.hathway.solatnadi.data.mapper.formatTo12Hour
+import com.hathway.solatnadi.domain.model.PrayerName
+import com.hathway.solatnadi.presentation.components.ActiveAlarmData
 import com.hathway.solatnadi.shared.R
+import kotlin.time.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 class PrayerAlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -59,6 +65,34 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
         val rawSoundRes = getRawResourceForSoundKey(soundKey)
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+        val prayerNameEnum = PrayerName.entries.firstOrNull {
+            it.name.equals(prayerKey, ignoreCase = true) || it.displayName.equals(prayerDisplayName, ignoreCase = true)
+        } ?: PrayerName.FAJR
+
+        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val formattedTime = formatTo12Hour(now.hour, now.minute)
+
+        AlarmStateManager.triggerAlarm(
+            ActiveAlarmData(
+                prayerName = prayerNameEnum,
+                timeFormatted = formattedTime
+            )
+        )
+
+        // Automatically reschedule next day's alarm for this prayer
+        if (!isTestNotification) {
+            try {
+                val reminderMinutes = intent.getIntExtra("EXTRA_REMINDER_MINUTES", 0)
+                NotificationScheduler(context).schedulePrayerNotification(
+                    prayerName = prayerNameEnum,
+                    scheduledTime = now,
+                    reminderMinutes = reminderMinutes
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
         // Create a new channel ID version to ensure previous channel sound and vibration settings are overridden
         val channelId = if (soundKey == "silent") "solatnadi_silent_channel_v3" else "solatnadi_prayer_channel_v3_${soundKey}_vib_${vibrationEnabled}"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -83,6 +117,7 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
                 if (wakeLock?.isHeld == true) {
                     try { wakeLock.release() } catch (_: Exception) {}
                 }
+                AlarmStateManager.clearActiveAlarm()
             }
         } else {
             if (wakeLock?.isHeld == true) {
@@ -96,6 +131,8 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
 
         val launchIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            putExtra("EXTRA_PRAYER_KEY", prayerKey)
+            putExtra("EXTRA_PRAYER_NAME", prayerDisplayName)
         }
         val pendingContentIntent = launchIntent?.let {
             android.app.PendingIntent.getActivity(

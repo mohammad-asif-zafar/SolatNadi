@@ -4,7 +4,7 @@ import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -27,14 +27,25 @@ import com.hathway.solatnadi.presentation.theme.*
 import org.jetbrains.compose.resources.stringResource
 import solatnadi.shared.generated.resources.Res
 import solatnadi.shared.generated.resources.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+
+import kotlin.math.cos
+import kotlin.math.sin
 
 @Composable
 fun CircularCountdownRing(
+    modifier: Modifier = Modifier,
     countdownText: String,
     nextPrayerName: String,
     progress: Float = 0.65f,
-    prayerName: PrayerName? = null,
-    modifier: Modifier = Modifier
+    prayerName: PrayerName? = null
 ) {
     val themeSpacing = SolatNadiTheme.spacing
     val themeDimens = SolatNadiTheme.dimens
@@ -44,6 +55,7 @@ fun CircularCountdownRing(
     val materialColorScheme = MaterialTheme.colorScheme
     val materialTypography = MaterialTheme.typography
 
+    // Enforce solid data bounds
     val validatedProgress = progress.coerceIn(0f, 1f)
 
     val smoothProgress by animateFloatAsState(
@@ -55,57 +67,85 @@ fun CircularCountdownRing(
     val sweepAngle = smoothProgress * 360f
 
     Box(
-        modifier = modifier.size(themeDimens.CountdownDiameter), contentAlignment = Alignment.Center
+        modifier = modifier.size(themeDimens.CountdownDiameter),
+        contentAlignment = Alignment.Center
     ) {
+        // Core Ring Canvas Box Container
         Surface(
-            modifier = Modifier.size(themeDimens.CountdownDiameter - 40.dp).shadow(
-                elevation = themeDimens.CardElevation * 4,
-                shape = CircleShape,
-                spotColor = materialColorScheme.onBackground.copy(alpha = 0.12f)
-            ), shape = CircleShape, color = materialColorScheme.surface
+            modifier = Modifier
+                .size(themeDimens.CountdownDiameter - 32.dp) // Proportional shrinkage
+                .shadow(
+                    elevation = themeDimens.CardElevation * 3,
+                    shape = CircleShape,
+                    spotColor = materialColorScheme.onBackground.copy(alpha = 0.1f)
+                ),
+            shape = CircleShape,
+            color = materialColorScheme.surface
         ) {
             Box(contentAlignment = Alignment.Center) {
-                Canvas(modifier = Modifier.fillMaxSize()) {
-                    val nativeStrokeWidth = themeDimens.CountdownStroke.toPx()
-                    val coreDiameter = size.minDimension - nativeStrokeWidth
-                    val targetOffset = Offset(nativeStrokeWidth / 2f, nativeStrokeWidth / 2f)
-                    val internalArcBounds = Size(coreDiameter, coreDiameter)
 
+                // Optimized Path Rendering
+                Canvas(modifier = Modifier.fillMaxSize().padding(12.dp)) {
+                    val strokeWidthPx = themeDimens.CountdownStroke.toPx()
+                    val radius = (size.width - strokeWidthPx) / 2f
+                    val centerOffset = Offset(size.width / 2f, size.height / 2f)
+                    val arcTopLeft = Offset(strokeWidthPx / 2f, strokeWidthPx / 2f)
+                    val arcSize = Size(size.width - strokeWidthPx, size.height - strokeWidthPx)
+
+                    // 1. Draw the passive background ring track
                     drawArc(
                         color = themeColors.ringTrack,
                         startAngle = 0f,
                         sweepAngle = 360f,
                         useCenter = false,
-                        topLeft = targetOffset,
-                        size = internalArcBounds,
-                        style = Stroke(width = nativeStrokeWidth)
+                        topLeft = arcTopLeft,
+                        size = arcSize,
+                        style = Stroke(width = strokeWidthPx)
                     )
 
+                    // 2. Draw the active progress line indicator
                     if (sweepAngle > 0f) {
                         drawArc(
                             color = materialColorScheme.primary,
                             startAngle = -90f,
                             sweepAngle = sweepAngle,
                             useCenter = false,
-                            topLeft = targetOffset,
-                            size = internalArcBounds,
+                            topLeft = arcTopLeft,
+                            size = arcSize,
                             style = Stroke(
-                                width = nativeStrokeWidth,
-                                cap = if (sweepAngle > 6f) StrokeCap.Round else StrokeCap.Butt
+                                width = strokeWidthPx,
+                                cap = if (sweepAngle > 4f) StrokeCap.Round else StrokeCap.Butt
                             )
+                        )
+
+                        // 3. Optional Design Polish: Floating Tip Node Dot
+                        val currentAngleRad = (sweepAngle - 90f) * (kotlin.math.PI / 180.0)
+                        val dotCenter = Offset(
+                            x = centerOffset.x + radius * cos(currentAngleRad).toFloat(),
+                            y = centerOffset.y + radius * sin(currentAngleRad).toFloat()
+                        )
+                        drawCircle(
+                            color = materialColorScheme.surface,
+                            radius = strokeWidthPx * 0.4f,
+                            center = dotCenter
+                        )
+                        drawCircle(
+                            color = materialColorScheme.primary,
+                            radius = strokeWidthPx * 0.25f,
+                            center = dotCenter
                         )
                     }
                 }
 
+                // Inner Information Hierarchy Stack
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.padding(horizontal = themeSpacing.Large)
                 ) {
                     Text(
-                        text = stringResource(Res.string.next_prayer),
-                        style = materialTypography.labelSmall,
-                        color = materialColorScheme.onSurfaceVariant,
-                        letterSpacing = 1.sp
+                        text = stringResource(Res.string.next_prayer).uppercase(),
+                        style = materialTypography.labelSmall.copy(letterSpacing = 1.5.sp),
+                        color = materialColorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                     )
 
                     Spacer(modifier = Modifier.height(themeSpacing.XSmall))
@@ -121,33 +161,40 @@ fun CircularCountdownRing(
                     Text(
                         text = stringResource(Res.string.time_remaining),
                         style = materialTypography.bodySmall,
-                        color = materialColorScheme.onSurfaceVariant
+                        color = materialColorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                     )
 
-                    Spacer(modifier = Modifier.height(themeSpacing.XSmall))
+                    Spacer(modifier = Modifier.height(themeSpacing.Small))
 
                     Text(
                         text = nextPrayerName,
-                        style = materialTypography.headlineMedium,
-                        color = materialColorScheme.primary
+                        style = materialTypography.titleLarge,
+                        color = materialColorScheme.onSurface
                     )
                 }
             }
         }
 
+        // Top Status Overlap Icon Badge
         Box(
-            modifier = Modifier.align(Alignment.TopCenter).offset(y = (-4).dp).size(44.dp)
-                .shadow(themeDimens.CardElevation * 2, CircleShape).clip(CircleShape)
-                .background(themeColors.sunriseGold), contentAlignment = Alignment.Center
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .offset(y = (-6).dp)
+                .size(44.dp)
+                .shadow(themeDimens.CardElevation * 2, CircleShape)
+                .clip(CircleShape)
+                .background(themeColors.sunriseGold),
+            contentAlignment = Alignment.Center
         ) {
             if (prayerName != null) {
-                PrayerIcon(prayerName = prayerName, size = 26.dp)
+                PrayerIcon(prayerName = prayerName, size = 24.dp)
             } else {
-                DhuhrIcon(modifier = Modifier.size(26.dp))
+                DhuhrIcon(modifier = Modifier.size(24.dp))
             }
         }
     }
 }
+
 @Preview(name = "Light Theme", showBackground = true, backgroundColor = 0xFFF5FBF7)
 @Composable
 fun CountdownRingLightPreview() {

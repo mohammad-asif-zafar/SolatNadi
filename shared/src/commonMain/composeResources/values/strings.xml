@@ -60,7 +60,7 @@
     <string name="repeat_reminder">Repeat reminder</string>
     <string name="repeat_reminder_desc">Repeat after 5 minutes if not dismissed</string>
     <string name="now">now</string>
-    <string name="prepare_prayer_msg">Let\'s prepare for prayer 💚</string>
+    <string name="prepare_prayer_msg">Let's prepare for prayer 💚</string>
     <string name="notification_preview">Notification preview</string>
 
     <!-- Choose Alarm Tone Screen -->
@@ -82,8 +82,8 @@
     <string name="available_locations">Available Locations</string>
 
     <!-- Prayer Alarm Dialog -->
-    <string name="time_for_prayer">It\'s time for %1$s</string>
-    <string name="time_to_prepare">It\'s time to prepare for prayer</string>
+    <string name="time_for_prayer">It's time for %1$s</string>
+    <string name="time_to_prepare">It's time to prepare for prayer</string>
     <string name="stop_alarm">Stop Alarm</string>
     <string name="snooze_5_min">Snooze 5 minutes</string>
 

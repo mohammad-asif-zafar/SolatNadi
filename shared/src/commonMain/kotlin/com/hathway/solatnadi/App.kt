@@ -7,10 +7,15 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.hathway.solatnadi.core.notification.AlarmStateManager
 import com.hathway.solatnadi.core.notification.NotificationScheduler
 import com.hathway.solatnadi.domain.model.AppTheme
 import com.hathway.solatnadi.domain.model.PrayerLocation
 import com.hathway.solatnadi.presentation.components.ActiveAlarmData
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.minutes
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import com.hathway.solatnadi.presentation.components.BackHandler
 import com.hathway.solatnadi.presentation.components.PrayerAlarmDialog
 import com.hathway.solatnadi.presentation.home.HomeScreen
@@ -154,7 +159,7 @@ fun App() {
             }
         }
 
-        var activeAlarmData by remember { mutableStateOf<ActiveAlarmData?>(null) }
+        val activeAlarmData by AlarmStateManager.activeAlarm.collectAsState()
         val scheduler = remember { NotificationScheduler() }
 
         activeAlarmData?.let { alarm ->
@@ -162,15 +167,20 @@ fun App() {
                 alarmData = alarm,
                 onStopAlarm = {
                     scheduler.stopAzanPreview()
-                    activeAlarmData = null
+                    AlarmStateManager.clearActiveAlarm()
                 },
                 onSnooze = {
                     scheduler.stopAzanPreview()
-                    activeAlarmData = null
+                    val nowInstant = Clock.System.now()
+                    val snoozeInstant = nowInstant.plus(5.minutes)
+                    val tz = TimeZone.currentSystemDefault()
+                    val snoozeDateTime = snoozeInstant.toLocalDateTime(tz)
+                    scheduler.schedulePrayerNotification(alarm.prayerName, snoozeDateTime, reminderMinutes = 0)
+                    AlarmStateManager.clearActiveAlarm()
                 },
                 onDismissRequest = {
                     scheduler.stopAzanPreview()
-                    activeAlarmData = null
+                    AlarmStateManager.clearActiveAlarm()
                 }
             )
         }

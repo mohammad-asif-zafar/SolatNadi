@@ -50,6 +50,14 @@ object AudioPlayerManager {
         }
     }
 
+    fun isPlaying(): Boolean {
+        return try {
+            mediaPlayer?.isPlaying == true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
     fun stopSound() {
         try {
             mediaPlayer?.let {
@@ -62,6 +70,7 @@ object AudioPlayerManager {
             e.printStackTrace()
         } finally {
             mediaPlayer = null
+            AlarmStateManager.clearActiveAlarm()
         }
     }
 }
