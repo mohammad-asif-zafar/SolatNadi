@@ -56,6 +56,32 @@ class PreferencesRepositoryImpl(
     )
 
     init {
+        try {
+            val queries = database.solatNadiDatabaseQueries
+            val existingSelected = queries.selectSelectedLocation().executeAsOneOrNull()
+            if (existingSelected == null) {
+                queries.transaction {
+                    presetLocations.forEach { loc ->
+                        queries.insertLocation(
+                            id = loc.id,
+                            name = loc.name,
+                            country = loc.country,
+                            latitude = loc.latitude,
+                            longitude = loc.longitude,
+                            timezone = loc.timezone,
+                            isSelected = if (loc.id == defaultLocation.id) 1L else 0L
+                        )
+                    }
+                }
+            }
+            val existingAppPref = queries.getAppPreference("APP_CONFIG").executeAsOneOrNull()
+            if (existingAppPref == null) {
+                queries.insertOrUpdateAppPreference("APP_CONFIG", "INITIALIZED")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val queries = database.solatNadiDatabaseQueries
@@ -95,34 +121,7 @@ class PreferencesRepositoryImpl(
                     }
                 }
             } catch (e: Exception) {
-                val queries = database.solatNadiDatabaseQueries
-                val existingSelected = queries.selectSelectedLocation().executeAsOneOrNull()
-                val savedSelectedId = settings.getStringOrNull("selected_location_id")
-
-                val systemTz = TimeZone.currentSystemDefault().id
-                val systemCountry = getSystemCountryCode()
-
-                val matchedPreset = if (savedSelectedId == null && existingSelected == null) {
-                    presetLocations.find { it.timezone == systemTz }
-                        ?: presetLocations.find { it.country.equals(systemCountry, ignoreCase = true) }
-                } else null
-
-                val targetSelectedId = existingSelected?.id
-                    ?: savedSelectedId
-                    ?: matchedPreset?.id
-                    ?: defaultLocation.id
-
-                presetLocations.forEach { loc ->
-                    queries.insertLocation(
-                        id = loc.id,
-                        name = loc.name,
-                        country = loc.country,
-                        latitude = loc.latitude,
-                        longitude = loc.longitude,
-                        timezone = loc.timezone,
-                        isSelected = if (loc.id == targetSelectedId) 1L else 0L
-                    )
-                }
+                e.printStackTrace()
             }
         }
     }
