@@ -3,7 +3,7 @@ package com.hathway.solatnadi.core.notification
 import platform.AVFAudio.AVAudioPlayer
 import platform.AVFAudio.AVAudioPlayerDelegateProtocol
 import platform.AVFAudio.AVAudioSession
-import platform.AVFAudio.AVAudioSessionCategoryPlayback
+import platform.AVFAudio.AVAudioSessionCategorySoloAmbient
 import platform.AVFAudio.setActive
 import platform.Foundation.NSData
 import platform.Foundation.NSBundle
@@ -22,19 +22,24 @@ import solatnadi.shared.generated.resources.Res
 object IosAudioPlayerManager {
     private var audioPlayer: AVAudioPlayer? = null
     private var activeDelegate: AudioDelegate? = null
+    val coordinator = AudioLifecycleCoordinator()
 
     fun playSound(soundKey: String, onCompletion: (() -> Unit)? = null) {
-        stopSound()
+        val session = coordinator.newSession()
+        releasePlayer()
 
         val fileName = getFileNameForSoundKey(soundKey)
         if (fileName == "silent") {
-            onCompletion?.invoke()
+            if (!coordinator.isStaleSession(session)) {
+                coordinator.handlePlaybackFailure(session)
+                onCompletion?.invoke()
+            }
             return
         }
 
         try {
             val audioSession = AVAudioSession.sharedInstance()
-            audioSession.setCategory(AVAudioSessionCategoryPlayback, error = null)
+            audioSession.setCategory(AVAudioSessionCategorySoloAmbient, error = null)
             audioSession.setActive(true, error = null)
 
             val soundNameWithoutExtension = fileName.substringBeforeLast(".")
@@ -42,89 +47,162 @@ object IosAudioPlayerManager {
                 ?: NSBundle.mainBundle.pathForResource(soundNameWithoutExtension, ofType = "caf")
 
             if (bundlePath != null) {
+                if (coordinator.isStaleSession(session)) return
                 val url = NSURL.fileURLWithPath(bundlePath)
-                startPlayerWithUrl(url, onCompletion)
+                startPlayerWithUrl(url, session, onCompletion)
             } else {
                 // Fallback to Compose Resources via Coroutine
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
+                        if (coordinator.isStaleSession(session)) return@launch
                         val bytes = Res.readBytes("files/$fileName")
+                        if (coordinator.isStaleSession(session)) return@launch
                         val nsData = bytes.usePinned { pinned ->
                             NSData.dataWithBytes(pinned.addressOf(0), length = bytes.size.toULong())
                         }
-                        startPlayerWithData(nsData, onCompletion)
+                        if (coordinator.isStaleSession(session)) return@launch
+                        startPlayerWithData(nsData, session, onCompletion)
                     } catch (e: Exception) {
                         e.printStackTrace()
+                        if (!coordinator.isStaleSession(session)) {
+                            coordinator.handlePlaybackFailure(session)
+                            onCompletion?.invoke()
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            if (!coordinator.isStaleSession(session)) {
+                coordinator.handlePlaybackFailure(session)
+                onCompletion?.invoke()
+            }
+        }
+    }
+
+    private fun startPlayerWithUrl(url: NSURL, session: Long, onCompletion: (() -> Unit)?) {
+        try {
+            if (coordinator.isStaleSession(session)) return
+            val player = AVAudioPlayer(contentsOfURL = url, error = null)
+            if (player != null) {
+                val delegate = AudioDelegate(session, player, { coordinator.sessionId }) { targetPlayer, targetDelegate, successful ->
+                    // Mandatory callback validation: accept ONLY when session is current AND player matches AND delegate matches
+                    if (!coordinator.isStaleSession(session) && audioPlayer === targetPlayer && activeDelegate === targetDelegate) {
+                        if (successful) {
+                            coordinator.handleNaturalCompletion(session)
+                        } else {
+                            coordinator.handlePlaybackFailure(session)
+                        }
+                        releaseSpecificPlayer(targetPlayer, targetDelegate)
                         onCompletion?.invoke()
                     }
                 }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            onCompletion?.invoke()
-        }
-    }
-
-    private fun startPlayerWithUrl(url: NSURL, onCompletion: (() -> Unit)?) {
-        try {
-            val player = AVAudioPlayer(contentsOfURL = url, error = null)
-            if (player != null) {
-                if (onCompletion != null) {
-                    val delegate = AudioDelegate {
-                        stopSound()
-                        onCompletion()
-                    }
-                    activeDelegate = delegate
-                    player.delegate = delegate
-                }
+                activeDelegate = delegate
+                player.delegate = delegate
                 audioPlayer = player
                 player.play()
             } else {
-                onCompletion?.invoke()
+                if (!coordinator.isStaleSession(session)) {
+                    coordinator.handlePlaybackFailure(session)
+                    onCompletion?.invoke()
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            onCompletion?.invoke()
+            if (!coordinator.isStaleSession(session)) {
+                coordinator.handlePlaybackFailure(session)
+                onCompletion?.invoke()
+            }
         }
     }
 
-    private fun startPlayerWithData(data: NSData, onCompletion: (() -> Unit)?) {
+    private fun startPlayerWithData(data: NSData, session: Long, onCompletion: (() -> Unit)?) {
         try {
+            if (coordinator.isStaleSession(session)) return
             val player = AVAudioPlayer(data = data, error = null)
             if (player != null) {
-                if (onCompletion != null) {
-                    val delegate = AudioDelegate {
-                        stopSound()
-                        onCompletion()
+                val delegate = AudioDelegate(session, player, { coordinator.sessionId }) { targetPlayer, targetDelegate, successful ->
+                    // Mandatory callback validation: accept ONLY when session is current AND player matches AND delegate matches
+                    if (!coordinator.isStaleSession(session) && audioPlayer === targetPlayer && activeDelegate === targetDelegate) {
+                        if (successful) {
+                            coordinator.handleNaturalCompletion(session)
+                        } else {
+                            coordinator.handlePlaybackFailure(session)
+                        }
+                        releaseSpecificPlayer(targetPlayer, targetDelegate)
+                        onCompletion?.invoke()
                     }
-                    activeDelegate = delegate
-                    player.delegate = delegate
                 }
+                activeDelegate = delegate
+                player.delegate = delegate
                 audioPlayer = player
                 player.play()
             } else {
-                onCompletion?.invoke()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            onCompletion?.invoke()
-        }
-    }
-
-    fun stopSound() {
-        try {
-            audioPlayer?.let {
-                if (it.isPlaying()) {
-                    it.stop()
+                if (!coordinator.isStaleSession(session)) {
+                    coordinator.handlePlaybackFailure(session)
+                    onCompletion?.invoke()
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
-        } finally {
-            audioPlayer = null
-            activeDelegate = null
-            AlarmStateManager.clearActiveAlarm()
+            if (!coordinator.isStaleSession(session)) {
+                coordinator.handlePlaybackFailure(session)
+                onCompletion?.invoke()
+            }
         }
+    }
+
+    /**
+     * Instance-safe player release: releases player and delegate ONLY if they still refer to target instance.
+     */
+    private fun releaseSpecificPlayer(playerToRelease: AVAudioPlayer, delegateToRelease: AudioDelegate?) {
+        try {
+            if (audioPlayer === playerToRelease) {
+                audioPlayer?.delegate = null
+                if (audioPlayer?.isPlaying() == true) {
+                    audioPlayer?.stop()
+                }
+                audioPlayer = null
+            } else {
+                playerToRelease.delegate = null
+                if (playerToRelease.isPlaying()) {
+                    playerToRelease.stop()
+                }
+            }
+            if (activeDelegate === delegateToRelease) {
+                activeDelegate = null
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * Releases audio player resources instance-safely without unconditional global reference erasure.
+     */
+    fun releasePlayer() {
+        try {
+            audioPlayer?.let { player ->
+                releaseSpecificPlayer(player, activeDelegate)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * Stops current audio playback by invalidating the session atomically and releasing resources.
+     */
+    fun stopPlayback() {
+        coordinator.stopPlayback()
+        releasePlayer()
+    }
+
+    /**
+     * Explicitly clears the active alarm state and invalidates the session.
+     */
+    fun dismissAlarm() {
+        coordinator.explicitDismissal()
     }
 
     fun isPlaying(): Boolean {
@@ -149,9 +227,16 @@ object IosAudioPlayerManager {
         }
     }
 
-    private class AudioDelegate(private val onCompletion: () -> Unit) : NSObject(), AVAudioPlayerDelegateProtocol {
+    private class AudioDelegate(
+        private val session: Long,
+        private val playerInstance: AVAudioPlayer,
+        private val getCurrentSessionId: () -> Long,
+        private val onCompletion: (AVAudioPlayer, AudioDelegate, Boolean) -> Unit
+    ) : NSObject(), AVAudioPlayerDelegateProtocol {
         override fun audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully: Boolean) {
-            onCompletion()
+            if (player == playerInstance && session == getCurrentSessionId()) {
+                onCompletion(player, this, successfully)
+            }
         }
     }
 }

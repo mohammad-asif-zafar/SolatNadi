@@ -91,23 +91,7 @@ fun SplashScreen(
                 .statusBarsPadding()
                 .padding(horizontal = 24.dp)
         ) {
-            Text(
-                text = stringResource(Res.string.app_name),
-                fontSize = 42.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = MaterialTheme.colorScheme.primary,
-                letterSpacing = (-1).sp
-            )
 
-            Spacer(modifier = Modifier.height(6.dp))
-
-            Text(
-                text = stringResource(Res.string.tagline),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onBackground,
-                letterSpacing = 0.5.sp
-            )
         }
 
         // Bottom Progress Indicator

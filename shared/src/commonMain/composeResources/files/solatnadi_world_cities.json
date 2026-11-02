@@ -4,7 +4,7 @@
     "name": "SolatNadi Worldwide Major Cities Starter Dataset",
     "description": "Curated starter set of major cities for local city search and coordinate-based prayer-time API requests. Not an exhaustive global gazetteer.",
     "generatedDate": "2026-10-18",
-    "recordCount": 127,
+    "recordCount": 132,
     "coordinateOrder": "latitude, longitude",
     "coordinateUnits": "decimal degrees",
     "timezoneStandard": "IANA Time Zone Database identifiers",
@@ -1810,6 +1810,76 @@
       "longitude": 28.0473,
       "timezone": "Africa/Johannesburg",
       "population": 6000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "sarajevo",
+      "name": "Sarajevo",
+      "countryCode": "BA",
+      "latitude": 43.8563,
+      "longitude": 18.4131,
+      "timezone": "Europe/Sarajevo",
+      "population": 350000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "tirana",
+      "name": "Tirana",
+      "countryCode": "AL",
+      "latitude": 41.3275,
+      "longitude": 19.8187,
+      "timezone": "Europe/Tirana",
+      "population": 560000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "manama",
+      "name": "Manama",
+      "countryCode": "BH",
+      "latitude": 26.2285,
+      "longitude": 50.586,
+      "timezone": "Asia/Bahrain",
+      "population": 700000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "kuwait-city",
+      "name": "Kuwait City",
+      "countryCode": "KW",
+      "latitude": 29.3759,
+      "longitude": 47.9774,
+      "timezone": "Asia/Kuwait",
+      "population": 3000000,
+      "prayerZone": {
+        "id": null,
+        "status": "not_verified",
+        "note": "Ordinary city coordinates only; no official prayer zone verified in this dataset."
+      }
+    },
+    {
+      "id": "beirut",
+      "name": "Beirut",
+      "countryCode": "LB",
+      "latitude": 33.8938,
+      "longitude": 35.5018,
+      "timezone": "Asia/Beirut",
+      "population": 2400000,
       "prayerZone": {
         "id": null,
         "status": "not_verified",

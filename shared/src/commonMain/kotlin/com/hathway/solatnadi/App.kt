@@ -167,7 +167,7 @@ fun App() {
                 alarmData = alarm,
                 onStopAlarm = {
                     scheduler.stopAzanPreview()
-                    AlarmStateManager.clearActiveAlarm()
+                    scheduler.dismissAlarm()
                 },
                 onSnooze = {
                     scheduler.stopAzanPreview()
@@ -176,11 +176,11 @@ fun App() {
                     val tz = TimeZone.currentSystemDefault()
                     val snoozeDateTime = snoozeInstant.toLocalDateTime(tz)
                     scheduler.schedulePrayerNotification(alarm.prayerName, snoozeDateTime, reminderMinutes = 0)
-                    AlarmStateManager.clearActiveAlarm()
+                    scheduler.dismissAlarm()
                 },
                 onDismissRequest = {
                     scheduler.stopAzanPreview()
-                    AlarmStateManager.clearActiveAlarm()
+                    scheduler.dismissAlarm()
                 }
             )
         }

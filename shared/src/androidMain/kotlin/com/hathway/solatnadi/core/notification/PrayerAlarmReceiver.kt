@@ -117,7 +117,6 @@ class PrayerAlarmReceiver : BroadcastReceiver() {
                 if (wakeLock?.isHeld == true) {
                     try { wakeLock.release() } catch (_: Exception) {}
                 }
-                AlarmStateManager.clearActiveAlarm()
             }
         } else {
             if (wakeLock?.isHeld == true) {

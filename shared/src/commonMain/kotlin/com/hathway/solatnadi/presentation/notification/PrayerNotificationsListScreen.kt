@@ -2,7 +2,6 @@ package com.hathway.solatnadi.presentation.notification
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,8 +20,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -69,7 +66,6 @@ fun PrayerNotificationsListScreenContent(
     val spacing = SolatNadiTheme.spacing
     val dimens = SolatNadiTheme.dimens
     val shapes = SolatNadiTheme.shapes
-    val customColors = SolatNadiTheme.customColors
 
     val colorScheme = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
@@ -175,39 +171,6 @@ fun PrayerNotificationsListScreenContent(
                     trailingText = uiState.defaultConfig.soundTone.title,
                     onClick = { onNavigateToPrayerDetail(PrayerName.FAJR) }
                 )
-
-                HorizontalDivider(
-                    modifier = Modifier.padding(vertical = spacing.XSmall),
-                    color = colorScheme.outlineVariant.copy(alpha = 0.5f)
-                )
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = spacing.Small, vertical = spacing.Medium),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = "📳",
-                            style = typography.titleMedium,
-                            modifier = Modifier.padding(end = spacing.Medium)
-                        )
-                        Text(
-                            text = stringResource(Res.string.vibration),
-                            style = typography.bodyLarge,
-                            fontWeight = FontWeight.Medium,
-                            color = colorScheme.onSurface
-                        )
-                    }
-
-                    Switch(
-                        checked = uiState.defaultConfig.vibrationEnabled,
-                        onCheckedChange = { /* Default vibration toggle */ },
-                        colors = SwitchDefaults.colors(checkedTrackColor = customColors.success)
-                    )
-                }
 
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = spacing.XSmall),

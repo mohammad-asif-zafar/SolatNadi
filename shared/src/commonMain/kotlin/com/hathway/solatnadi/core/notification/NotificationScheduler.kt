@@ -8,5 +8,6 @@ expect open class NotificationScheduler() {
     open fun cancelPrayerNotification(prayerName: PrayerName)
     open fun playAzanPreview(soundKey: String = "default_adhan")
     open fun stopAzanPreview()
+    open fun dismissAlarm()
     open fun triggerTestNotification(prayerName: PrayerName = PrayerName.FAJR)
 }

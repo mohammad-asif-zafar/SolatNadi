@@ -129,7 +129,7 @@ actual open class NotificationScheduler(private val context: Context) {
     actual open fun playAzanPreview(soundKey: String) {
         try {
             if (soundKey == "silent") {
-                AudioPlayerManager.stopSound()
+                AudioPlayerManager.stopPlayback()
                 return
             }
             val rawRes = getRawResourceForSoundKey(soundKey)
@@ -140,7 +140,11 @@ actual open class NotificationScheduler(private val context: Context) {
     }
 
     actual open fun stopAzanPreview() {
-        AudioPlayerManager.stopSound()
+        AudioPlayerManager.stopPlayback()
+    }
+
+    actual open fun dismissAlarm() {
+        AudioPlayerManager.dismissAlarm()
     }
 
     actual open fun triggerTestNotification(prayerName: PrayerName) {

@@ -126,7 +126,11 @@ actual open class NotificationScheduler actual constructor() {
     }
 
     actual open fun stopAzanPreview() {
-        IosAudioPlayerManager.stopSound()
+        IosAudioPlayerManager.stopPlayback()
+    }
+
+    actual open fun dismissAlarm() {
+        IosAudioPlayerManager.dismissAlarm()
     }
 
     actual open fun triggerTestNotification(prayerName: PrayerName) {
