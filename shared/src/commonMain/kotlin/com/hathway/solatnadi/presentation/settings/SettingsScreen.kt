@@ -388,7 +388,7 @@ fun SettingsScreenContent(
             text = {
                 Column {
                     Text(
-                        text = "SolatNadi v1.0.0",
+                        text = "SolatNadi v1.0.5",
                         style = typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = colorScheme.primary
